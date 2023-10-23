@@ -1,4 +1,4 @@
-package com.seo4d696b75.android.switchbot_lock_ext
+package com.seo4d696b75.android.switchbot_lock_ext.ui
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.seo4d696b75.android.switchbot_lock_ext", appContext.packageName)
+        assertEquals("com.seo4d696b75.android.switchbot_lock_ext.ui.test", appContext.packageName)
     }
 }
