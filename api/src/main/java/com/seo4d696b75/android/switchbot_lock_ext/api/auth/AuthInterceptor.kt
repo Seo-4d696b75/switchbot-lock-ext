@@ -1,10 +1,16 @@
 package com.seo4d696b75.android.switchbot_lock_ext.api.auth
 
 import com.seo4d696b75.android.switchbot_lock_ext.domain.auth.UserCredentialProvider
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import dagger.multibindings.IntoSet
 import okhttp3.Interceptor
 import okhttp3.Response
+import javax.inject.Inject
 
-class AuthInterceptor(
+class AuthInterceptor @Inject constructor(
     private val getCurrentTime: CurrentTimeProvider,
     private val getNonce: NonceProvider,
     private val getCredential: UserCredentialProvider,
@@ -26,4 +32,13 @@ class AuthInterceptor(
             .build()
         return chain.proceed(newRequest)
     }
+}
+
+@Suppress("unused")
+@Module
+@InstallIn(SingletonComponent::class)
+interface AuthInterceptorModule {
+    @Binds
+    @IntoSet
+    fun bindAuthInterceptor(impl: AuthInterceptor): Interceptor
 }
