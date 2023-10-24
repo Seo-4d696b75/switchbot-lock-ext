@@ -1,8 +1,7 @@
-package com.seo4d696b75.android.switchbot_lock_ext.domain
+package com.seo4d696b75.android.switchbot_lock_ext.api
 
-import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockDeviceStatus
-import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockState
-import com.seo4d696b75.android.switchbot_lock_ext.domain.device.PhysicalDevice
+import com.seo4d696b75.android.switchbot_lock_ext.api.response.device.PhysicalDevice
+import com.seo4d696b75.android.switchbot_lock_ext.api.response.status.PhysicalDeviceStatus
 import kotlinx.serialization.json.Json
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -80,7 +79,7 @@ class JsonSerializationTest {
             "doorState": "closed",
             "calibrate": true
         }"""
-        val status: LockDeviceStatus = json.decodeFromString(str)
-        assertEquals(LockState.Locked, status.lockState)
+        val status: PhysicalDeviceStatus = json.decodeFromString(str)
+        assertEquals("locked", status.lockState)
     }
 }
