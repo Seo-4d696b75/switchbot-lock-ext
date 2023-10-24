@@ -42,13 +42,13 @@ sealed interface PhysicalDevice {
         override val type: String,
         override val enableCloudService: Boolean,
         override val hubDeviceId: String,
-        val group: Boolean,
-        val groupName: String?,
-        val master: Boolean,
+        val group: Boolean = false,
+        val groupName: String? = null,
+        val master: Boolean = true,
     ) : PhysicalDevice
 }
 
-private class PhysicalDeviceSerializer : KSerializer<PhysicalDevice> {
+class PhysicalDeviceSerializer : KSerializer<PhysicalDevice> {
     override val descriptor: SerialDescriptor
         get() = buildClassSerialDescriptor("PhysicalDevice") {
             element<String>("deviceType")
