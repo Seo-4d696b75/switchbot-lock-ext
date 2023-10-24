@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
     alias(libs.plugins.kotlinx.serialization)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -44,6 +46,9 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
 
     implementation(project(":domain"))
+
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
 
     testImplementation(libs.junit)
     testImplementation(libs.okhttp.mockwebserver)
