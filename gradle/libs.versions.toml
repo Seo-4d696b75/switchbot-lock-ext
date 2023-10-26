@@ -35,6 +35,9 @@ appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "a
 compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version = "2.6.0" }
 hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version = "1.0.0" }
 
+# security
+androidx-security = { group = "androidx.security", name = "security-crypto", version = "1.0.0" }
+
 # network
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }

@@ -65,6 +65,8 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":api"))
 
+    implementation(libs.androidx.security)
+
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
 
