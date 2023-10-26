@@ -36,7 +36,7 @@ android {
 
 dependencies {
 
-    implementation(libs.core.ktx)
+    implementation(libs.androidx.core.ktx)
     implementation(libs.kotlinx.serialization.json)
 
     implementation(platform(libs.kotlinx.coroutines.bom))
