@@ -39,5 +39,8 @@ dependencies {
     implementation(libs.core.ktx)
     implementation(libs.kotlinx.serialization.json)
 
+    implementation(platform(libs.kotlinx.coroutines.bom))
+    implementation(libs.kotlinx.coroutines.core)
+
     testImplementation(libs.junit)
 }

@@ -1,21 +1,24 @@
 package com.seo4d696b75.android.switchbot_lock_ext.data.auth
 
-import com.seo4d696b75.android.switchbot_lock_ext.data.BuildConfig
 import com.seo4d696b75.android.switchbot_lock_ext.domain.auth.UserCredential
 import com.seo4d696b75.android.switchbot_lock_ext.domain.auth.UserCredentialProvider
+import com.seo4d696b75.android.switchbot_lock_ext.domain.user.UserRegistration
+import com.seo4d696b75.android.switchbot_lock_ext.domain.user.UserRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Inject
 
-class UserCredentialProviderImpl @Inject constructor() :
+class UserCredentialProviderImpl @Inject constructor(
+    private val userRepository: UserRepository,
+) :
     UserCredentialProvider {
     override fun invoke(): UserCredential {
-        return UserCredential(
-            token = BuildConfig.SWITCH_BOT_TOKEN,
-            secret = BuildConfig.SWITCH_BOT_SECRET,
-        )
+        return when (val user = userRepository.currentUser) {
+            is UserRegistration.User -> user.credential
+            UserRegistration.Undefined -> throw IllegalStateException("user credentials not found")
+        }
     }
 }
 
