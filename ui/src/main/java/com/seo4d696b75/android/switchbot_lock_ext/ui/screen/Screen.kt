@@ -19,6 +19,7 @@ sealed interface Screen {
      */
     sealed interface BottomTab {
         val tabRoute: String
+
         @get:StringRes
         val labelId: Int
         val icon: ImageVector
@@ -51,6 +52,10 @@ sealed interface Screen {
     sealed interface User : Screen {
         data object Top : User {
             override val route = "$tabRoute/top"
+        }
+
+        data object Edit : User {
+            override val route = "$tabRoute/edit"
         }
 
         companion object : BottomTab {

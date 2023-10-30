@@ -5,6 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.Screen
+import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.user.EditUserScreen
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.user.UserScreen
 
 fun NavGraphBuilder.userNavGraph(
@@ -17,7 +18,21 @@ fun NavGraphBuilder.userNavGraph(
         composable(
             route = Screen.User.Top.route,
         ) {
-            UserScreen()
+            UserScreen(
+                navigateToEdit = {
+                    navController.navigateSingleTop(Screen.User.Edit.route)
+                },
+            )
+        }
+
+        composable(
+            route = Screen.User.Edit.route,
+        ) {
+            EditUserScreen(
+                navigateBack = {
+                    navController.popBackStack()
+                },
+            )
         }
     }
 }

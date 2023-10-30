@@ -17,6 +17,7 @@ import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.user.page.UserPage
 
 @Composable
 fun UserScreen(
+    navigateToEdit: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: UserViewModel = hiltViewModel(),
 ) {
@@ -25,7 +26,7 @@ fun UserScreen(
     UserScreen(
         modifier = modifier.fillMaxSize(),
         user = uiState.user,
-        onEditUserClicked = {}, // TODO navigate to edit screen
+        onEditUserClicked = navigateToEdit,
         onRemoveUserClicked = viewModel::removeUser,
     )
 }

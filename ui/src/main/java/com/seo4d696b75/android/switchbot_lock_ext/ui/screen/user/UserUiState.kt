@@ -9,12 +9,14 @@ data class UserUiState(
     val user: UserRegistration,
     val tokenInput: TextFieldValue,
     val secretInput: TextFieldValue,
+    val isSaveEnabled: Boolean,
 ) {
     companion object {
         val InitialValue = UserUiState(
             user = UserRegistration.Undefined,
             tokenInput = TextFieldValue(),
             secretInput = TextFieldValue(),
+            isSaveEnabled = false,
         )
     }
 }

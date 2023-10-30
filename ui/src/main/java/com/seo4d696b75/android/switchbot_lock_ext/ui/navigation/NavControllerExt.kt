@@ -1,6 +1,7 @@
 package com.seo4d696b75.android.switchbot_lock_ext.ui.navigation
 
 import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavController
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.Screen
 
 val NavBackStackEntry.currentBottomTab: Screen.BottomTab?
@@ -13,3 +14,9 @@ val NavBackStackEntry.currentBottomTab: Screen.BottomTab?
             else -> null
         }
     }
+
+fun NavController.navigateSingleTop(route: String) {
+    navigate(route) {
+        launchSingleTop = true
+    }
+}
