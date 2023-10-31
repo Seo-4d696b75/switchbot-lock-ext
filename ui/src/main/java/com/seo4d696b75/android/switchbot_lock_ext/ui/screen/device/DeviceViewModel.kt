@@ -3,7 +3,6 @@ package com.seo4d696b75.android.switchbot_lock_ext.ui.screen.device
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.DeviceRepository
-import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockDevice
 import com.seo4d696b75.android.switchbot_lock_ext.domain.user.UserRegistration
 import com.seo4d696b75.android.switchbot_lock_ext.domain.user.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,8 +26,7 @@ class DeviceViewModel @Inject constructor(
     private val deviceRepository: DeviceRepository,
 ) : ViewModel() {
 
-    private val isRefreshingFlow = MutableStateFlow(true)
-    private val devicesFlow = MutableStateFlow<List<LockDevice>>(emptyList())
+    private val isRefreshingFlow = MutableStateFlow(false)
     private val snackBarMessageFlow = MutableStateFlow<String?>(null)
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -37,7 +35,7 @@ class DeviceViewModel @Inject constructor(
         .flatMapLatest { user ->
             when (user) {
                 is UserRegistration.User -> combine(
-                    devicesFlow,
+                    deviceRepository.deviceFlow,
                     isRefreshingFlow,
                     snackBarMessageFlow,
                 ) { devices, isRefreshing, snackBarMessage ->
@@ -69,9 +67,7 @@ class DeviceViewModel @Inject constructor(
     fun refresh() = viewModelScope.launch {
         isRefreshingFlow.update { true }
         runCatching {
-            devicesFlow.update {
-                deviceRepository.getLockDevices()
-            }
+            deviceRepository.refresh()
         }.onFailure {
             snackBarMessageFlow.update { "An error happened" }
         }

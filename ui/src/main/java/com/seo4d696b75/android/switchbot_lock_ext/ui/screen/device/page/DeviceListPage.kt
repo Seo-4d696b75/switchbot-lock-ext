@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,10 +29,6 @@ fun DeviceListPage(
     onRefreshClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LaunchedEffect(Unit) {
-        onRefreshClicked()
-    }
-
     Box(
         modifier = modifier.fillMaxSize(),
     ) {
@@ -76,7 +71,7 @@ private fun DeviceListPagePreview_Empty() {
         Surface {
             DeviceListPage(
                 devices = persistentListOf(),
-                isRefreshing = true,
+                isRefreshing = false,
                 onRefreshClicked = {},
             )
         }

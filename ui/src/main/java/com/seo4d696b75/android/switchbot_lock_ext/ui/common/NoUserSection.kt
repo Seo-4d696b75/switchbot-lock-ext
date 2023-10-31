@@ -31,7 +31,7 @@ fun NoUserSection(
         )
         Text(
             text = "No user configured",
-            style = MaterialTheme.typography.body1,
+            style = MaterialTheme.typography.h6,
         )
     }
 }

@@ -2,6 +2,9 @@ package com.seo4d696b75.android.switchbot_lock_ext.ui.screen.device.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.MaterialTheme
@@ -31,7 +34,13 @@ fun NoDeviceSection(
         )
         Text(
             text = "No lock devices",
-            style = MaterialTheme.typography.body1,
+            style = MaterialTheme.typography.h6,
+        )
+        Spacer(modifier = Modifier.height(24.dp))
+        Text(
+            text = "Your devices not found? Please refresh device list for the latest data.",
+            style = MaterialTheme.typography.body2,
+            modifier = Modifier.padding(horizontal = 32.dp),
         )
     }
 }
