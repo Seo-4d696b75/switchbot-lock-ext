@@ -17,7 +17,7 @@ import com.seo4d696b75.android.switchbot_lock_ext.ui.R
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.LoadingSection
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.PrimaryButton
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.device.component.DeviceListSection
-import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.device.component.NoDeviceSection
+import com.seo4d696b75.android.switchbot_lock_ext.ui.common.NoDeviceSection
 import com.seo4d696b75.android.switchbot_lock_ext.ui.theme.AppTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -47,7 +47,9 @@ fun DeviceListPage(
                 contentAlignment = Alignment.Center,
             ) {
                 if (devices.isEmpty()) {
-                    NoDeviceSection()
+                    NoDeviceSection(
+                        description = "Your devices not found? Please refresh device list for the latest data.",
+                    )
                 } else {
                     DeviceListSection(devices = devices)
                 }

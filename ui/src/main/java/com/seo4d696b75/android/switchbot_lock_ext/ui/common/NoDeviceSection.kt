@@ -1,4 +1,4 @@
-package com.seo4d696b75.android.switchbot_lock_ext.ui.screen.device.component
+package com.seo4d696b75.android.switchbot_lock_ext.ui.common
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -20,6 +20,7 @@ import com.seo4d696b75.android.switchbot_lock_ext.ui.R
 
 @Composable
 fun NoDeviceSection(
+    description: String,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -38,7 +39,7 @@ fun NoDeviceSection(
         )
         Spacer(modifier = Modifier.height(24.dp))
         Text(
-            text = "Your devices not found? Please refresh device list for the latest data.",
+            text = description,
             style = MaterialTheme.typography.body2,
             modifier = Modifier.padding(horizontal = 32.dp),
         )
