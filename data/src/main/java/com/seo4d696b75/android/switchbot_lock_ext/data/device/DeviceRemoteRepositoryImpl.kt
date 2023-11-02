@@ -5,9 +5,9 @@ import com.seo4d696b75.android.switchbot_lock_ext.api.response.device.PhysicalDe
 import com.seo4d696b75.android.switchbot_lock_ext.api.response.status.PhysicalDeviceStatus
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.DeviceRemoteRepository
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockDevice
-import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockDeviceStatus
+import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockStatus
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockGroup
-import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockState
+import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockState
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -25,7 +25,7 @@ class DeviceRemoteRepositoryImpl @Inject constructor(
             .map { it.toModel() }
     }
 
-    override suspend fun getLockDeviceStatus(id: String): LockDeviceStatus {
+    override suspend fun getLockDeviceStatus(id: String): LockStatus {
         val response = api.getStatus(id)
         return response.toModel()
     }
@@ -48,11 +48,11 @@ private fun PhysicalDevice.Lock.toModel(): LockDevice {
     )
 }
 
-private fun PhysicalDeviceStatus.toModel(): LockDeviceStatus {
-    return LockDeviceStatus(
+private fun PhysicalDeviceStatus.toModel(): LockStatus {
+    return LockStatus(
         battery = battery,
         version = version,
-        lockState = LockState
+        state = LockState
             .values()
             .first { it.name.lowercase() == lockState },
         isDoorClosed = doorState == "closed",
