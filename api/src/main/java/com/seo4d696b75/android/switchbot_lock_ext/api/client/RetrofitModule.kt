@@ -29,7 +29,10 @@ object RetrofitModule {
                 }
             }
             .build()
-        val json = Json { ignoreUnknownKeys = true }
+        val json = Json {
+            ignoreUnknownKeys = true
+            encodeDefaults = true
+        }
         val mediaType = "application/json".toMediaType()
         return Retrofit.Builder()
             .client(client)
