@@ -4,6 +4,7 @@ import android.util.Log
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.DeviceRemoteRepository
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.DeviceRepository
 import com.seo4d696b75.android.switchbot_lock_ext.domain.status.AsyncLockStatus
+import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockState
 import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockStatus
 import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockStatusRepository
 import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockStatusStore
@@ -33,7 +34,10 @@ class LockStatusRepositoryImpl @Inject constructor(
     private var runningJob: Job? = null
     private val dirtyFlagFlow = MutableStateFlow(true)
 
-    override val statusFlow: Flow<LockStatusStore> = channelFlow {
+    private val lockStateCacheFlow =
+        MutableStateFlow<Map<String, Boolean>>(emptyMap())
+
+    private val statusMapFlow = channelFlow {
         combine(
             deviceRepository
                 .controlDeviceFlow
@@ -65,19 +69,40 @@ class LockStatusRepositoryImpl @Inject constructor(
                 dirtyFlagFlow.update { false }
             }
         }
-    }.map(::LockStatusStoreImpl)
+    }
+
+    override val statusFlow: Flow<LockStatusStore> = combine(
+        statusMapFlow,
+        lockStateCacheFlow,
+    ) { map, lockStateCache ->
+        LockStatusStoreImpl(map, lockStateCache)
+    }
 
     override fun refresh() {
         dirtyFlagFlow.update { true }
+        lockStateCacheFlow.update { emptyMap() }
+    }
+
+    override fun update(id: String, locked: Boolean) {
+        lockStateCacheFlow.update {
+            it.toMutableMap().apply { set(id, locked) }
+        }
     }
 
     private class LockStatusStoreImpl(
         private val map: Map<String, Result<LockStatus>>,
+        private val lockStateCache: Map<String, Boolean>,
     ) : LockStatusStore {
         override fun get(id: String): AsyncLockStatus {
             return map[id]?.let { result ->
                 result.getOrNull()?.let { status ->
-                    AsyncLockStatus.Data(status)
+                    AsyncLockStatus.Data(
+                        lockStateCache[id]?.let { locked ->
+                            status.copy(
+                                state = if (locked) LockState.Locked else LockState.Unlocked,
+                            )
+                        } ?: status
+                    )
                 } ?: AsyncLockStatus.Error
             } ?: AsyncLockStatus.Loading
         }
