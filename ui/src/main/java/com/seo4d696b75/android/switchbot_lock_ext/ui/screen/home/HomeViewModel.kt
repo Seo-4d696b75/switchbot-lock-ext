@@ -36,7 +36,7 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val lockStateCacheFlow =
-        MutableStateFlow(mutableMapOf<String, Boolean>())
+        MutableStateFlow<Map<String, Boolean>>(emptyMap())
 
     private fun resolveLockStatus(
         id: String,
@@ -99,7 +99,7 @@ class HomeViewModel @Inject constructor(
     fun refresh() {
         statusRepository.refresh()
         lockStateCacheFlow.update {
-            it.apply { clear() }
+            emptyMap()
         }
     }
 
@@ -110,7 +110,7 @@ class HomeViewModel @Inject constructor(
                 controlRepository.setLocked(id, locked)
             }.onSuccess {
                 lockStateCacheFlow.update {
-                    it.apply { set(id, locked) }
+                    it.toMutableMap().apply { set(id, locked) }
                 }
             }
         }
