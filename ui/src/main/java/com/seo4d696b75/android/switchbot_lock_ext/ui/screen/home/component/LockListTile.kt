@@ -1,7 +1,6 @@
 package com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.component
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -46,13 +45,14 @@ fun LockListTile(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
-            Spacer(modifier = Modifier.height(12.dp))
             LockControlSection(
                 status = state.status,
                 onLockedChanged = {
                     onLockedChanged(state.device.id, it)
                 },
-                modifier = Modifier.height(45.dp),
+                modifier = Modifier
+                    .height(100.dp)
+                    .fillMaxWidth(),
             )
         }
     }
