@@ -3,7 +3,11 @@ package com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.page
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.Surface
@@ -49,6 +53,11 @@ fun LockListPage(
                     state = it,
                     onLockedChanged = onLockedChanged,
                 )
+            }
+            item(
+                span = { GridItemSpan(2) },
+            ) {
+                Spacer(modifier = Modifier.fillMaxWidth().height(40.dp))
             }
         }
     }
