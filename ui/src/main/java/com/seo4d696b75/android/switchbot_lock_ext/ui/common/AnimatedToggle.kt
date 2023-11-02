@@ -86,7 +86,9 @@ fun AnimatedToggle(
         targetColor = contentColor(true),
     )
 
-    LaunchedEffect(state.isLoading) {
+    // when hoisted state `checked` changed outside this composable,
+    // then internal state must be synchronized
+    LaunchedEffect(state.isChecked) {
         if (!state.isLoading) {
             state.slide.snapTo(
                 if (state.isChecked) 1f else 0f,
