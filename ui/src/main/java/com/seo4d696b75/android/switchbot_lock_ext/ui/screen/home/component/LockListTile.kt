@@ -28,6 +28,7 @@ import com.seo4d696b75.android.switchbot_lock_ext.ui.theme.AppTheme
 fun LockListTile(
     state: DeviceState,
     onLockedChanged: suspend (String, Boolean) -> Unit,
+    showStatusDetail: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -49,6 +50,9 @@ fun LockListTile(
                 status = state.status,
                 onLockedChanged = {
                     onLockedChanged(state.device.id, it)
+                },
+                showStatusDetail = {
+                    showStatusDetail(state.device.id)
                 },
                 modifier = Modifier
                     .height(100.dp)
@@ -113,6 +117,7 @@ private fun LockListTilePreview(
             ),
             modifier = Modifier.width(180.dp),
             onLockedChanged = { _, _ -> },
+            showStatusDetail = {},
         )
     }
 }

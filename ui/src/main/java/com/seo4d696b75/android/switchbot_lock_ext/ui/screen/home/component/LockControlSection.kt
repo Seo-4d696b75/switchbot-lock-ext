@@ -28,6 +28,7 @@ import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockState
 fun LockControlSection(
     status: AsyncLockStatus,
     onLockedChanged: suspend (Boolean) -> Unit,
+    showStatusDetail: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     when (status) {
@@ -46,7 +47,7 @@ fun LockControlSection(
                         percent = status.data.battery,
                         modifier = Modifier.padding(8.dp),
                     )
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = showStatusDetail) {
                         Icon(
                             Icons.Outlined.Info,
                             contentDescription = "status details",
@@ -61,7 +62,9 @@ fun LockControlSection(
                 }
                 if (status.data.state == LockState.Jammed) {
                     Row(
-                        modifier = Modifier.fillMaxWidth().height(45.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(45.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center,
                     ) {

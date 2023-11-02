@@ -83,7 +83,7 @@ fun DeviceListItem(
     }
 }
 
-private fun LockGroup.formatString() = when(this) {
+fun LockGroup.formatString() = when(this) {
     LockGroup.Disabled -> "none"
     is LockGroup.Enabled -> "$groupName (master: $isMaster)"
 }

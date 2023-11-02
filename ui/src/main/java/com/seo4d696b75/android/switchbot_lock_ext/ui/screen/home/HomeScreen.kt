@@ -21,6 +21,7 @@ import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 fun HomeScreen(
+    navigateToStatusDetail: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
@@ -31,6 +32,7 @@ fun HomeScreen(
         devices = uiState.devices,
         onLockedChanged = viewModel::onLockedChanged,
         onRefresh = viewModel::refresh,
+        showStatusDetail = navigateToStatusDetail,
         modifier = modifier.fillMaxSize(),
     )
 }
@@ -42,6 +44,7 @@ fun HomeScreen(
     devices: ImmutableList<DeviceState>,
     onLockedChanged: suspend (String, Boolean) -> Unit,
     onRefresh: () -> Unit,
+    showStatusDetail: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -66,6 +69,7 @@ fun HomeScreen(
             LockListPage(
                 devices = devices,
                 onLockedChanged = onLockedChanged,
+                showStatusDetail = showStatusDetail,
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding),

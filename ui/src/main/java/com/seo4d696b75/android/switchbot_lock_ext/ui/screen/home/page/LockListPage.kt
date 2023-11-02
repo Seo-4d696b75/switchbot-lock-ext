@@ -31,6 +31,7 @@ import kotlinx.collections.immutable.toPersistentList
 fun LockListPage(
     devices: ImmutableList<DeviceState>,
     onLockedChanged: suspend (String, Boolean) -> Unit,
+    showStatusDetail: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (devices.isEmpty()) {
@@ -52,12 +53,15 @@ fun LockListPage(
                 LockListTile(
                     state = it,
                     onLockedChanged = onLockedChanged,
+                    showStatusDetail = showStatusDetail,
                 )
             }
             item(
                 span = { GridItemSpan(2) },
             ) {
-                Spacer(modifier = Modifier.fillMaxWidth().height(40.dp))
+                Spacer(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(40.dp))
             }
         }
     }
@@ -71,6 +75,7 @@ private fun LockListPagePreview_Empty() {
             LockListPage(
                 devices = persistentListOf(),
                 onLockedChanged = { _, _ -> },
+                showStatusDetail = {},
             )
         }
     }
@@ -98,6 +103,7 @@ private fun LockListPagePreview() {
                     }
                     .toPersistentList(),
                 onLockedChanged = { _, _ -> },
+                showStatusDetail = {},
             )
         }
     }

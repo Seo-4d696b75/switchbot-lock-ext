@@ -30,6 +30,11 @@ sealed interface Screen {
             override val route = "$tabRoute/top"
         }
 
+        data object StatusDetailDialog : Home {
+            override val route = "$tabRoute/statusDetailDialog/{deviceId}"
+            fun createRoute(id: String) = "$tabRoute/statusDetailDialog/$id"
+        }
+
         companion object : BottomTab {
             override val tabRoute = "home"
             override val labelId = R.string.bottom_nav_home
