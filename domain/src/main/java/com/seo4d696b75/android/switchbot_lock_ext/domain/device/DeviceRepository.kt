@@ -4,5 +4,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface DeviceRepository {
     val deviceFlow: Flow<List<LockDevice>>
+    val controlDeviceFlow: Flow<List<LockDevice>>
     suspend fun refresh()
 }
