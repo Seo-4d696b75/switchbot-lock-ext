@@ -2,7 +2,11 @@ package com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -26,6 +30,7 @@ fun HomeScreen(
         isUserConfigured = uiState.isUserConfigured,
         devices = uiState.devices,
         onLockedChanged = viewModel::onLockedChanged,
+        onRefresh = viewModel::refresh,
         modifier = modifier.fillMaxSize(),
     )
 }
@@ -36,6 +41,7 @@ fun HomeScreen(
     isUserConfigured: Boolean,
     devices: ImmutableList<DeviceState>,
     onLockedChanged: suspend (String, Boolean) -> Unit,
+    onRefresh: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -46,6 +52,14 @@ fun HomeScreen(
                     Text(text = "Home")
                 },
             )
+        },
+        floatingActionButton = {
+            FloatingActionButton(onClick = onRefresh) {
+                Icon(
+                    Icons.Default.Refresh,
+                    contentDescription = "refresh status",
+                )
+            }
         },
     ) { innerPadding ->
         if (isUserConfigured) {
