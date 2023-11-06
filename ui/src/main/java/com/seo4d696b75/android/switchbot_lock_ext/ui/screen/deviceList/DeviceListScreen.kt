@@ -3,7 +3,11 @@ package com.seo4d696b75.android.switchbot_lock_ext.ui.screen.deviceList
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -25,6 +29,7 @@ import kotlinx.collections.immutable.ImmutableList
 @Composable
 fun DeviceListScreen(
     modifier: Modifier = Modifier,
+    navigateToRegistration: () -> Unit,
     viewModel: DeviceListViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -34,6 +39,7 @@ fun DeviceListScreen(
         devices = uiState.devices,
         snackBarMessage = uiState.snackBarMessage,
         onRemoveClicked = viewModel::remove,
+        onAddClicked = navigateToRegistration,
         modifier = modifier.fillMaxSize(),
     )
 }
@@ -44,6 +50,7 @@ fun DeviceListScreen(
     isUserConfigured: Boolean,
     devices: ImmutableList<LockDevice>,
     onRemoveClicked: (LockDevice) -> Unit,
+    onAddClicked: () -> Unit,
     snackBarMessage: UiEvent<String>,
     modifier: Modifier = Modifier,
 ) {
@@ -63,6 +70,14 @@ fun DeviceListScreen(
                     Text(text = "Device Management")
                 },
             )
+        },
+        floatingActionButton = {
+            FloatingActionButton(onClick = onAddClicked) {
+                Icon(
+                    Icons.Default.Add,
+                    contentDescription = "add device",
+                )
+            }
         },
         snackbarHost = {
             SnackbarHost(hostState = snackBarHostState)
