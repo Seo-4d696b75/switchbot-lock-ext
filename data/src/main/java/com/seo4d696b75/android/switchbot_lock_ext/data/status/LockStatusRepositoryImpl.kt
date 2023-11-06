@@ -40,7 +40,7 @@ class LockStatusRepositoryImpl @Inject constructor(
     private val statusMapFlow = channelFlow {
         combine(
             deviceRepository
-                .controlDeviceFlow
+                .deviceFlow
                 .map { devices -> devices.map { it.id } }
                 .distinctUntilChanged(),
             dirtyFlagFlow,

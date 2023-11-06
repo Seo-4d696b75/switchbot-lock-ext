@@ -2,9 +2,8 @@ package com.seo4d696b75.android.switchbot_lock_ext.data.device
 
 import com.seo4d696b75.android.switchbot_lock_ext.data.db.LockDeviceDao
 import com.seo4d696b75.android.switchbot_lock_ext.data.db.LockDeviceEntity
-import com.seo4d696b75.android.switchbot_lock_ext.domain.device.DeviceRemoteRepository
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.DeviceRepository
-import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockGroup
+import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockDevice
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -15,25 +14,19 @@ import javax.inject.Inject
 
 class DeviceRepositoryImpl @Inject constructor(
     private val dao: LockDeviceDao,
-    private val remoteRepository: DeviceRemoteRepository,
 ) : DeviceRepository {
     override val deviceFlow = dao
         .getAllDevices()
         .map { list -> list.map { it.toModel() } }
 
-    override val controlDeviceFlow = deviceFlow.map { list ->
-        list.filter {
-            when (val group = it.group) {
-                LockGroup.Disabled -> true
-                is LockGroup.Enabled -> group.isMaster
-            }
-        }
+    override suspend fun add(devices: List<LockDevice>) {
+        dao.addDevices(
+            devices.map { LockDeviceEntity.fromModel(it) },
+        )
     }
 
-    override suspend fun refresh() {
-        val devices = remoteRepository.getLockDevices()
-        val entities = devices.map { LockDeviceEntity.fromModel(it) }
-        dao.refreshDevices(entities)
+    override suspend fun remove(device: LockDevice) {
+        dao.removeDevice(device.id)
     }
 }
 
