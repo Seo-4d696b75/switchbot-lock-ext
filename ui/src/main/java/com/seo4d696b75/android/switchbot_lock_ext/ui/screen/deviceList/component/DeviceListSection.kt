@@ -1,4 +1,4 @@
-package com.seo4d696b75.android.switchbot_lock_ext.ui.screen.device.component
+package com.seo4d696b75.android.switchbot_lock_ext.ui.screen.deviceList.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,8 +11,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,6 +33,7 @@ import kotlinx.collections.immutable.ImmutableList
 @Composable
 fun DeviceListSection(
     devices: ImmutableList<LockDevice>,
+    onRemoveClicked: (LockDevice) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -40,7 +44,10 @@ fun DeviceListSection(
             devices,
             key = { it.id },
         ) {
-            DeviceListItem(device = it)
+            DeviceListItem(
+                device = it,
+                onRemoveClicked = { onRemoveClicked(it) },
+            )
         }
     }
 }
@@ -48,6 +55,7 @@ fun DeviceListSection(
 @Composable
 fun DeviceListItem(
     device: LockDevice,
+    onRemoveClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -55,7 +63,9 @@ fun DeviceListItem(
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth().padding(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
         ) {
             Icon(
                 painter = painterResource(
@@ -65,7 +75,9 @@ fun DeviceListItem(
                 modifier = Modifier.size(40.dp),
             )
             Spacer(modifier = Modifier.width(12.dp))
-            Column {
+            Column(
+                modifier = Modifier.weight(1f),
+            ) {
                 Text(
                     text = device.name,
                     style = MaterialTheme.typography.titleLarge,
@@ -79,11 +91,18 @@ fun DeviceListItem(
                     style = MaterialTheme.typography.titleSmall,
                 )
             }
+            Spacer(modifier = Modifier.width(12.dp))
+            IconButton(onClick = onRemoveClicked) {
+                Icon(
+                    Icons.Outlined.Delete,
+                    contentDescription = "remove",
+                )
+            }
         }
     }
 }
 
-fun LockGroup.formatString() = when(this) {
+fun LockGroup.formatString() = when (this) {
     LockGroup.Disabled -> "none"
     is LockGroup.Enabled -> "$groupName (master: $isMaster)"
 }
@@ -100,6 +119,7 @@ private fun DeviceListItemPreview() {
                 hubDeviceId = "hub-device-id",
                 group = LockGroup.Disabled,
             ),
+            onRemoveClicked = {},
         )
     }
 }
