@@ -39,7 +39,7 @@ fun LockListPage(
             modifier = modifier,
             contentAlignment = Alignment.Center,
         ) {
-            NoDeviceSection(description = "No devices registered yet, or no master devices when grouped with others.")
+            NoDeviceSection(description = "No controllable devices registered yet.")
         }
     } else {
         LazyVerticalGrid(
