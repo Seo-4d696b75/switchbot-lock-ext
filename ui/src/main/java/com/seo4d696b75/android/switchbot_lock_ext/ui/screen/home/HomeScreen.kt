@@ -1,5 +1,6 @@
 package com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -65,21 +66,26 @@ fun HomeScreen(
             }
         },
     ) { innerPadding ->
-        if (isUserConfigured) {
-            LockListPage(
-                devices = devices,
-                onLockedChanged = onLockedChanged,
-                showStatusDetail = showStatusDetail,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding),
-            )
-        } else {
-            NoUserHomePage(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding),
-            )
+        Crossfade(
+            targetState = isUserConfigured,
+            label = "HomeScreen#isUserConfigured",
+        ) {
+            if (it) {
+                LockListPage(
+                    devices = devices,
+                    onLockedChanged = onLockedChanged,
+                    showStatusDetail = showStatusDetail,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding),
+                )
+            } else {
+                NoUserHomePage(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding),
+                )
+            }
         }
     }
 }

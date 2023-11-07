@@ -1,5 +1,6 @@
 package com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.component
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,77 +32,85 @@ fun LockControlSection(
     showStatusDetail: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    when (status) {
-        is AsyncLockStatus.Data -> {
-            Column(
-                modifier = modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.SpaceBetween,
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically,
+    Crossfade(
+        targetState = status,
+        label = "LockControlSection",
+    ) {
+        when (it) {
+            is AsyncLockStatus.Data -> {
+                Column(
+                    modifier = modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.SpaceBetween,
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    BatterySection(
-                        percent = status.data.battery,
-                        modifier = Modifier.padding(8.dp),
-                    )
-                    IconButton(onClick = showStatusDetail) {
-                        Icon(
-                            Icons.Outlined.Info,
-                            contentDescription = "status details",
-                        )
-                    }
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(
-                            Icons.Outlined.Settings,
-                            contentDescription = "setting",
-                        )
-                    }
-                }
-                if (status.data.state == LockState.Jammed) {
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(45.dp),
-                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Icon(Icons.Outlined.Warning, contentDescription = null)
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text(text = "Jammed")
+                        BatterySection(
+                            percent = it.data.battery,
+                            modifier = Modifier.padding(8.dp),
+                        )
+                        IconButton(onClick = showStatusDetail) {
+                            Icon(
+                                Icons.Outlined.Info,
+                                contentDescription = "status details",
+                            )
+                        }
+                        IconButton(onClick = { /*TODO*/ }) {
+                            Icon(
+                                Icons.Outlined.Settings,
+                                contentDescription = "setting",
+                            )
+                        }
                     }
-                } else {
-                    LockToggle(
-                        isLocked = status.data.state == LockState.Locked,
-                        onLockedChanged = onLockedChanged,
-                    )
+                    if (it.data.state == LockState.Jammed) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(45.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center,
+                        ) {
+                            Icon(
+                                Icons.Outlined.Warning,
+                                contentDescription = null
+                            )
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Text(text = "Jammed")
+                        }
+                    } else {
+                        LockToggle(
+                            isLocked = it.data.state == LockState.Locked,
+                            onLockedChanged = onLockedChanged,
+                        )
+                    }
                 }
             }
-        }
 
-        AsyncLockStatus.Error -> {
-            Row(
-                modifier = modifier,
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center,
-            ) {
-                Icon(Icons.Outlined.Warning, contentDescription = null)
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(text = "API error")
+            AsyncLockStatus.Error -> {
+                Row(
+                    modifier = modifier,
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
+                ) {
+                    Icon(Icons.Outlined.Warning, contentDescription = null)
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(text = "API error")
+                }
             }
-        }
 
-        AsyncLockStatus.Loading -> {
-            Row(
-                modifier = modifier,
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center,
-            ) {
-                CircularProgressIndicator(modifier = Modifier.size(40.dp))
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(text = "Loading")
+            AsyncLockStatus.Loading -> {
+                Row(
+                    modifier = modifier,
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
+                ) {
+                    CircularProgressIndicator(modifier = Modifier.size(40.dp))
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(text = "Loading")
+                }
             }
         }
     }
