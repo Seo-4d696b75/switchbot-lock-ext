@@ -74,7 +74,7 @@ class SecureViewModel @Inject constructor() : ViewModel() {
     }
 
     companion object {
-        val allowedAuthenticators = BiometricManager.Authenticators.BIOMETRIC_STRONG or
+        const val allowedAuthenticators = BiometricManager.Authenticators.BIOMETRIC_STRONG or
                 BiometricManager.Authenticators.DEVICE_CREDENTIAL
     }
 }
