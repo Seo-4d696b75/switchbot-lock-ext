@@ -1,10 +1,10 @@
 package com.seo4d696b75.android.switchbot_lock_ext.ui.screen.main.component
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -23,7 +23,7 @@ fun MainBottomNavigation(
     val backStackEntry by navController.currentBackStackEntryAsState()
     val current = backStackEntry?.currentBottomTab
 
-    BottomNavigation(
+    NavigationBar(
         modifier = modifier.fillMaxWidth(),
     ) {
         listOf(
@@ -31,7 +31,7 @@ fun MainBottomNavigation(
             Screen.Device,
             Screen.User,
         ).forEach { tab ->
-            BottomNavigationItem(
+            NavigationBarItem(
                 selected = current == tab,
                 onClick = {
                     navController.navigate(tab.tabRoute) {

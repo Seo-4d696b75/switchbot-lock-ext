@@ -8,8 +8,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,13 +37,13 @@ fun AppLockedSection(
         )
         Text(
             text = "App Locked",
-            style = MaterialTheme.typography.h6,
+            style = MaterialTheme.typography.titleLarge,
         )
         if (description != null) {
             Spacer(modifier = Modifier.height(24.dp))
             Text(
                 text = description,
-                style = MaterialTheme.typography.body2,
+                style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 32.dp),

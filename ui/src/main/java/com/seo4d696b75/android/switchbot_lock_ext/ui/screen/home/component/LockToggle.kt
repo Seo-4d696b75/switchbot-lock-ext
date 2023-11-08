@@ -2,15 +2,14 @@ package com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.component
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -26,7 +25,8 @@ fun LockToggle(
     modifier: Modifier = Modifier,
 ) {
     val lockedColor = MaterialTheme.colorScheme.primary
-    val unlockedColor = Color.Gray
+    val unlockedColor = MaterialTheme.colorScheme.secondary
+    val contentColor = MaterialTheme.colorScheme.onPrimary
     AnimatedToggle(
         modifier = modifier,
         checked = isLocked,
@@ -36,14 +36,14 @@ fun LockToggle(
                     Icons.Default.KeyboardArrowLeft,
                     contentDescription = null,
                     modifier = Modifier.size(25.dp),
-                    tint = Color.White,
+                    tint = contentColor,
                 )
             }
             Text(
                 text = if (it) "Unlock" else "Lock",
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
-                color = Color.White,
+                color = contentColor,
                 modifier = Modifier.weight(1f),
                 textAlign = TextAlign.Center
             )
@@ -52,7 +52,7 @@ fun LockToggle(
                     Icons.Default.KeyboardArrowRight,
                     contentDescription = null,
                     modifier = Modifier.size(25.dp),
-                    tint = Color.White,
+                    tint = contentColor,
                 )
             }
         },
@@ -61,7 +61,7 @@ fun LockToggle(
                 text = if (it) "Locking..." else "Unlocking...",
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
-                color = Color.White,
+                color = contentColor,
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
                 maxLines = 1,
@@ -80,5 +80,6 @@ fun LockToggle(
         },
         contentColor = { if (it) lockedColor else unlockedColor },
         onCheckedChange = onLockedChanged,
+        thumbColor = contentColor,
     )
 }
