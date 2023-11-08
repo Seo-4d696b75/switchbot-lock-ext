@@ -43,8 +43,12 @@ sealed interface Screen {
     }
 
     sealed interface Device : Screen {
-        data object Top : Device {
-            override val route = "$tabRoute/top"
+        data object List : Device {
+            override val route = "$tabRoute/list"
+        }
+
+        data object Registration : Device {
+            override val route = "$tabRoute/registration"
         }
 
         companion object : BottomTab {

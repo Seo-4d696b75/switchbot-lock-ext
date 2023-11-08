@@ -20,7 +20,7 @@ import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockGroup
 import com.seo4d696b75.android.switchbot_lock_ext.domain.status.AsyncLockStatus
 import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockState
 import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockStatus
-import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.device.component.formatString
+import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.deviceList.component.formatString
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.DeviceState
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.HomeViewModel
 import com.seo4d696b75.android.switchbot_lock_ext.ui.theme.AppTheme

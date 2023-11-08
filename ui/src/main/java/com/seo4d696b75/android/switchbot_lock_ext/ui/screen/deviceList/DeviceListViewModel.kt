@@ -1,17 +1,24 @@
-package com.seo4d696b75.android.switchbot_lock_ext.ui.screen.device
+package com.seo4d696b75.android.switchbot_lock_ext.ui.screen.deviceList
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.DeviceRepository
+import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockDevice
 import com.seo4d696b75.android.switchbot_lock_ext.domain.user.UserRegistration
 import com.seo4d696b75.android.switchbot_lock_ext.domain.user.UserRepository
+import com.seo4d696b75.android.switchbot_lock_ext.ui.common.NavEvent
+import com.seo4d696b75.android.switchbot_lock_ext.ui.common.NavEventPublisher
+import com.seo4d696b75.android.switchbot_lock_ext.ui.common.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
@@ -21,39 +28,42 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class DeviceViewModel @Inject constructor(
+class DeviceListViewModel @Inject constructor(
     userRepository: UserRepository,
     private val deviceRepository: DeviceRepository,
-) : ViewModel() {
+) : ViewModel(), NavEventPublisher<DeviceListViewModel.Event> {
 
-    private val isRefreshingFlow = MutableStateFlow(false)
-    private val snackBarMessageFlow = MutableStateFlow<String?>(null)
+    sealed interface Event : NavEvent {
+    }
+
+    private val _event = MutableSharedFlow<Event>()
+    override val event = _event.asSharedFlow()
+
+    private val snackBarMessageFlow =
+        MutableStateFlow<UiEvent<String>>(UiEvent.None)
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val uiState: StateFlow<DeviceUiState> = userRepository
+    val uiState: StateFlow<DeviceListUiState> = userRepository
         .userFlow
         .flatMapLatest { user ->
             when (user) {
                 is UserRegistration.User -> combine(
                     deviceRepository.deviceFlow,
-                    isRefreshingFlow,
                     snackBarMessageFlow,
-                ) { devices, isRefreshing, snackBarMessage ->
-                    DeviceUiState(
+                ) { devices, message ->
+                    DeviceListUiState(
                         user = user,
                         devices = devices.toPersistentList(),
-                        isRefreshing = isRefreshing,
-                        snackBarMessage = snackBarMessage,
+                        snackBarMessage = message,
                     )
                 }
 
                 else -> flow {
                     emit(
-                        DeviceUiState(
+                        DeviceListUiState(
                             user = user,
                             devices = persistentListOf(),
-                            isRefreshing = false,
-                            snackBarMessage = null,
+                            snackBarMessage = UiEvent.None,
                         )
                     )
                 }
@@ -61,21 +71,16 @@ class DeviceViewModel @Inject constructor(
         }.stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(),
-            DeviceUiState.InitialValue,
+            DeviceListUiState.InitialValue,
         )
 
-    fun refresh() = viewModelScope.launch {
-        isRefreshingFlow.update { true }
+    fun remove(device: LockDevice) = viewModelScope.launch(Dispatchers.IO) {
         runCatching {
-            deviceRepository.refresh()
+            deviceRepository.remove(device)
         }.onFailure {
-            snackBarMessageFlow.update { "An error happened" }
+            snackBarMessageFlow.update {
+                UiEvent.Data("Failed to remove")
+            }
         }
-        isRefreshingFlow.update { false }
     }
-
-    fun clearSnackBarMessage() {
-        snackBarMessageFlow.update { null }
-    }
-
 }

@@ -5,11 +5,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.launch
 
 @Stable
 interface NavEvent
@@ -34,5 +37,40 @@ fun <E : NavEvent> ObserveEvent(
             .collect {
                 callback.emit(it)
             }
+    }
+}
+
+@Stable
+sealed interface UiEvent<out T> {
+    data object None : UiEvent<Nothing>
+
+    data class Data<T>(
+        val value: T,
+        var hasConsumed: Boolean = false,
+    ) : UiEvent<T>
+
+    fun runOnce(block: (T) -> Unit) {
+        when (this) {
+            None -> {}
+            is Data<T> -> {
+                if (!hasConsumed) {
+                    hasConsumed = true
+                    block(value)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun <T> LaunchedEvent(
+    event: UiEvent<T>,
+    block: suspend CoroutineScope.(T) -> Unit,
+) {
+    val scope = rememberCoroutineScope()
+    LaunchedEffect(event) {
+        event.runOnce {
+            scope.launch { block(it) }
+        }
     }
 }
