@@ -29,7 +29,7 @@ fun CredentialsDescription(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Image(
-            painter = painterResource(id = R.drawable.ic_lock_person),
+            painter = painterResource(id = R.drawable.ic_security),
             contentDescription = null,
             colorFilter = ColorFilter.tint(Color.Gray),
             modifier = Modifier.size(48.dp),
