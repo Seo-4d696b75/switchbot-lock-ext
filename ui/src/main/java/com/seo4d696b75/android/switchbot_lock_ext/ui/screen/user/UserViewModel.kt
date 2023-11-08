@@ -34,7 +34,7 @@ class UserViewModel @Inject constructor(
                 secretInput.update { TextFieldValue(user.credential.secret) }
             }
 
-            UserRegistration.Undefined -> {}
+            else -> {}
         }
     }
 

@@ -20,7 +20,7 @@ class UserRepositoryImpl @Inject constructor(
 ) : UserRepository {
 
     private val _userFlow =
-        MutableStateFlow<UserRegistration>(UserRegistration.Undefined)
+        MutableStateFlow<UserRegistration>(UserRegistration.Loading)
 
     init {
         val token = storage.getUserToken()

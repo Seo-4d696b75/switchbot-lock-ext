@@ -17,7 +17,7 @@ class UserCredentialProviderImpl @Inject constructor(
     override fun invoke(): UserCredential {
         return when (val user = userRepository.currentUser) {
             is UserRegistration.User -> user.credential
-            UserRegistration.Undefined -> throw IllegalStateException("user credentials not found")
+            else -> throw IllegalStateException("user credentials not found")
         }
     }
 }

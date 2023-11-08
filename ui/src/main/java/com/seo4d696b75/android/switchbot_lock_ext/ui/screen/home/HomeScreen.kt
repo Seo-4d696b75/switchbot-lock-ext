@@ -16,6 +16,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.seo4d696b75.android.switchbot_lock_ext.domain.user.UserRegistration
+import com.seo4d696b75.android.switchbot_lock_ext.ui.common.LoadingSection
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.page.LockListPage
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.page.NoUserHomePage
 import kotlinx.collections.immutable.ImmutableList
@@ -29,7 +31,7 @@ fun HomeScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     HomeScreen(
-        isUserConfigured = uiState.isUserConfigured,
+        user = uiState.user,
         devices = uiState.devices,
         onLockedChanged = viewModel::onLockedChanged,
         onRefresh = viewModel::refresh,
@@ -41,7 +43,7 @@ fun HomeScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    isUserConfigured: Boolean,
+    user: UserRegistration,
     devices: ImmutableList<DeviceState>,
     onLockedChanged: suspend (String, Boolean) -> Unit,
     onRefresh: () -> Unit,
@@ -67,23 +69,27 @@ fun HomeScreen(
         },
     ) { innerPadding ->
         Crossfade(
-            targetState = isUserConfigured,
-            label = "HomeScreen#isUserConfigured",
+            targetState = user,
+            label = "HomeScreen",
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
         ) {
-            if (it) {
-                LockListPage(
+            when (it) {
+                is UserRegistration.User -> LockListPage(
                     devices = devices,
                     onLockedChanged = onLockedChanged,
                     showStatusDetail = showStatusDetail,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding),
+                    modifier = Modifier.fillMaxSize(),
                 )
-            } else {
-                NoUserHomePage(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding),
+
+                UserRegistration.Undefined -> NoUserHomePage(
+                    modifier = Modifier.fillMaxSize(),
+                )
+
+                UserRegistration.Loading -> LoadingSection(
+                    isLoading = true,
+                    modifier = Modifier.fillMaxSize(),
                 )
             }
         }

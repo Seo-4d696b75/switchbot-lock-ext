@@ -69,6 +69,8 @@ fun UserScreen(
                         .padding(innerPadding),
                 )
             }
+
+            UserRegistration.Loading -> {}
         }
     }
 }

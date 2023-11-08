@@ -40,17 +40,17 @@ class DeviceViewModel @Inject constructor(
                     snackBarMessageFlow,
                 ) { devices, isRefreshing, snackBarMessage ->
                     DeviceUiState(
-                        isUserConfigured = true,
+                        user = user,
                         devices = devices.toPersistentList(),
                         isRefreshing = isRefreshing,
                         snackBarMessage = snackBarMessage,
                     )
                 }
 
-                UserRegistration.Undefined -> flow {
+                else -> flow {
                     emit(
                         DeviceUiState(
-                            isUserConfigured = false,
+                            user = user,
                             devices = persistentListOf(),
                             isRefreshing = false,
                             snackBarMessage = null,

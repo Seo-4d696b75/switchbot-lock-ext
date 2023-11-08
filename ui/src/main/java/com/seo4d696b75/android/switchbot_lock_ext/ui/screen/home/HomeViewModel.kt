@@ -40,7 +40,7 @@ class HomeViewModel @Inject constructor(
                     statusRepository.statusFlow,
                 ) { devices, statusStore ->
                     HomeUiState(
-                        isUserConfigured = true,
+                        user = user,
                         devices = devices.map {
                             DeviceState(
                                 device = it,
@@ -50,10 +50,10 @@ class HomeViewModel @Inject constructor(
                     )
                 }
 
-                UserRegistration.Undefined -> flow {
+                else -> flow {
                     emit(
                         HomeUiState(
-                            isUserConfigured = false,
+                            user = user,
                             devices = persistentListOf(),
                         )
                     )

@@ -1,6 +1,6 @@
 package com.seo4d696b75.android.switchbot_lock_ext.ui.screen.device
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockDevice
+import com.seo4d696b75.android.switchbot_lock_ext.domain.user.UserRegistration
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.device.page.DeviceListPage
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.device.page.NoUserDevicePage
 import kotlinx.collections.immutable.ImmutableList
@@ -31,7 +32,7 @@ fun DeviceScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     DeviceScreen(
-        isUserConfigured = uiState.isUserConfigured,
+        user = uiState.user,
         devices = uiState.devices,
         isRefreshing = uiState.isRefreshing,
         snackBarMessage = uiState.snackBarMessage,
@@ -44,10 +45,10 @@ fun DeviceScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DeviceScreen(
-    isUserConfigured: Boolean,
+    user: UserRegistration,
     devices: ImmutableList<LockDevice>,
     isRefreshing: Boolean,
-    onRefreshClicked: ()->Unit,
+    onRefreshClicked: () -> Unit,
     snackBarMessage: String?,
     clearSnackBarMessage: () -> Unit,
     modifier: Modifier = Modifier,
@@ -79,19 +80,22 @@ fun DeviceScreen(
             SnackbarHost(hostState = snackBarHostState)
         }
     ) { innerPadding ->
-        Box(
+        Crossfade(
+            targetState = user,
+            label = "DeviceScreen",
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            if (isUserConfigured) {
-                DeviceListPage(
+            when (it) {
+                is UserRegistration.User -> DeviceListPage(
                     devices = devices,
                     isRefreshing = isRefreshing,
                     onRefreshClicked = onRefreshClicked,
                 )
-            } else {
-                NoUserDevicePage()
+
+                UserRegistration.Undefined -> NoUserDevicePage()
+                UserRegistration.Loading -> {}
             }
         }
     }
