@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.view.WindowManager
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -29,6 +30,12 @@ class MainActivity : FragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_SECURE,
+            WindowManager.LayoutParams.FLAG_SECURE,
+        )
+
         setContent {
             AppTheme {
                 Surface(
@@ -58,6 +65,11 @@ class MainActivity : FragmentActivity() {
     override fun onStart() {
         super.onStart()
         viewModel.authenticate(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.lockApp()
     }
 
     private val openSettingLauncher = registerForActivityResult(

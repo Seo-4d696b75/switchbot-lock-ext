@@ -45,6 +45,10 @@ class SecureViewModel @Inject constructor() : ViewModel() {
             }
         }
 
+    fun lockApp() {
+        _uiState.update { SecureUiState.NotAuthenticated }
+    }
+
     fun authenticate(activity: FragmentActivity) {
         _uiState.update { SecureUiState.NotAuthenticated }
         val manager = BiometricManager.from(activity)
@@ -74,7 +78,8 @@ class SecureViewModel @Inject constructor() : ViewModel() {
     }
 
     companion object {
-        const val allowedAuthenticators = BiometricManager.Authenticators.BIOMETRIC_STRONG or
-                BiometricManager.Authenticators.DEVICE_CREDENTIAL
+        const val allowedAuthenticators =
+            BiometricManager.Authenticators.BIOMETRIC_STRONG or
+                    BiometricManager.Authenticators.DEVICE_CREDENTIAL
     }
 }
