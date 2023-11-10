@@ -55,6 +55,10 @@ dependencies {
     implementation(libs.compose.navigation)
     implementation(libs.hilt.navigation.compose)
 
+    implementation(libs.androidx.glance)
+    implementation(libs.androidx.glance.material3)
+    implementation(libs.android.glance.tools.host)
+
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
 

@@ -1,9 +1,11 @@
-package com.seo4d696b75.android.switchbot_lock_ext.widget
+package com.seo4d696b75.android.switchbot_lock_ext.ui.widget
 
 import android.content.Context
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpSize
@@ -18,15 +20,42 @@ import com.google.android.glance.appwidget.host.AppWidgetHost
 import com.google.android.glance.appwidget.host.glance.GlanceAppWidgetHostPreview
 import com.google.android.glance.appwidget.host.glance.compose
 import com.google.android.glance.appwidget.host.rememberAppWidgetHostState
-import com.seo4d696b75.android.switchbot_lock_ext.widget.component.LockButton
+import com.seo4d696b75.android.switchbot_lock_ext.domain.status.AsyncLockStatus
+import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockStatusRepository
+import com.seo4d696b75.android.switchbot_lock_ext.ui.theme.AppWidgetTheme
+import com.seo4d696b75.android.switchbot_lock_ext.ui.widget.component.LockControlSection
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.EntryPointAccessors
+import dagger.hilt.components.SingletonComponent
 
 class LockWidget : GlanceAppWidget() {
     override suspend fun provideGlance(context: Context, id: GlanceId) {
+        val entryPoint = EntryPointAccessors.fromApplication(
+            context,
+            LockWidgetEntryPoint::class.java,
+        )
+        val id = "E8893CF06602"
         provideContent {
             AppWidgetTheme {
-                LockButton()
+                val statusStore by entryPoint
+                    .statusRepository
+                    .statusFlow
+                    .collectAsState(initial = null)
+                val status = statusStore?.get(id) ?: AsyncLockStatus.Loading
+                LockControlSection(
+                    name = "Lock",
+                    status = status,
+                    onLockedChanged = {},
+                )
             }
         }
+    }
+
+    @EntryPoint
+    @InstallIn(SingletonComponent::class)
+    interface LockWidgetEntryPoint {
+        val statusRepository: LockStatusRepository
     }
 }
 

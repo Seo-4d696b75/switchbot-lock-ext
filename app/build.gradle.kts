@@ -72,7 +72,6 @@ dependencies {
     implementation(project(":ui"))
     implementation(project(":domain"))
     implementation(project(":data"))
-    implementation(project(":widget"))
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
