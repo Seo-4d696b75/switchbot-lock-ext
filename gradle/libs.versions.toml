@@ -16,6 +16,8 @@ retrofit = "2.9.0"
 hilt = "2.48.1"
 ksp = "1.9.10-1.0.13"
 room = "2.6.0"
+glance = "1.0.0"
+glance-tools = "0.2.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -48,8 +50,11 @@ hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-com
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version = "1.6.1" }
 
 # glance
-androidx-glance = { group = "androidx.glance", name = "glance-appwidget", version = "1.0.0" }
-androidx-glance-material3 = { group = "androidx.glance", name = "glance-material3", version = "1.0.0" }
+androidx-glance = { group = "androidx.glance", name = "glance-appwidget", version.ref = "glance" }
+androidx-glance-material3 = { group = "androidx.glance", name = "glance-material3", version.ref = "glance" }
+android-glance-tools-host = { group = "com.google.android.glance.tools", name = "appwidget-host", version.ref = "glance-tools" }
+android-glance-tools-configuration = { group = "com.google.android.glance.tools", name = "appwidget-configuration", version.ref = "glance-tools" }
+android-glance-tools-viewer = { group = "com.google.android.glance.tools", name = "appwidget-viewer", version.ref = "glance-tools" }
 
 # room
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
