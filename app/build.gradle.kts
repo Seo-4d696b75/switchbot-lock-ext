@@ -66,6 +66,8 @@ dependencies {
 
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.biometric.ktx)
+    implementation(libs.androidx.glance)
+    implementation(libs.androidx.glance.material3)
 
     implementation(project(":ui"))
     implementation(project(":domain"))

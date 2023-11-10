@@ -47,6 +47,10 @@ hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-com
 
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version = "1.6.1" }
 
+# glance
+androidx-glance = { group = "androidx.glance", name = "glance-appwidget", version = "1.0.0" }
+androidx-glance-material3 = { group = "androidx.glance", name = "glance-material3", version = "1.0.0" }
+
 # room
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
