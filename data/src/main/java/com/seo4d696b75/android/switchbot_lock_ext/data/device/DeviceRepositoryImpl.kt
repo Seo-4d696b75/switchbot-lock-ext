@@ -7,10 +7,10 @@ import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockDevice
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityRetainedComponent
-import dagger.hilt.android.scopes.ActivityRetainedScoped
+import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
+import javax.inject.Singleton
 
 class DeviceRepositoryImpl @Inject constructor(
     private val dao: LockDeviceDao,
@@ -32,9 +32,9 @@ class DeviceRepositoryImpl @Inject constructor(
 
 @Suppress("unused")
 @Module
-@InstallIn(ActivityRetainedComponent::class)
+@InstallIn(SingletonComponent::class)
 interface DeviceRepositoryModule {
     @Binds
-    @ActivityRetainedScoped
+    @Singleton
     fun bindDeviceRepository(impl: DeviceRepositoryImpl): DeviceRepository
 }
