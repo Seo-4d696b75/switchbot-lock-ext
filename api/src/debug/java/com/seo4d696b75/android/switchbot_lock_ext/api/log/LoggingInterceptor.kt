@@ -1,5 +1,6 @@
 package com.seo4d696b75.android.switchbot_lock_ext.api.log
 
+import android.util.Log
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,6 +16,10 @@ object LoggingInterceptorModule {
     @Provides
     @IntoSet
     fun provideLogInterceptor(): Interceptor {
-        return HttpLoggingInterceptor()
+        return HttpLoggingInterceptor {
+            Log.d("okHttp", it)
+        }.apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
     }
 }
