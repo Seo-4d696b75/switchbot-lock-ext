@@ -34,7 +34,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -65,11 +64,12 @@ import kotlin.math.roundToInt
 @Composable
 fun AnimatedToggle(
     checked: Boolean,
+    loading: Boolean,
     label: @Composable RowScope.(Boolean) -> Unit,
     loadingLabel: @Composable RowScope.(Boolean) -> Unit,
     icon: @Composable (Boolean) -> Unit,
     contentColor: (Boolean) -> Color,
-    onCheckedChange: suspend (Boolean) -> Unit,
+    onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
     thumbColor: Color = Color.White,
 ) {
@@ -81,18 +81,25 @@ fun AnimatedToggle(
     val maxOffset = with(density) { (width - thumbSize).toPx() }
 
     val state = rememberAnimatedToggleState(
-        checked = checked,
         initialColor = contentColor(false),
         targetColor = contentColor(true),
     )
 
-    // when hoisted state `checked` changed outside this composable,
+    // when hoisted state changed outside this composable,
     // then internal state must be synchronized
-    LaunchedEffect(state.isChecked) {
-        if (!state.isLoading) {
-            state.slide.snapTo(
-                if (state.isChecked) 1f else 0f,
-            )
+    LaunchedEffect(loading, checked) {
+        state.slide.snapTo(
+            if (!loading) {
+                if (checked) 1f else 0f
+            } else {
+                if (checked) 0f else 1f
+            }
+        )
+    }
+
+    LaunchedEffect(loading) {
+        if (!loading) {
+            state.hasCheckedChanged = false
         }
     }
 
@@ -108,7 +115,7 @@ fun AnimatedToggle(
     ) {
         // label
         Crossfade(
-            targetState = state.isLoading to state.isChecked,
+            targetState = loading to checked,
             label = "label crossfade"
         ) { pair ->
             val (isLoading, isChecked) = pair
@@ -172,37 +179,29 @@ fun AnimatedToggle(
                     )
                 }
                 .draggable(
-                    enabled = !state.isLoading,
+                    enabled = !loading,
                     state = rememberDraggableState { delta ->
                         val pixel = state.slide.value * maxOffset + delta
                         val target = max(min(pixel / maxOffset, 1f), 0f)
                         scope.launch {
                             state.slide.snapTo(target)
                         }
-                        if (target == 1f && !state.isChecked && !state.isLoading) {
-                            scope.launch {
-                                state.isLoading = true
-                                runCatching {
-                                    onCheckedChange(true)
-                                }
-                                state.isLoading = false
-                            }
-                        } else if (target == 0f && state.isChecked && !state.isLoading) {
-                            scope.launch {
-                                state.isLoading = true
-                                runCatching {
-                                    onCheckedChange(false)
-                                }
-                                state.isLoading = false
+                        if (!loading && !state.hasCheckedChanged) {
+                            if (target == 1f && !checked) {
+                                state.hasCheckedChanged = true
+                                onCheckedChange(true)
+                            } else if (target == 0f && checked) {
+                                state.hasCheckedChanged = true
+                                onCheckedChange(false)
                             }
                         }
                     },
                     orientation = Orientation.Horizontal,
                     onDragStopped = {
-                        if (!state.isLoading) {
+                        if (!loading) {
                             scope.launch {
                                 state.slide.animateTo(
-                                    targetValue = if (state.isChecked) 1f else 0f,
+                                    targetValue = if (checked) 1f else 0f,
                                     animationSpec = tween(
                                         durationMillis = 200,
                                         easing = EaseOutCubic,
@@ -224,7 +223,7 @@ fun AnimatedToggle(
                 ),
         ) {
             Crossfade(
-                targetState = state.isLoading to state.isChecked,
+                targetState = loading to checked,
                 label = "thumb crossfade",
                 modifier = Modifier.wrapContentSize(),
             ) { pair ->
@@ -265,24 +264,12 @@ fun AnimatedToggle(
 
 @Stable
 private data class AnimatedToggleState(
-    private var _isChecked: Boolean = false,
-    private val _isLoading: MutableState<Boolean> = mutableStateOf(false),
+    var hasCheckedChanged: Boolean,
     val slide: Animatable<Float, AnimationVector1D>, // normalized in [0,1]
     val colorConverter: TwoWayConverter<Color, AnimationVector4D>,
     val initialColorVec: AnimationVector4D,
     val targetColorVec: AnimationVector4D,
 ) {
-    var isLoading by _isLoading
-
-    val isChecked: Boolean
-        get() = _isChecked
-
-    fun computeIsChecked(hoistedState: Boolean) {
-        if (!isLoading) {
-            _isChecked = hoistedState
-        }
-    }
-
     val currentColor: Color
         get() {
             val colorVec = with(slide.value) {
@@ -299,19 +286,21 @@ private data class AnimatedToggleState(
 
 @Composable
 private fun rememberAnimatedToggleState(
-    checked: Boolean,
     initialColor: Color,
     targetColor: Color,
 ): AnimatedToggleState {
     return remember {
         val converter = (Color.VectorConverter)(initialColor.colorSpace)
         AnimatedToggleState(
+            hasCheckedChanged = false,
             slide = Animatable(0f),
             colorConverter = converter,
             initialColorVec = converter.convertToVector(initialColor),
             targetColorVec = converter.convertToVector(targetColor),
         )
-    }.apply { computeIsChecked(checked) }
+    }.apply {
+
+    }
 }
 
 @Preview
@@ -321,8 +310,13 @@ private fun AnimatedTogglePreview() {
         var isChecked by remember {
             mutableStateOf(false)
         }
+        var isLoading by remember {
+            mutableStateOf(false)
+        }
+        val scope = rememberCoroutineScope()
         AnimatedToggle(
             checked = isChecked,
+            loading = isLoading,
             label = {
                 if (it) {
                     Icon(
@@ -351,7 +345,7 @@ private fun AnimatedTogglePreview() {
             },
             loadingLabel = {
                 Text(
-                    text = if (it) "Locking..." else "Unlocking...",
+                    text = if (it) "Locking" else "Unlocking",
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
                     color = Color.White,
@@ -373,8 +367,12 @@ private fun AnimatedTogglePreview() {
             },
             contentColor = { if (it) Color.Blue else Color.Gray },
             onCheckedChange = {
-                delay(1000)
-                isChecked = it
+                isLoading = true
+                scope.launch {
+                    delay(1000)
+                    isChecked = it
+                    isLoading = false
+                }
             },
         )
     }
