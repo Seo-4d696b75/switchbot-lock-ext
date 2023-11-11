@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.Flow
 interface LockStatusRepository {
     val statusFlow: Flow<LockStatusStore>
     fun refresh()
-    fun update(id: String, locked: Boolean)
+    fun update(id: String, state: LockedState)
 }
