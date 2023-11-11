@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.seo4d696b75.android.switchbot_lock_ext.domain.control.LockControlRepository
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.DeviceRepository
 import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockStatusRepository
+import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockedState
 import com.seo4d696b75.android.switchbot_lock_ext.domain.user.UserRegistration
 import com.seo4d696b75.android.switchbot_lock_ext.domain.user.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +20,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -42,7 +43,7 @@ class HomeViewModel @Inject constructor(
                     HomeUiState(
                         user = user,
                         devices = devices.map {
-                            DeviceState(
+                            LockUiState(
                                 device = it,
                                 status = statusStore[it.id],
                             )
@@ -69,13 +70,25 @@ class HomeViewModel @Inject constructor(
         statusRepository.refresh()
     }
 
-    suspend fun onLockedChanged(id: String, locked: Boolean) {
-        withContext(Dispatchers.IO) {
+    fun onLockedChanged(id: String, locked: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
             Log.d("HomeViewModel", "onLockedChanged id: $id locked: $locked")
             runCatching {
+                statusRepository.update(
+                    id,
+                    LockedState.Normal(isLocked = !locked, isLoading = true),
+                )
                 controlRepository.setLocked(id, locked)
             }.onSuccess {
-                statusRepository.update(id, locked)
+                statusRepository.update(
+                    id,
+                    LockedState.Normal(isLocked = locked),
+                )
+            }.onFailure {
+                statusRepository.update(
+                    id,
+                    LockedState.Error,
+                )
             }
         }
     }

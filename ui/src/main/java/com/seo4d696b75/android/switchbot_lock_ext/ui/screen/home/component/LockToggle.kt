@@ -15,13 +15,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockedState
 import com.seo4d696b75.android.switchbot_lock_ext.ui.R
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.AnimatedToggle
 
 @Composable
 fun LockToggle(
-    isLocked: Boolean,
-    onLockedChanged: suspend (Boolean) -> Unit,
+    state: LockedState.Normal,
+    onLockedChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val lockedColor = MaterialTheme.colorScheme.primary
@@ -29,7 +30,8 @@ fun LockToggle(
     val contentColor = MaterialTheme.colorScheme.onPrimary
     AnimatedToggle(
         modifier = modifier,
-        checked = isLocked,
+        checked = state.isLocked,
+        loading = state.isLoading,
         label = {
             if (it) {
                 Icon(
@@ -58,7 +60,7 @@ fun LockToggle(
         },
         loadingLabel = {
             Text(
-                text = if (it) "Locking..." else "Unlocking...",
+                text = if (it) "Locking" else "Unlocking",
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
                 color = contentColor,

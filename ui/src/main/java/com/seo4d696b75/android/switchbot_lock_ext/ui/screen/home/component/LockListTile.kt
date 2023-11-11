@@ -18,16 +18,15 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockDevice
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockGroup
-import com.seo4d696b75.android.switchbot_lock_ext.domain.status.AsyncLockStatus
-import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockState
 import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockStatus
-import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.DeviceState
+import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockedState
+import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.LockUiState
 import com.seo4d696b75.android.switchbot_lock_ext.ui.theme.AppTheme
 
 @Composable
 fun LockListTile(
-    state: DeviceState,
-    onLockedChanged: suspend (String, Boolean) -> Unit,
+    state: LockUiState,
+    onLockedChanged: (String, Boolean) -> Unit,
     showStatusDetail: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -63,36 +62,37 @@ fun LockListTile(
 }
 
 internal class LockListTilePreviewParamProvider :
-    PreviewParameterProvider<AsyncLockStatus> {
+    PreviewParameterProvider<LockStatus> {
     override val values = sequenceOf(
-        AsyncLockStatus.Loading,
-        AsyncLockStatus.Error,
-        AsyncLockStatus.Data(
-            data = LockStatus(
-                battery = 90,
-                version = "new",
-                state = LockState.Locked,
-                isDoorClosed = true,
-                isCalibrated = true,
-            ),
+        LockStatus.Loading,
+        LockStatus.Error,
+        LockStatus.Data(
+            battery = 90,
+            version = "new",
+            state = LockedState.Normal(true),
+            isDoorClosed = true,
+            isCalibrated = true,
         ),
-        AsyncLockStatus.Data(
-            data = LockStatus(
-                battery = 90,
-                version = "new",
-                state = LockState.Unlocked,
-                isDoorClosed = true,
-                isCalibrated = true,
-            ),
+        LockStatus.Data(
+            battery = 90,
+            version = "new",
+            state = LockedState.Normal(false),
+            isDoorClosed = true,
+            isCalibrated = true,
         ),
-        AsyncLockStatus.Data(
-            data = LockStatus(
-                battery = 90,
-                version = "new",
-                state = LockState.Jammed,
-                isDoorClosed = true,
-                isCalibrated = true,
-            ),
+        LockStatus.Data(
+            battery = 90,
+            version = "new",
+            state = LockedState.Jammed,
+            isDoorClosed = true,
+            isCalibrated = true,
+        ),
+        LockStatus.Data(
+            battery = 90,
+            version = "new",
+            state = LockedState.Error,
+            isDoorClosed = true,
+            isCalibrated = true,
         ),
     )
 }
@@ -101,11 +101,11 @@ internal class LockListTilePreviewParamProvider :
 @Composable
 private fun LockListTilePreview(
     @PreviewParameter(LockListTilePreviewParamProvider::class)
-    status: AsyncLockStatus,
+    status: LockStatus,
 ) {
     AppTheme {
         LockListTile(
-            state = DeviceState(
+            state = LockUiState(
                 device = LockDevice(
                     id = "device-id",
                     name = "Sample Lock",

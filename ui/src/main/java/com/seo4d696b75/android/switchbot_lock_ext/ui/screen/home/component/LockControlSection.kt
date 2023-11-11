@@ -1,5 +1,6 @@
 package com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.component
 
+import android.util.Log
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,31 +14,38 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.seo4d696b75.android.switchbot_lock_ext.domain.status.AsyncLockStatus
-import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockState
+import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockStatus
+import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockedState
+import com.seo4d696b75.android.switchbot_lock_ext.ui.R
 
 @Composable
 fun LockControlSection(
-    status: AsyncLockStatus,
-    onLockedChanged: suspend (Boolean) -> Unit,
+    status: LockStatus,
+    onLockedChanged: (Boolean) -> Unit,
     showStatusDetail: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Crossfade(
-        targetState = status,
+        targetState = when (status) {
+            LockStatus.Loading -> "loading"
+            LockStatus.Error -> "error"
+            is LockStatus.Data -> "data"
+        },
         label = "LockControlSection",
-    ) {
-        when (it) {
-            is AsyncLockStatus.Data -> {
+    ) { key ->
+        Log.d("LockControlSection", key)
+        when (status) {
+            is LockStatus.Data -> {
                 Column(
                     modifier = modifier.fillMaxWidth(),
                     verticalArrangement = Arrangement.SpaceBetween,
@@ -49,7 +57,7 @@ fun LockControlSection(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         BatterySection(
-                            percent = it.data.battery,
+                            percent = status.battery,
                             modifier = Modifier.padding(8.dp),
                         )
                         IconButton(onClick = showStatusDetail) {
@@ -65,50 +73,79 @@ fun LockControlSection(
                             )
                         }
                     }
-                    if (it.data.state == LockState.Jammed) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(45.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center,
-                        ) {
-                            Icon(
-                                Icons.Outlined.Warning,
-                                contentDescription = null
-                            )
-                            Spacer(modifier = Modifier.width(4.dp))
-                            Text(text = "Jammed")
+                    when (val state = status.state) {
+                        LockedState.Jammed -> {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(45.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center,
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_warn),
+                                    contentDescription = null,
+                                    modifier = Modifier.size(32.dp),
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text(text = "Jammed")
+                            }
                         }
-                    } else {
-                        LockToggle(
-                            isLocked = it.data.state == LockState.Locked,
-                            onLockedChanged = onLockedChanged,
-                        )
+
+                        LockedState.Error -> {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(45.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center,
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_warn),
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.error,
+                                    modifier = Modifier.size(32.dp),
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text(text = "Error")
+                            }
+                        }
+
+                        is LockedState.Normal -> {
+                            LockToggle(
+                                state = state,
+                                onLockedChanged = onLockedChanged,
+                            )
+                        }
                     }
                 }
             }
 
-            AsyncLockStatus.Error -> {
+            LockStatus.Error -> {
                 Row(
                     modifier = modifier,
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center,
                 ) {
-                    Icon(Icons.Outlined.Warning, contentDescription = null)
-                    Spacer(modifier = Modifier.width(4.dp))
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_warn),
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.error,
+                        modifier = Modifier.size(32.dp),
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
                     Text(text = "API error")
                 }
             }
 
-            AsyncLockStatus.Loading -> {
+            LockStatus.Loading -> {
                 Row(
                     modifier = modifier,
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center,
                 ) {
-                    CircularProgressIndicator(modifier = Modifier.size(40.dp))
-                    Spacer(modifier = Modifier.width(4.dp))
+                    CircularProgressIndicator(modifier = Modifier.size(32.dp))
+                    Spacer(modifier = Modifier.width(8.dp))
                     Text(text = "Loading")
                 }
             }

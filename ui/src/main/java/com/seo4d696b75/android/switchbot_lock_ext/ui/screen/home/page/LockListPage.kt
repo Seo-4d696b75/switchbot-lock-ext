@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockDevice
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockGroup
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.NoDeviceSection
-import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.DeviceState
+import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.LockUiState
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.component.LockListTile
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.component.LockListTilePreviewParamProvider
 import com.seo4d696b75.android.switchbot_lock_ext.ui.theme.AppTheme
@@ -29,8 +29,8 @@ import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 fun LockListPage(
-    devices: ImmutableList<DeviceState>,
-    onLockedChanged: suspend (String, Boolean) -> Unit,
+    devices: ImmutableList<LockUiState>,
+    onLockedChanged: (String, Boolean) -> Unit,
     showStatusDetail: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -92,7 +92,7 @@ private fun LockListPagePreview() {
                 devices = LockListTilePreviewParamProvider()
                     .values
                     .map {
-                        DeviceState(
+                        LockUiState(
                             device = LockDevice(
                                 id = "device-id",
                                 name = "Sample Lock",

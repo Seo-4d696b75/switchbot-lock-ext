@@ -17,12 +17,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockDevice
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockGroup
-import com.seo4d696b75.android.switchbot_lock_ext.domain.status.AsyncLockStatus
-import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockState
 import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockStatus
+import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockedState
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.deviceList.component.formatString
-import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.DeviceState
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.HomeViewModel
+import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.LockUiState
 import com.seo4d696b75.android.switchbot_lock_ext.ui.theme.AppTheme
 
 @Composable
@@ -46,7 +45,7 @@ fun StatusDetailDialog(
 
 @Composable
 fun StatusDetailDialog(
-    state: DeviceState,
+    state: LockUiState,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -71,12 +70,12 @@ fun StatusDetailDialog(
                     Spacer(modifier = Modifier.height(12.dp))
 
                     when (val status = state.status) {
-                        is AsyncLockStatus.Data -> {
-                            Text(text = "battery: ${status.data.battery}%")
-                            Text(text = "version: ${status.data.version}")
-                            Text(text = "state: ${status.data.state.name}")
-                            Text(text = "door closed: ${status.data.isDoorClosed}")
-                            Text(text = "calibrated: ${status.data.isCalibrated}")
+                        is LockStatus.Data -> {
+                            Text(text = "battery: ${status.battery}%")
+                            Text(text = "version: ${status.version}")
+                            Text(text = "state: ${status.state.formatString()}")
+                            Text(text = "door closed: ${status.isDoorClosed}")
+                            Text(text = "calibrated: ${status.isCalibrated}")
                         }
 
                         else -> {}
@@ -92,12 +91,18 @@ fun StatusDetailDialog(
     )
 }
 
+fun LockedState.formatString() = when (this) {
+    LockedState.Error -> "error"
+    LockedState.Jammed -> "jammed"
+    is LockedState.Normal -> if (isLocked) "locked" else "unlocked"
+}
+
 @Preview
 @Composable
 private fun StatusDetailDialogPreview() {
     AppTheme {
         StatusDetailDialog(
-            state = DeviceState(
+            state = LockUiState(
                 device = LockDevice(
                     id = "device-id",
                     name = "Sample Lock",
@@ -105,14 +110,12 @@ private fun StatusDetailDialogPreview() {
                     hubDeviceId = "hub-device-id",
                     group = LockGroup.Disabled,
                 ),
-                status = AsyncLockStatus.Data(
-                    data = LockStatus(
-                        battery = 90,
-                        version = "new",
-                        state = LockState.Locked,
-                        isDoorClosed = true,
-                        isCalibrated = true,
-                    ),
+                status = LockStatus.Data(
+                    battery = 90,
+                    version = "new",
+                    state = LockedState.Normal(true),
+                    isDoorClosed = true,
+                    isCalibrated = true,
                 ),
             ),
             onDismiss = { },

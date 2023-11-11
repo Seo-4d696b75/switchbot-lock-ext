@@ -44,8 +44,8 @@ fun HomeScreen(
 @Composable
 fun HomeScreen(
     user: UserRegistration,
-    devices: ImmutableList<DeviceState>,
-    onLockedChanged: suspend (String, Boolean) -> Unit,
+    devices: ImmutableList<LockUiState>,
+    onLockedChanged: (String, Boolean) -> Unit,
     onRefresh: () -> Unit,
     showStatusDetail: (String) -> Unit,
     modifier: Modifier = Modifier,
