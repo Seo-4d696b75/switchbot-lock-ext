@@ -22,7 +22,7 @@ object RetrofitModule {
     ): Retrofit {
         val client = OkHttpClient.Builder()
             .connectTimeout(Duration.ofSeconds(3))
-            .readTimeout(Duration.ofSeconds(3))
+            .readTimeout(Duration.ofSeconds(20))
             .retryOnConnectionFailure(false).apply {
                 interceptors.forEach {
                     addNetworkInterceptor(it)
