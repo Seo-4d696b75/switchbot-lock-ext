@@ -8,8 +8,8 @@ import androidx.glance.appwidget.CircularProgressIndicator
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Row
 import androidx.glance.layout.Spacer
-import androidx.glance.layout.height
 import androidx.glance.layout.size
+import androidx.glance.layout.width
 import androidx.glance.layout.wrapContentSize
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
@@ -26,7 +26,7 @@ fun LoadingSection(
         CircularProgressIndicator(
             modifier = GlanceModifier.size(40.dp),
         )
-        Spacer(modifier = GlanceModifier.height(12.dp))
+        Spacer(modifier = GlanceModifier.width(8.dp))
         Text(
             text = message,
             style = TextStyle(

@@ -27,7 +27,7 @@ class LockWidget(
             val state = provider[deviceId]
             AppWidgetTheme {
                 LockControlScreen(
-                    name = "玄関の鍵",
+                    name = "Door Lock",
                     state = LockWidgetUiState.fromModel(state),
                     onLockedChanged = {
                         coroutineScope.launch {

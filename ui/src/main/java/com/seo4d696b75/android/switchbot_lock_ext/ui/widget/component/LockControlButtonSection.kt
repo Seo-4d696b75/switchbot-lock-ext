@@ -23,7 +23,7 @@ fun LockControlButtonSection(
             color = GlanceTheme.colors.secondary,
             onClicked = { onClicked(false) },
         )
-        Spacer(modifier = GlanceModifier.width(16.dp))
+        Spacer(modifier = GlanceModifier.width(12.dp))
         LockControlButton(
             label = "Lock",
             icon = ImageProvider(R.drawable.ic_lock),
