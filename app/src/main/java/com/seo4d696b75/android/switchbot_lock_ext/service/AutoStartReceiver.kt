@@ -15,11 +15,11 @@ class AutoStartReceiver : BroadcastReceiver() {
 
             Intent(
                 context,
-                AutoLockService::class.java,
+                LockService::class.java,
             ).apply {
                 putExtra(
-                    AutoLockService.KEY_WHEN_STARTS,
-                    AutoLockService.START_BOOT_COMPLETED,
+                    LockService.KEY_WHEN_STARTS,
+                    LockService.START_BOOT_COMPLETED,
                 )
             }.also(context::startService)
         }

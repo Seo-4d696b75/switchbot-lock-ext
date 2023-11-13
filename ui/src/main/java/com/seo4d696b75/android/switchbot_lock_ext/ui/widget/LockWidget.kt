@@ -8,17 +8,15 @@ import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.provideContent
 import androidx.glance.currentState
 import androidx.glance.state.GlanceStateDefinition
+import com.seo4d696b75.android.switchbot_lock_ext.domain.widget.AppWidgetMediator
 import com.seo4d696b75.android.switchbot_lock_ext.domain.widget.LockWidgetRepository
 import com.seo4d696b75.android.switchbot_lock_ext.domain.widget.LockWidgetStateProvider
 import com.seo4d696b75.android.switchbot_lock_ext.ui.theme.AppWidgetTheme
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import java.io.File
 
 class LockWidget(
     private val widgetRepository: LockWidgetRepository,
-    private val coroutineScope: CoroutineScope,
+    private val widgetMediator: AppWidgetMediator,
 ) : GlanceAppWidget() {
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         provideContent {
@@ -30,12 +28,8 @@ class LockWidget(
                     name = "Door Lock",
                     state = LockWidgetUiState.fromModel(state),
                     onLockedChanged = {
-                        coroutineScope.launch {
-                            widgetRepository.setLocked(deviceId, it)
-                            delay(2000L)
-                            widgetRepository.setIdle(deviceId)
-                        }
-                    },
+                        widgetMediator.onLockCommand(deviceId, it)
+                    }
                 )
             }
         }

@@ -44,7 +44,7 @@
             </intent-filter>
         </receiver>
         <service
-            android:name=".service.AutoLockService"
+            android:name=".service.LockService"
             android:exported="false" />
     </application>
 

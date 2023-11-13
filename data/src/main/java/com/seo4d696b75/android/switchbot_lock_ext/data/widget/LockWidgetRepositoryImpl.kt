@@ -46,7 +46,7 @@ class LockWidgetRepositoryImpl @Inject constructor(
                         LockWidgetState.Loading(isLocking = isLocked)
                 }
             }
-            appWidgetMediator.update()
+            appWidgetMediator.update(deviceId)
             val result = runCatching {
                 controlRepository.setLocked(deviceId, isLocked)
                 isLocked
@@ -56,7 +56,7 @@ class LockWidgetRepositoryImpl @Inject constructor(
                     this[deviceId] = LockWidgetState.Completed(result)
                 }
             }
-            appWidgetMediator.update()
+            appWidgetMediator.update(deviceId)
         }
     }
 
@@ -70,7 +70,7 @@ class LockWidgetRepositoryImpl @Inject constructor(
                 }
             }
         }
-        appWidgetMediator.update()
+        appWidgetMediator.update(deviceId)
     }
 }
 

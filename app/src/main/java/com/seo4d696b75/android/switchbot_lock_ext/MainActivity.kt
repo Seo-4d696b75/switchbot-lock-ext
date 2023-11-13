@@ -17,7 +17,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.seo4d696b75.android.switchbot_lock_ext.secure.SecureUiState
 import com.seo4d696b75.android.switchbot_lock_ext.secure.SecureViewModel
-import com.seo4d696b75.android.switchbot_lock_ext.service.AutoLockService
+import com.seo4d696b75.android.switchbot_lock_ext.service.LockService
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.auth.NoAuthenticatorScreen
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.auth.NotAuthenticatedScreen
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.main.MainScreen
@@ -37,10 +37,10 @@ class MainActivity : FragmentActivity() {
             WindowManager.LayoutParams.FLAG_SECURE,
         )
 
-        Intent(this, AutoLockService::class.java).apply {
+        Intent(this, LockService::class.java).apply {
             putExtra(
-                AutoLockService.KEY_WHEN_STARTS,
-                AutoLockService.START_ACTIVITY_LAUNCHED,
+                LockService.KEY_WHEN_STARTS,
+                LockService.START_ACTIVITY_LAUNCHED,
             )
         }.also(::startService)
 
