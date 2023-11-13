@@ -30,9 +30,9 @@ fun ErrorSection(
             provider = ImageProvider(R.drawable.ic_error),
             contentDescription = null,
             colorFilter = ColorFilter.tint(GlanceTheme.colors.error),
-            modifier = GlanceModifier.size(50.dp)
+            modifier = GlanceModifier.size(40.dp)
         )
-        Spacer(modifier = GlanceModifier.height(8.dp))
+        Spacer(modifier = GlanceModifier.height(12.dp))
         Text(
             text = message,
             style = TextStyle(

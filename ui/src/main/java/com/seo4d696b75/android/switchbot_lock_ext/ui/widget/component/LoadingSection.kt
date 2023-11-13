@@ -26,7 +26,7 @@ fun LoadingSection(
         CircularProgressIndicator(
             modifier = GlanceModifier.size(40.dp),
         )
-        Spacer(modifier = GlanceModifier.height(8.dp))
+        Spacer(modifier = GlanceModifier.height(12.dp))
         Text(
             text = message,
             style = TextStyle(
