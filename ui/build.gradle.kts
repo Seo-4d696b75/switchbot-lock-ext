@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.seo4d696b75.android.switchbot_lock_ext.ui"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 27
@@ -54,6 +54,10 @@ dependencies {
     implementation(libs.material3)
     implementation(libs.compose.navigation)
     implementation(libs.hilt.navigation.compose)
+
+    implementation(libs.androidx.glance)
+    implementation(libs.androidx.glance.material3)
+    implementation(libs.android.glance.tools.host)
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)

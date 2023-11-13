@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.seo4d696b75.android.switchbot_lock_ext"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.seo4d696b75.android.switchbot_lock_ext"
@@ -66,6 +66,8 @@ dependencies {
 
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.biometric.ktx)
+
+    implementation(libs.androidx.glance)
 
     implementation(project(":ui"))
     implementation(project(":domain"))
