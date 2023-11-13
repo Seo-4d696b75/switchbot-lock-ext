@@ -5,3 +5,7 @@ sealed interface LockWidgetState {
     data class Loading(val isLocking: Boolean) : LockWidgetState
     data class Completed(val isLocked: Result<Boolean>) : LockWidgetState
 }
+
+interface LockWidgetStateProvider {
+    operator fun get(deviceId: String) : LockWidgetState
+}
