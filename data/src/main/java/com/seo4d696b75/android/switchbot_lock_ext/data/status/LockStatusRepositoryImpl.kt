@@ -8,7 +8,6 @@ import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockState
 import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockStatus
 import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockStatusRepository
 import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockStatusStore
-import com.seo4d696b75.android.switchbot_lock_ext.domain.widget.AppWidgetMediator
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -22,7 +21,6 @@ import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -31,7 +29,6 @@ import javax.inject.Singleton
 class LockStatusRepositoryImpl @Inject constructor(
     private val deviceRepository: DeviceRepository,
     private val remoteRepository: DeviceRemoteRepository,
-    private val appWidgetMediator: AppWidgetMediator,
 ) : LockStatusRepository {
 
     private var runningJob: Job? = null
@@ -79,8 +76,6 @@ class LockStatusRepositoryImpl @Inject constructor(
         lockStateCacheFlow,
     ) { map, lockStateCache ->
         LockStatusStoreImpl(map, lockStateCache)
-    }.onEach {
-        appWidgetMediator.update()
     }
 
     override fun refresh() {
