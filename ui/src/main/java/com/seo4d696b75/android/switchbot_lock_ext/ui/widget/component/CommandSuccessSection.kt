@@ -6,7 +6,6 @@ import androidx.glance.ColorFilter
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
 import androidx.glance.Image
-import androidx.glance.ImageProvider
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Row
 import androidx.glance.layout.Spacer
@@ -18,7 +17,7 @@ import androidx.glance.text.TextStyle
 import com.seo4d696b75.android.switchbot_lock_ext.ui.R
 
 @Composable
-fun ErrorSection(
+fun CommandSuccessSection(
     message: String,
     modifier: GlanceModifier = GlanceModifier,
 ) {
@@ -27,9 +26,9 @@ fun ErrorSection(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Image(
-            provider = ImageProvider(R.drawable.ic_error),
+            provider = androidx.glance.ImageProvider(R.drawable.ic_check),
             contentDescription = null,
-            colorFilter = ColorFilter.tint(GlanceTheme.colors.error),
+            colorFilter = ColorFilter.tint(GlanceTheme.colors.primary),
             modifier = GlanceModifier.size(50.dp)
         )
         Spacer(modifier = GlanceModifier.height(8.dp))

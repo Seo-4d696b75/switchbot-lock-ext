@@ -1,4 +1,4 @@
-package com.seo4d696b75.android.switchbot_lock_ext.ui.widget.component
+package com.seo4d696b75.android.switchbot_lock_ext.ui.widget
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
@@ -10,20 +10,21 @@ import androidx.glance.layout.Box
 import androidx.glance.layout.Column
 import androidx.glance.layout.Spacer
 import androidx.glance.layout.fillMaxSize
-import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.height
 import androidx.glance.layout.padding
-import androidx.glance.layout.wrapContentHeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
-import com.seo4d696b75.android.switchbot_lock_ext.domain.status.AsyncLockStatus
-import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockState
 import com.seo4d696b75.android.switchbot_lock_ext.ui.R
+import com.seo4d696b75.android.switchbot_lock_ext.ui.widget.component.CommandSuccessSection
+import com.seo4d696b75.android.switchbot_lock_ext.ui.widget.component.ErrorSection
+import com.seo4d696b75.android.switchbot_lock_ext.ui.widget.component.ImageProvider
+import com.seo4d696b75.android.switchbot_lock_ext.ui.widget.component.LoadingSection
+import com.seo4d696b75.android.switchbot_lock_ext.ui.widget.component.LockControlButtonSection
 
 @Composable
-fun LockControlSection(
+fun LockControlScreen(
     name: String,
-    status: AsyncLockStatus,
+    state: LockWidgetUiState,
     onLockedChanged: (Boolean) -> Unit,
     modifier: GlanceModifier = GlanceModifier,
 ) {
@@ -48,25 +49,32 @@ fun LockControlSection(
         )
         Spacer(modifier = GlanceModifier.height(8.dp))
         Box(
-            modifier = GlanceModifier.fillMaxWidth().wrapContentHeight(),
+            modifier = GlanceModifier.fillMaxSize(),
             contentAlignment = Alignment.Center,
         ) {
-            when (status) {
-                is AsyncLockStatus.Data -> {
-                    if (status.data.state == LockState.Jammed) {
-                        ErrorSection(message = "Jammed")
-                    } else {
-                        LockControlButton(
-                            isLocked = status.data.state == LockState.Locked,
-                            onLockedChanged = onLockedChanged,
-                        )
-                    }
+            when (state) {
+                LockWidgetUiState.Idling -> {
+                    LockControlButtonSection(
+                        onClicked = onLockedChanged,
+                    )
                 }
 
-                AsyncLockStatus.Error -> ErrorSection(message = "API error")
-                AsyncLockStatus.Loading -> {}
+                is LockWidgetUiState.Loading -> {
+                    LoadingSection(
+                        message = if (state.isLocking) "Locking" else "Unlocking",
+                    )
+                }
+
+                is LockWidgetUiState.CommandSuccess -> {
+                    CommandSuccessSection(
+                        message = if (state.isLocked) "Locked" else "Unlocked",
+                    )
+                }
+
+                LockWidgetUiState.CommandFailure -> {
+                    ErrorSection(message = "Error")
+                }
             }
         }
     }
 }
-
