@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.ColorFilter
+import androidx.glance.ExperimentalGlanceApi
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
 import androidx.glance.Image
@@ -22,6 +23,7 @@ import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import com.seo4d696b75.android.switchbot_lock_ext.ui.R
 
+@OptIn(ExperimentalGlanceApi::class)
 @Composable
 fun LockControlButton(
     label: String,
@@ -37,7 +39,6 @@ fun LockControlButton(
         Box(
             modifier = GlanceModifier
                 .size(46.dp)
-                .clickable(onClicked)
                 .background(
                     ImageProvider(
                         id = R.drawable.lock_button_background,
@@ -50,7 +51,9 @@ fun LockControlButton(
                 provider = icon,
                 contentDescription = label,
                 colorFilter = ColorFilter.tint(GlanceTheme.colors.onPrimary),
-                modifier = GlanceModifier.size(40.dp),
+                modifier = GlanceModifier
+                    .size(40.dp)
+                    .clickable("LockControlButton-$label", onClicked),
             )
         }
         Spacer(modifier = GlanceModifier.height(2.dp))
