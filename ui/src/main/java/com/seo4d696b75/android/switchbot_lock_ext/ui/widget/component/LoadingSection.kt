@@ -25,6 +25,7 @@ fun LoadingSection(
     ) {
         CircularProgressIndicator(
             modifier = GlanceModifier.size(40.dp),
+            color = GlanceTheme.colors.primary,
         )
         Spacer(modifier = GlanceModifier.width(8.dp))
         Text(
