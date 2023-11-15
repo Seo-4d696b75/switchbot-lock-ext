@@ -4,6 +4,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface LockWidgetRepository {
     val stateProviderFlow: Flow<LockWidgetStateProvider>
-    suspend fun setLocked(deviceId: String, isLocked: Boolean)
-    fun setIdle(deviceId: String)
+    fun setState(deviceId: String, state: LockWidgetState)
 }

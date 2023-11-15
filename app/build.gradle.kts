@@ -71,6 +71,10 @@ dependencies {
 
     implementation(libs.androidx.glance)
 
+    implementation(libs.androidx.work)
+    implementation(libs.androidx.hilt.work)
+    ksp(libs.androidx.hilt.compiler)
+
     implementation(project(":ui"))
     implementation(project(":domain"))
     implementation(project(":data"))
