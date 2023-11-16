@@ -11,12 +11,14 @@ import kotlinx.collections.immutable.persistentListOf
 data class DeviceListUiState(
     val user: UserRegistration,
     val devices: ImmutableList<LockDevice>,
+    val isRefreshing: Boolean,
     val snackBarMessage: UiEvent<String>,
 ) {
     companion object {
         val InitialValue = DeviceListUiState(
             user = UserRegistration.Loading,
             devices = persistentListOf(),
+            isRefreshing = false,
             snackBarMessage = UiEvent.None,
         )
     }

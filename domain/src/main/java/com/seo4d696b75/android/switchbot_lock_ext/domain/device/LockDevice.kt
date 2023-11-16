@@ -8,10 +8,13 @@ data class LockDevice(
     val group: LockGroup,
 ) {
     val isMaster: Boolean
-        get() = when (group) {
+        get() = when (val group = group) {
             LockGroup.Disabled -> true
             is LockGroup.Enabled -> group.isMaster
         }
+
+    val isControllable: Boolean
+        get() = enableCloudService && isMaster
 }
 
 sealed interface LockGroup {

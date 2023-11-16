@@ -20,7 +20,6 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 fun DeviceListPage(
     devices: ImmutableList<LockDevice>,
-    onRemoveClicked: (LockDevice) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -35,12 +34,11 @@ fun DeviceListPage(
         ) {
         if (devices.isEmpty()) {
             NoDeviceSection(
-                description = "No devices registered yet. At the first time, you need to add a device.",
+                description = "No devices found. At the first time, you need to refresh.",
             )
         } else {
             DeviceListSection(
                 devices = devices,
-                onRemoveClicked = onRemoveClicked,
             )
         }
     }
@@ -53,7 +51,6 @@ private fun DeviceListPagePreview_Empty() {
         Surface {
             DeviceListPage(
                 devices = persistentListOf(),
-                onRemoveClicked = {},
             )
         }
     }
@@ -67,14 +64,40 @@ private fun DeviceListPagePreview() {
             DeviceListPage(
                 devices = persistentListOf(
                     LockDevice(
-                        id = "device-id",
+                        id = "1",
                         name = "Sample Lock",
                         enableCloudService = true,
                         hubDeviceId = "hub-device-id",
                         group = LockGroup.Disabled,
-                    )
+                    ),
+                    LockDevice(
+                        id = "2",
+                        name = "Sample Lock",
+                        enableCloudService = false,
+                        hubDeviceId = "hub-device-id",
+                        group = LockGroup.Disabled,
+                    ),
+                    LockDevice(
+                        id = "3",
+                        name = "Sample Lock",
+                        enableCloudService = true,
+                        hubDeviceId = "hub-device-id",
+                        group = LockGroup.Enabled(
+                            groupName = "group",
+                            isMaster = true,
+                        ),
+                    ),
+                    LockDevice(
+                        id = "4",
+                        name = "Sample Lock",
+                        enableCloudService = true,
+                        hubDeviceId = "hub-device-id",
+                        group = LockGroup.Enabled(
+                            groupName = "group",
+                            isMaster = false,
+                        ),
+                    ),
                 ),
-                onRemoveClicked = {},
             )
         }
     }

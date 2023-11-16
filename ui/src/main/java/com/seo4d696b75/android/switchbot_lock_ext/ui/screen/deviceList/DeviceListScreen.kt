@@ -1,10 +1,11 @@
 package com.seo4d696b75.android.switchbot_lock_ext.ui.screen.deviceList
 
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -22,6 +23,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockDevice
 import com.seo4d696b75.android.switchbot_lock_ext.domain.user.UserRegistration
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.LaunchedEvent
+import com.seo4d696b75.android.switchbot_lock_ext.ui.common.LoadingSection
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.UiEvent
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.deviceList.page.DeviceListPage
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.deviceList.page.NoUserDevicePage
@@ -30,7 +32,6 @@ import kotlinx.collections.immutable.ImmutableList
 @Composable
 fun DeviceListScreen(
     modifier: Modifier = Modifier,
-    navigateToRegistration: () -> Unit,
     viewModel: DeviceListViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -39,8 +40,8 @@ fun DeviceListScreen(
         user = uiState.user,
         devices = uiState.devices,
         snackBarMessage = uiState.snackBarMessage,
-        onRemoveClicked = viewModel::remove,
-        onEditClicked = navigateToRegistration,
+        isRefreshing = uiState.isRefreshing,
+        onRefreshClicked = viewModel::refresh,
         modifier = modifier.fillMaxSize(),
     )
 }
@@ -49,9 +50,9 @@ fun DeviceListScreen(
 @Composable
 fun DeviceListScreen(
     user: UserRegistration,
+    isRefreshing: Boolean,
     devices: ImmutableList<LockDevice>,
-    onRemoveClicked: (LockDevice) -> Unit,
-    onEditClicked: () -> Unit,
+    onRefreshClicked: () -> Unit,
     snackBarMessage: UiEvent<String>,
     modifier: Modifier = Modifier,
 ) {
@@ -73,10 +74,10 @@ fun DeviceListScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = onEditClicked) {
+            FloatingActionButton(onClick = onRefreshClicked) {
                 Icon(
-                    Icons.Default.Edit,
-                    contentDescription = "edit device registration",
+                    Icons.Default.Refresh,
+                    contentDescription = "refresh",
                 )
             }
         },
@@ -84,22 +85,26 @@ fun DeviceListScreen(
             SnackbarHost(hostState = snackBarHostState)
         }
     ) { innerPadding ->
-        Crossfade(
-            targetState = user,
-            label = "DeviceScreen",
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            when (it) {
-                is UserRegistration.User -> DeviceListPage(
-                    devices = devices,
-                    onRemoveClicked = onRemoveClicked,
-                )
+            Crossfade(
+                targetState = user,
+                label = "DeviceScreen",
+                modifier = Modifier.fillMaxSize(),
+            ) {
+                when (it) {
+                    is UserRegistration.User -> DeviceListPage(
+                        devices = devices,
+                    )
 
-                UserRegistration.Undefined -> NoUserDevicePage()
-                UserRegistration.Loading -> {}
+                    UserRegistration.Undefined -> NoUserDevicePage()
+                    UserRegistration.Loading -> {}
+                }
             }
+            LoadingSection(isLoading = isRefreshing)
         }
     }
 }

@@ -37,7 +37,7 @@ class HomeViewModel @Inject constructor(
         .flatMapLatest { user ->
             when (user) {
                 is UserRegistration.User -> combine(
-                    deviceRepository.deviceFlow,
+                    deviceRepository.controlDeviceFlow,
                     statusRepository.statusFlow,
                 ) { devices, statusStore ->
                     HomeUiState(

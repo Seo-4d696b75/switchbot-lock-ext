@@ -3,7 +3,6 @@ package com.seo4d696b75.android.switchbot_lock_ext.ui.screen.deviceList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.DeviceRepository
-import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockDevice
 import com.seo4d696b75.android.switchbot_lock_ext.domain.user.UserRegistration
 import com.seo4d696b75.android.switchbot_lock_ext.domain.user.UserRepository
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.NavEvent
@@ -12,7 +11,6 @@ import com.seo4d696b75.android.switchbot_lock_ext.ui.common.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,6 +37,7 @@ class DeviceListViewModel @Inject constructor(
     private val _event = MutableSharedFlow<Event>()
     override val event = _event.asSharedFlow()
 
+    private val isRefreshingFlow = MutableStateFlow(false)
     private val snackBarMessageFlow =
         MutableStateFlow<UiEvent<String>>(UiEvent.None)
 
@@ -49,11 +48,13 @@ class DeviceListViewModel @Inject constructor(
             when (user) {
                 is UserRegistration.User -> combine(
                     deviceRepository.deviceFlow,
+                    isRefreshingFlow,
                     snackBarMessageFlow,
-                ) { devices, message ->
+                ) { devices, isRefreshing, message ->
                     DeviceListUiState(
                         user = user,
                         devices = devices.toPersistentList(),
+                        isRefreshing = isRefreshing,
                         snackBarMessage = message,
                     )
                 }
@@ -63,6 +64,7 @@ class DeviceListViewModel @Inject constructor(
                         DeviceListUiState(
                             user = user,
                             devices = persistentListOf(),
+                            isRefreshing = false,
                             snackBarMessage = UiEvent.None,
                         )
                     )
@@ -74,13 +76,15 @@ class DeviceListViewModel @Inject constructor(
             DeviceListUiState.InitialValue,
         )
 
-    fun remove(device: LockDevice) = viewModelScope.launch(Dispatchers.IO) {
+    fun refresh() = viewModelScope.launch {
+        isRefreshingFlow.update { true }
         runCatching {
-            deviceRepository.remove(device)
+            deviceRepository.refresh()
         }.onFailure {
             snackBarMessageFlow.update {
-                UiEvent.Data("Failed to remove")
+                UiEvent.Data("Failed to refresh")
             }
         }
+        isRefreshingFlow.update { false }
     }
 }

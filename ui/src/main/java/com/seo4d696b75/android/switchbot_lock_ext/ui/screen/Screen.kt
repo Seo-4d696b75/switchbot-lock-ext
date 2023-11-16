@@ -47,10 +47,6 @@ sealed interface Screen {
             override val route = "$tabRoute/list"
         }
 
-        data object Registration : Device {
-            override val route = "$tabRoute/registration"
-        }
-
         companion object : BottomTab {
             override val tabRoute = "device"
             override val labelId = R.string.bottom_nav_device
