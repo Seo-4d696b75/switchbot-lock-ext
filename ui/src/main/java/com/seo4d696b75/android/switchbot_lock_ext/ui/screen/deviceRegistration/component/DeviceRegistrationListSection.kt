@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -46,24 +47,34 @@ fun DeviceRegistrationListSection(
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             stickyHeader {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight()
-                        .padding(8.dp),
-                    verticalAlignment = Alignment.CenterVertically,
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    Icon(
-                        Icons.Outlined.Info,
-                        contentDescription = null,
-                        modifier = Modifier.size(40.dp),
-                    )
-                    Spacer(modifier = Modifier.width(12.dp))
                     Text(
-                        text = "Only controllable devices can be registered.\n- Cloud service MUST be enabled\n- Device is not grouped with others, or is a master among the grouped devices",
-                        modifier = Modifier.weight(1f),
-                        style = MaterialTheme.typography.bodyMedium,
+                        text = "Select devices to be added, or to be updated",
+                        style = MaterialTheme.typography.titleMedium,
                     )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight()
+                            .padding(8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Icon(
+                            Icons.Outlined.Info,
+                            contentDescription = null,
+                            modifier = Modifier.size(40.dp),
+                        )
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Text(
+                            text = "Only controllable devices can be registered.\n- Cloud service MUST be enabled\n- Device is not grouped with others, or is a master among the grouped devices",
+                            modifier = Modifier.weight(1f),
+                            style = MaterialTheme.typography.bodyMedium,
+                        )
+                    }
                 }
             }
             items(
@@ -88,7 +99,7 @@ fun DeviceRegistrationListSection(
             )
             Spacer(modifier = Modifier.width(8.dp))
             PrimaryButton(
-                label = "Register",
+                label = "Save",
                 onClick = onRegisterClicked,
                 enabled = isRegisterEnabled,
                 modifier = Modifier.weight(1f),

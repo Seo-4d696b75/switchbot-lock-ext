@@ -64,7 +64,7 @@ private fun DeviceRegistrationListPage() {
                 devices = persistentListOf(
                     DeviceSelectUiState(
                         device = LockDevice(
-                            id = "device-id",
+                            id = "1",
                             name = "Sample Lock",
                             enableCloudService = true,
                             hubDeviceId = "hub-device-id",
@@ -74,7 +74,7 @@ private fun DeviceRegistrationListPage() {
                     ),
                     DeviceSelectUiState(
                         device = LockDevice(
-                            id = "device-id",
+                            id = "2",
                             name = "Sample Lock",
                             enableCloudService = false,
                             hubDeviceId = "hub-device-id",
@@ -84,7 +84,7 @@ private fun DeviceRegistrationListPage() {
                     ),
                     DeviceSelectUiState(
                         device = LockDevice(
-                            id = "device-id",
+                            id = "3",
                             name = "Sample Lock",
                             enableCloudService = true,
                             hubDeviceId = "hub-device-id",
@@ -97,7 +97,7 @@ private fun DeviceRegistrationListPage() {
                     ),
                     DeviceSelectUiState(
                         device = LockDevice(
-                            id = "device-id",
+                            id = "4",
                             name = "Sample Lock",
                             enableCloudService = true,
                             hubDeviceId = "hub-device-id",
