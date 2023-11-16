@@ -4,7 +4,7 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -40,7 +40,7 @@ fun DeviceListScreen(
         devices = uiState.devices,
         snackBarMessage = uiState.snackBarMessage,
         onRemoveClicked = viewModel::remove,
-        onAddClicked = navigateToRegistration,
+        onEditClicked = navigateToRegistration,
         modifier = modifier.fillMaxSize(),
     )
 }
@@ -51,7 +51,7 @@ fun DeviceListScreen(
     user: UserRegistration,
     devices: ImmutableList<LockDevice>,
     onRemoveClicked: (LockDevice) -> Unit,
-    onAddClicked: () -> Unit,
+    onEditClicked: () -> Unit,
     snackBarMessage: UiEvent<String>,
     modifier: Modifier = Modifier,
 ) {
@@ -73,10 +73,10 @@ fun DeviceListScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = onAddClicked) {
+            FloatingActionButton(onClick = onEditClicked) {
                 Icon(
-                    Icons.Default.Refresh,
-                    contentDescription = "add device",
+                    Icons.Default.Edit,
+                    contentDescription = "edit device registration",
                 )
             }
         },
