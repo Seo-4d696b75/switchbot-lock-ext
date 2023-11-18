@@ -71,6 +71,8 @@ dependencies {
 
     implementation(libs.androidx.glance)
 
+    implementation(libs.kotlinx.serialization.json)
+
     implementation(libs.androidx.work)
     implementation(libs.androidx.hilt.work)
     ksp(libs.androidx.hilt.compiler)

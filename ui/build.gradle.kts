@@ -59,6 +59,8 @@ dependencies {
     implementation(libs.androidx.glance.material3)
     implementation(libs.android.glance.tools.host)
 
+    implementation(libs.kotlinx.serialization.json)
+
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
 
