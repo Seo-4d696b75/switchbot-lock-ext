@@ -92,10 +92,7 @@ fun HomeScreen(
                     NoUserSection()
                 }
 
-                UserRegistration.Loading -> LoadingSection(
-                    isLoading = true,
-                    modifier = Modifier.fillMaxSize(),
-                )
+                UserRegistration.Loading -> LoadingSection()
             }
         }
     }

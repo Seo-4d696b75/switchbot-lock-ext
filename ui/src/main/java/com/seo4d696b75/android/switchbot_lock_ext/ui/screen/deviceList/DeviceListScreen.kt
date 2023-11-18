@@ -1,6 +1,9 @@
 package com.seo4d696b75.android.switchbot_lock_ext.ui.screen.deviceList
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -111,7 +114,13 @@ fun DeviceListScreen(
                     UserRegistration.Loading -> {}
                 }
             }
-            LoadingSection(isLoading = isRefreshing)
+            AnimatedVisibility(
+                visible = isRefreshing,
+                enter = fadeIn(),
+                exit = fadeOut(),
+            ) {
+                LoadingSection()
+            }
         }
     }
 }
