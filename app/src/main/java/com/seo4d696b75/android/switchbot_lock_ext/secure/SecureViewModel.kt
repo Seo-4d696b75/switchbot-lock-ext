@@ -49,7 +49,11 @@ class SecureViewModel @Inject constructor() : ViewModel() {
         _uiState.update { SecureUiState.NotAuthenticated }
     }
 
-    fun authenticate(activity: FragmentActivity) {
+    fun authenticate(
+        activity: FragmentActivity,
+        title: String = "User Authentication",
+        subTitle: String = "For security of your credentials, authentication is required before using this app.",
+    ) {
         _uiState.update { SecureUiState.NotAuthenticated }
         val manager = BiometricManager.from(activity)
         when (manager.canAuthenticate(allowedAuthenticators)) {
@@ -57,8 +61,8 @@ class SecureViewModel @Inject constructor() : ViewModel() {
                 val executor = ContextCompat.getMainExecutor(activity)
                 val prompt = BiometricPrompt(activity, executor, authCallback)
                 val info = BiometricPrompt.PromptInfo.Builder()
-                    .setTitle("User Authentication")
-                    .setSubtitle("For security of your credentials, authentication is required before using this app.")
+                    .setTitle(title)
+                    .setSubtitle(subTitle)
                     .setAllowedAuthenticators(allowedAuthenticators)
                     .build()
                 prompt.authenticate(info)

@@ -7,4 +7,5 @@
     android:previewImage="@drawable/ic_launcher_background"
     android:resizeMode="none"
     android:updatePeriodMillis="0"
-    android:widgetCategory="home_screen" />
+    android:widgetCategory="home_screen"
+    android:widgetFeatures="reconfigurable"/>
