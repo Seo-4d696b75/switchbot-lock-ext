@@ -9,6 +9,7 @@ import androidx.glance.layout.Alignment
 import androidx.glance.layout.Box
 import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.padding
+import com.seo4d696b75.android.switchbot_lock_ext.domain.widget.LockWidgetState
 import com.seo4d696b75.android.switchbot_lock_ext.ui.R
 import com.seo4d696b75.android.switchbot_lock_ext.ui.widget.component.ImageProvider
 import com.seo4d696b75.android.switchbot_lock_ext.ui.widget.component.LoadingSection
@@ -16,7 +17,7 @@ import com.seo4d696b75.android.switchbot_lock_ext.ui.widget.component.LockContro
 
 @Composable
 fun LockWidgetScreen(
-    state: LockWidgetUiState,
+    state: LockWidgetState?,
     onLockCommand: (Boolean) -> Unit,
     modifier: GlanceModifier = GlanceModifier,
 ) {
@@ -32,18 +33,14 @@ fun LockWidgetScreen(
             .padding(vertical = 4.dp),
         contentAlignment = Alignment.Center,
     ) {
-        when (state) {
-            LockWidgetUiState.Initializing -> {
-                LoadingSection(message = "Initializing")
-            }
-
-            is LockWidgetUiState.Data -> {
-                LockControlSection(
-                    name = state.deviceName,
-                    status = state.status,
-                    onLockCommand = onLockCommand,
-                )
-            }
+        if (state == null) {
+            LoadingSection(message = "Initializing")
+        } else {
+            LockControlSection(
+                name = state.deviceName,
+                status = state.status,
+                onLockCommand = onLockCommand,
+            )
         }
     }
 }

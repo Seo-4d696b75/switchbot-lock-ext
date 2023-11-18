@@ -35,28 +35,24 @@ class LockControlWorker @AssistedInject constructor(
 
     override suspend fun doWork() = runCatching {
         withContext(Dispatchers.IO) {
-            widgetMediator.setLockWidgetState(
-                appWidgetId,
-                LockWidgetStatus.Loading(isLocking = isLocked),
-            )
+            widgetMediator.updateLockWidgetState(appWidgetId) {
+                it.copy(status = LockWidgetStatus.Loading(isLocked))
+            }
             runCatching {
                 controlRepository.setLocked(deviceId, isLocked)
             }.onSuccess {
-                widgetMediator.setLockWidgetState(
-                    appWidgetId,
-                    LockWidgetStatus.Success(isLocked),
-                )
+                widgetMediator.updateLockWidgetState(appWidgetId) {
+                    it.copy(status = LockWidgetStatus.Success(isLocked))
+                }
             }.onFailure {
-                widgetMediator.setLockWidgetState(
-                    appWidgetId,
-                    LockWidgetStatus.Failure("Error"),
-                )
+                widgetMediator.updateLockWidgetState(appWidgetId) {
+                    it.copy(status = LockWidgetStatus.Failure("Error"))
+                }
             }
             delay(3000L)
-            widgetMediator.setLockWidgetState(
-                appWidgetId,
-                LockWidgetStatus.Idling,
-            )
+            widgetMediator.updateLockWidgetState(appWidgetId) {
+                it.copy(status = LockWidgetStatus.Idling)
+            }
             Result.success()
         }
     }.getOrElse { Result.failure() }

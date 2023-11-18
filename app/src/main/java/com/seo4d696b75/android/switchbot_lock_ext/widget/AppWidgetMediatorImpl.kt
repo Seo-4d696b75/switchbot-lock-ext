@@ -7,6 +7,7 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.seo4d696b75.android.switchbot_lock_ext.domain.widget.AppWidgetMediator
+import com.seo4d696b75.android.switchbot_lock_ext.domain.widget.LockWidgetState
 import com.seo4d696b75.android.switchbot_lock_ext.domain.widget.LockWidgetStatus
 import com.seo4d696b75.android.switchbot_lock_ext.ui.widget.LockWidget
 import com.seo4d696b75.android.switchbot_lock_ext.worker.LockControlWorker
@@ -45,27 +46,35 @@ class AppWidgetMediatorImpl @Inject constructor(
     override suspend fun initializeLockWidgetState(
         appWidgetId: Int,
         deviceId: String,
+        deviceName: String,
     ) {
         val glanceId = glanceAppWidgetManager.getGlanceIdBy(appWidgetId)
         updateAppWidgetState(context, glanceId) {
-            it[LockWidget.PREF_KEY_DEVICE_ID] = deviceId
             it[LockWidget.PREF_KEY_STATE] = Json.encodeToString(
-                LockWidgetStatus.serializer(),
-                LockWidgetStatus.Idling,
+                LockWidgetState.serializer(),
+                LockWidgetState(
+                    deviceId = deviceId,
+                    deviceName = deviceName,
+                    status = LockWidgetStatus.Idling,
+                ),
             )
         }
         LockWidget(this).update(context, glanceId)
     }
 
-    override suspend fun setLockWidgetState(
+    override suspend fun updateLockWidgetState(
         appWidgetId: Int,
-        state: LockWidgetStatus,
+        update: (LockWidgetState) -> LockWidgetState
     ) {
+
         val glanceId = glanceAppWidgetManager.getGlanceIdBy(appWidgetId)
         updateAppWidgetState(context, glanceId) {
+            val state = it[LockWidget.PREF_KEY_STATE]?.let { str ->
+                Json.decodeFromString(LockWidgetState.serializer(), str)
+            } ?: throw IllegalStateException()
             it[LockWidget.PREF_KEY_STATE] = Json.encodeToString(
-                LockWidgetStatus.serializer(),
-                state,
+                LockWidgetState.serializer(),
+                update(state),
             )
         }
         LockWidget(this).update(context, glanceId)
