@@ -10,7 +10,8 @@ import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockedState
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dagger.hilt.android.components.ActivityRetainedComponent
+import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -23,7 +24,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import javax.inject.Singleton
 
 class LockStatusRepositoryImpl @Inject constructor(
     private val deviceRepository: DeviceRepository,
@@ -106,9 +106,9 @@ class LockStatusRepositoryImpl @Inject constructor(
 
 @Suppress("unused")
 @Module
-@InstallIn(SingletonComponent::class)
+@InstallIn(ActivityRetainedComponent::class)
 interface LockStatusRepositoryModule {
     @Binds
-    @Singleton
+    @ActivityRetainedScoped
     fun bindLockStatusRepository(impl: LockStatusRepositoryImpl): LockStatusRepository
 }
