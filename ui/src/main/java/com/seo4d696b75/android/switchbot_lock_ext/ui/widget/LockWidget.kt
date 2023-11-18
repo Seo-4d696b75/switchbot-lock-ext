@@ -9,13 +9,11 @@ import androidx.glance.appwidget.provideContent
 import androidx.glance.currentState
 import androidx.glance.state.GlanceStateDefinition
 import com.seo4d696b75.android.switchbot_lock_ext.domain.widget.AppWidgetMediator
-import com.seo4d696b75.android.switchbot_lock_ext.domain.widget.LockWidgetRepository
-import com.seo4d696b75.android.switchbot_lock_ext.domain.widget.LockWidgetStateProvider
+import com.seo4d696b75.android.switchbot_lock_ext.domain.widget.LockWidgetStatus
 import com.seo4d696b75.android.switchbot_lock_ext.ui.theme.AppWidgetTheme
 import java.io.File
 
 class LockWidget(
-    private val widgetRepository: LockWidgetRepository,
     private val widgetMediator: AppWidgetMediator,
 ) : GlanceAppWidget() {
     override suspend fun provideGlance(context: Context, id: GlanceId) {
@@ -24,31 +22,19 @@ class LockWidget(
             val provider: LockWidgetStateProvider = currentState()
             val state = provider[deviceId]
             AppWidgetTheme {
-                LockControlScreen(
-                    name = "Door Lock",
-                    state = LockWidgetUiState.fromModel(state),
-                    onLockedChanged = {
-                        widgetMediator.onLockCommand(deviceId, it)
-                    }
+                LockWidgetScreen(
+                    state = state,
+                    onLockCommand = {
+                        widgetMediator.sendLockCommand(
+                            appWidgetId,
+                            deviceId ?: throw IllegalStateException(),
+                            it,
+                        )
+                    },
                 )
             }
         }
     }
-
-    override val stateDefinition: GlanceStateDefinition<LockWidgetStateProvider>
-        get() = object : GlanceStateDefinition<LockWidgetStateProvider> {
-            override suspend fun getDataStore(
-                context: Context,
-                fileKey: String
-            ): DataStore<LockWidgetStateProvider> {
-                return LockWidgetDataStore(widgetRepository)
-            }
-
-            override fun getLocation(context: Context, fileKey: String): File {
-                throw NotImplementedError()
-            }
-
-        }
 
     companion object {
         val PREF_KEY_DEVICE_ID = stringPreferencesKey("pref_key_device_id")
