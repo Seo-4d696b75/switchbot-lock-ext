@@ -17,6 +17,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -24,9 +25,9 @@ import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockDevice
 import com.seo4d696b75.android.switchbot_lock_ext.domain.user.UserRegistration
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.LaunchedEvent
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.LoadingSection
+import com.seo4d696b75.android.switchbot_lock_ext.ui.common.NoUserSection
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.UiEvent
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.deviceList.page.DeviceListPage
-import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.deviceList.page.NoUserDevicePage
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
@@ -100,7 +101,13 @@ fun DeviceListScreen(
                         devices = devices,
                     )
 
-                    UserRegistration.Undefined -> NoUserDevicePage()
+                    UserRegistration.Undefined -> Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        NoUserSection()
+                    }
+
                     UserRegistration.Loading -> {}
                 }
             }

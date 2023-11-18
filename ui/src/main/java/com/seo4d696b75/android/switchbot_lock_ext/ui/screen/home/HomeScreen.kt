@@ -1,6 +1,7 @@
 package com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home
 
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -13,13 +14,14 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.seo4d696b75.android.switchbot_lock_ext.domain.user.UserRegistration
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.LoadingSection
+import com.seo4d696b75.android.switchbot_lock_ext.ui.common.NoUserSection
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.page.LockListPage
-import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.page.NoUserHomePage
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
@@ -83,9 +85,12 @@ fun HomeScreen(
                     modifier = Modifier.fillMaxSize(),
                 )
 
-                UserRegistration.Undefined -> NoUserHomePage(
+                UserRegistration.Undefined -> Box(
                     modifier = Modifier.fillMaxSize(),
-                )
+                    contentAlignment = Alignment.Center,
+                ) {
+                    NoUserSection()
+                }
 
                 UserRegistration.Loading -> LoadingSection(
                     isLoading = true,
