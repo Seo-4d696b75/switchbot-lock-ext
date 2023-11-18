@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import com.seo4d696b75.android.switchbot_lock_ext.domain.widget.AppWidgetMediator
 import com.seo4d696b75.android.switchbot_lock_ext.secure.SecureUiState
 import com.seo4d696b75.android.switchbot_lock_ext.secure.SecureViewModel
 import com.seo4d696b75.android.switchbot_lock_ext.secure.openLockScreenSetting
@@ -24,15 +23,11 @@ import com.seo4d696b75.android.switchbot_lock_ext.ui.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class AppWidgetConfigureActivity : FragmentActivity() {
 
     private val viewModel: SecureViewModel by viewModels()
-
-    @Inject
-    lateinit var widgetMediator: AppWidgetMediator
 
     private val appWidgetId by lazy {
         intent?.extras?.getInt(
@@ -62,7 +57,18 @@ class AppWidgetConfigureActivity : FragmentActivity() {
                     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
                     when (val state = uiState) {
                         SecureUiState.Authenticated -> LockWidgetConfigurationScreen(
-                            onCompleted = ::onConfigurationCompleted,
+                            onCompleted = {
+                                setResult(
+                                    RESULT_OK,
+                                    Intent().apply {
+                                        putExtra(
+                                            AppWidgetManager.EXTRA_APPWIDGET_ID,
+                                            appWidgetId
+                                        )
+                                    },
+                                )
+                                finish()
+                            }
                         )
 
                         SecureUiState.NotAuthenticated -> NotAuthenticatedScreen(
@@ -96,21 +102,5 @@ class AppWidgetConfigureActivity : FragmentActivity() {
     override fun onStop() {
         super.onStop()
         viewModel.lockApp()
-    }
-
-    private fun onConfigurationCompleted(deviceId: String) {
-        lifecycleScope.launch {
-            widgetMediator.initializeLockWidgetState(
-                appWidgetId,
-                deviceId,
-            )
-            setResult(
-                RESULT_OK,
-                Intent().apply {
-                    putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-                },
-            )
-            finish()
-        }
     }
 }

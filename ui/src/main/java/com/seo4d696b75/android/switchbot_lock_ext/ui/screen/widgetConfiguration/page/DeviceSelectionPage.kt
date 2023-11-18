@@ -1,4 +1,4 @@
-package com.seo4d696b75.android.switchbot_lock_ext.ui.screen.deviceList.page
+package com.seo4d696b75.android.switchbot_lock_ext.ui.screen.widgetConfiguration.page
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,14 +12,15 @@ import androidx.compose.ui.unit.dp
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockDevice
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockGroup
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.NoDeviceSection
-import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.deviceList.component.DeviceListSection
+import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.widgetConfiguration.component.DeviceListSection
 import com.seo4d696b75.android.switchbot_lock_ext.ui.theme.AppTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
-fun DeviceListPage(
+fun DeviceSelectionPage(
     devices: ImmutableList<LockDevice>,
+    onSelected: (LockDevice) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -33,11 +34,12 @@ fun DeviceListPage(
     ) {
         if (devices.isEmpty()) {
             NoDeviceSection(
-                description = "No devices found. At the first time, you need to refresh.",
+                description = "No devices found. At the first time, device registration in app is required.",
             )
         } else {
             DeviceListSection(
                 devices = devices,
+                onClick = onSelected,
             )
         }
     }
@@ -45,11 +47,12 @@ fun DeviceListPage(
 
 @Preview
 @Composable
-private fun DeviceListPagePreview_Empty() {
+private fun DeviceSelectionPagePreview_Empty() {
     AppTheme {
         Surface {
-            DeviceListPage(
+            DeviceSelectionPage(
                 devices = persistentListOf(),
+                onSelected = {},
             )
         }
     }
@@ -57,22 +60,15 @@ private fun DeviceListPagePreview_Empty() {
 
 @Preview
 @Composable
-private fun DeviceListPagePreview() {
+private fun DeviceSelectionPagePreview() {
     AppTheme {
         Surface {
-            DeviceListPage(
+            DeviceSelectionPage(
                 devices = persistentListOf(
                     LockDevice(
                         id = "1",
                         name = "Sample Lock",
                         enableCloudService = true,
-                        hubDeviceId = "hub-device-id",
-                        group = LockGroup.Disabled,
-                    ),
-                    LockDevice(
-                        id = "2",
-                        name = "Sample Lock",
-                        enableCloudService = false,
                         hubDeviceId = "hub-device-id",
                         group = LockGroup.Disabled,
                     ),
@@ -86,17 +82,8 @@ private fun DeviceListPagePreview() {
                             isMaster = true,
                         ),
                     ),
-                    LockDevice(
-                        id = "4",
-                        name = "Sample Lock",
-                        enableCloudService = true,
-                        hubDeviceId = "hub-device-id",
-                        group = LockGroup.Enabled(
-                            groupName = "group",
-                            isMaster = false,
-                        ),
-                    ),
                 ),
+                onSelected = {},
             )
         }
     }
