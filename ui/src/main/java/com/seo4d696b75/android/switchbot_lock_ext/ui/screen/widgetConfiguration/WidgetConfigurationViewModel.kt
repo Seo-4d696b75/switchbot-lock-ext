@@ -8,15 +8,14 @@ import com.seo4d696b75.android.switchbot_lock_ext.domain.device.DeviceRepository
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockDevice
 import com.seo4d696b75.android.switchbot_lock_ext.domain.user.UserRepository
 import com.seo4d696b75.android.switchbot_lock_ext.domain.widget.AppWidgetMediator
-import com.seo4d696b75.android.switchbot_lock_ext.ui.common.NavEvent
-import com.seo4d696b75.android.switchbot_lock_ext.ui.common.NavEventPublisher
+import com.seo4d696b75.android.switchbot_lock_ext.ui.common.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,22 +25,21 @@ class WidgetConfigurationViewModel @Inject constructor(
     userRepository: UserRepository,
     deviceRepository: DeviceRepository,
     private val widgetMediator: AppWidgetMediator,
-) : ViewModel(), NavEventPublisher<WidgetConfigurationViewModel.Event> {
+) : ViewModel() {
 
-    sealed interface Event : NavEvent {
-        data object Completed : Event
-    }
 
-    private val _event = MutableSharedFlow<Event>()
-    override val event = _event.asSharedFlow()
+    private val onConfigurationCompletedFlow =
+        MutableStateFlow<UiEvent<Unit>>(UiEvent.None)
 
     val uiState = combine(
         userRepository.userFlow,
         deviceRepository.controlDeviceFlow,
-    ) { user, devices ->
+        onConfigurationCompletedFlow,
+    ) { user, devices, event ->
         WidgetConfigurationUiState(
             user = user,
             devices = devices.toPersistentList(),
+            onConfigurationCompleted = event,
         )
     }.stateIn(
         viewModelScope,
@@ -60,6 +58,6 @@ class WidgetConfigurationViewModel @Inject constructor(
             device.id,
             device.name,
         )
-        _event.emit(Event.Completed)
+        onConfigurationCompletedFlow.update { UiEvent.Data(Unit) }
     }
 }

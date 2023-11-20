@@ -23,12 +23,8 @@ fun EditUserScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    ObserveEvent(viewModel) {
-        when (it) {
-            UserViewModel.Event.NavigateBack -> {
-                navigateBack()
-            }
-        }
+    ObserveEvent(uiState.onUserSaved) {
+        navigateBack()
     }
 
     EditUserScreen(

@@ -6,14 +6,11 @@ import androidx.lifecycle.viewModelScope
 import com.seo4d696b75.android.switchbot_lock_ext.domain.auth.UserCredential
 import com.seo4d696b75.android.switchbot_lock_ext.domain.user.UserRegistration
 import com.seo4d696b75.android.switchbot_lock_ext.domain.user.UserRepository
-import com.seo4d696b75.android.switchbot_lock_ext.ui.common.NavEvent
-import com.seo4d696b75.android.switchbot_lock_ext.ui.common.NavEventPublisher
+import com.seo4d696b75.android.switchbot_lock_ext.ui.common.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -23,9 +20,11 @@ import javax.inject.Inject
 @HiltViewModel
 class UserViewModel @Inject constructor(
     private val userRepository: UserRepository,
-) : ViewModel(), NavEventPublisher<UserViewModel.Event> {
+) : ViewModel() {
     private val tokenInput = MutableStateFlow(TextFieldValue())
     private val secretInput = MutableStateFlow(TextFieldValue())
+    private val onUserSavedFlow =
+        MutableStateFlow<UiEvent<Unit>>(UiEvent.None)
 
     init {
         when (val user = userRepository.currentUser) {
@@ -42,12 +41,14 @@ class UserViewModel @Inject constructor(
         userRepository.userFlow,
         tokenInput,
         secretInput,
-    ) { user, token, secret ->
+        onUserSavedFlow,
+    ) { user, token, secret, event ->
         UserUiState(
             user = user,
             tokenInput = token,
             secretInput = secret,
             isSaveEnabled = validateFormInput(token.text, secret.text),
+            onUserSaved = event,
         )
     }.stateIn(
         viewModelScope,
@@ -80,7 +81,7 @@ class UserViewModel @Inject constructor(
                         credential = UserCredential(token, secret),
                     )
                 )
-                _event.emit(Event.NavigateBack)
+                onUserSavedFlow.update { UiEvent.Data(Unit) }
             }
         }
     }
@@ -88,11 +89,4 @@ class UserViewModel @Inject constructor(
     fun removeUser() {
         userRepository.remove()
     }
-
-    sealed interface Event : NavEvent {
-        data object NavigateBack : Event
-    }
-
-    private val _event = MutableSharedFlow<Event>()
-    override val event = _event.asSharedFlow()
 }

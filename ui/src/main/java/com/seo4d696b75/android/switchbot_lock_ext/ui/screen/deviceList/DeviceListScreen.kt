@@ -26,7 +26,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockDevice
 import com.seo4d696b75.android.switchbot_lock_ext.domain.user.UserRegistration
-import com.seo4d696b75.android.switchbot_lock_ext.ui.common.LaunchedEvent
+import com.seo4d696b75.android.switchbot_lock_ext.ui.common.ObserveEvent
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.LoadingSection
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.NoUserSection
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.UiEvent
@@ -64,7 +64,7 @@ fun DeviceListScreen(
         SnackbarHostState()
     }
 
-    LaunchedEvent(snackBarMessage) {
+    ObserveEvent(snackBarMessage) {
         snackBarHostState.showSnackbar(it)
     }
 

@@ -5,18 +5,14 @@ import androidx.lifecycle.viewModelScope
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.DeviceRepository
 import com.seo4d696b75.android.switchbot_lock_ext.domain.user.UserRegistration
 import com.seo4d696b75.android.switchbot_lock_ext.domain.user.UserRepository
-import com.seo4d696b75.android.switchbot_lock_ext.ui.common.NavEvent
-import com.seo4d696b75.android.switchbot_lock_ext.ui.common.NavEventPublisher
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
@@ -29,13 +25,7 @@ import javax.inject.Inject
 class DeviceListViewModel @Inject constructor(
     userRepository: UserRepository,
     private val deviceRepository: DeviceRepository,
-) : ViewModel(), NavEventPublisher<DeviceListViewModel.Event> {
-
-    sealed interface Event : NavEvent {
-    }
-
-    private val _event = MutableSharedFlow<Event>()
-    override val event = _event.asSharedFlow()
+) : ViewModel() {
 
     private val isRefreshingFlow = MutableStateFlow(false)
     private val snackBarMessageFlow =
