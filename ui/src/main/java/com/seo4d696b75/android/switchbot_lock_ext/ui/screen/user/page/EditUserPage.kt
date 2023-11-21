@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
@@ -61,7 +62,7 @@ fun EditUserPage(
                     onValueChange = onTokenChanged,
                     singleLine = true,
                     label = {
-                        Text(text = "token")
+                        Text(text = stringResource(id = R.string.label_user_token))
                     },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Password,
@@ -73,7 +74,7 @@ fun EditUserPage(
                         ) {
                             Icon(
                                 Icons.Outlined.Clear,
-                                contentDescription = "clear token",
+                                contentDescription = stringResource(id = R.string.label_clear_input),
                             )
                         }
                     },
@@ -85,7 +86,7 @@ fun EditUserPage(
                     onValueChange = onSecretChanged,
                     singleLine = true,
                     label = {
-                        Text(text = "secret")
+                        Text(text = stringResource(id = R.string.label_user_secret))
                     },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Password,
@@ -98,7 +99,7 @@ fun EditUserPage(
                         ) {
                             Icon(
                                 Icons.Outlined.Clear,
-                                contentDescription = "clear secret",
+                                contentDescription = stringResource(id = R.string.label_clear_input),
                             )
                         }
                     },
@@ -109,7 +110,7 @@ fun EditUserPage(
             }
         }
         PrimaryButton(
-            label = "Save",
+            label = stringResource(id = R.string.label_save),
             enabled = isSaveButtonEnabled,
             onClick = onSaveUserClicked,
             iconResId = R.drawable.ic_save,

@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.seo4d696b75.android.switchbot_lock_ext.ui.R
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.AppLockedSection
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.PrimaryButton
 
@@ -33,11 +35,11 @@ fun NoAuthenticatorScreen(
             contentAlignment = Alignment.Center,
         ) {
             AppLockedSection(
-                description = "This app uses your device's lock screen for security of your credentials, but lock screen not set.",
+                description = stringResource(id = R.string.description_no_authenticator),
             )
         }
         PrimaryButton(
-            label = "Configure lock screen",
+            label = stringResource(id = R.string.label_configure_lock_screen),
             onClick = navigateToSetting,
         )
     }

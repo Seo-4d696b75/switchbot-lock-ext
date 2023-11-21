@@ -1,6 +1,7 @@
 package com.seo4d696b75.android.switchbot_lock_ext.ui.widget.component
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
@@ -13,6 +14,7 @@ import androidx.glance.layout.height
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import com.seo4d696b75.android.switchbot_lock_ext.domain.widget.LockWidgetStatus
+import com.seo4d696b75.android.switchbot_lock_ext.ui.R
 
 @Composable
 fun LockControlSection(
@@ -46,13 +48,17 @@ fun LockControlSection(
 
                 is LockWidgetStatus.Loading -> {
                     LoadingSection(
-                        message = if (status.isLocking) "Locking" else "Unlocking",
+                        message = stringResource(
+                            if (status.isLocking) R.string.label_locking else R.string.label_unlocking,
+                        ),
                     )
                 }
 
                 is LockWidgetStatus.Success -> {
                     CommandSuccessSection(
-                        message = if (status.isLocked) "Locked" else "Unlocked",
+                        message = stringResource(
+                            if (status.isLocked) R.string.message_locked_state_locked else R.string.message_locked_state_unlocked,
+                        ),
                     )
                 }
 

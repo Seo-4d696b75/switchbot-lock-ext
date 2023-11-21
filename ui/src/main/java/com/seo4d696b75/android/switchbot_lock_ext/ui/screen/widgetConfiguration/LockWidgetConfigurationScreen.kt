@@ -12,10 +12,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockDevice
 import com.seo4d696b75.android.switchbot_lock_ext.domain.user.UserRegistration
+import com.seo4d696b75.android.switchbot_lock_ext.ui.R
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.ObserveEvent
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.LoadingSection
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.NoUserSection
@@ -55,7 +57,7 @@ fun LockWidgetConfigurationScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = "Widget Configuration")
+                    Text(text = stringResource(id = R.string.top_bar_widget_configuration))
                 },
             )
         },

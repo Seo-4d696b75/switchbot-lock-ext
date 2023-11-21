@@ -22,13 +22,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockDevice
 import com.seo4d696b75.android.switchbot_lock_ext.domain.user.UserRegistration
-import com.seo4d696b75.android.switchbot_lock_ext.ui.common.ObserveEvent
+import com.seo4d696b75.android.switchbot_lock_ext.ui.R
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.LoadingSection
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.NoUserSection
+import com.seo4d696b75.android.switchbot_lock_ext.ui.common.ObserveEvent
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.UiEvent
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.deviceList.page.DeviceListPage
 import kotlinx.collections.immutable.ImmutableList
@@ -43,7 +45,7 @@ fun DeviceListScreen(
     DeviceListScreen(
         user = uiState.user,
         devices = uiState.devices,
-        snackBarMessage = uiState.snackBarMessage,
+        showRefreshErrorMessage = uiState.showRefreshErrorMessage,
         isRefreshing = uiState.isRefreshing,
         onRefreshClicked = viewModel::refresh,
         modifier = modifier.fillMaxSize(),
@@ -57,15 +59,17 @@ fun DeviceListScreen(
     isRefreshing: Boolean,
     devices: ImmutableList<LockDevice>,
     onRefreshClicked: () -> Unit,
-    snackBarMessage: UiEvent<String>,
+    showRefreshErrorMessage: UiEvent<Unit>,
     modifier: Modifier = Modifier,
 ) {
     val snackBarHostState = remember {
         SnackbarHostState()
     }
 
-    ObserveEvent(snackBarMessage) {
-        snackBarHostState.showSnackbar(it)
+    val errorMessage = stringResource(id = R.string.message_refresh_failure)
+
+    ObserveEvent(showRefreshErrorMessage) {
+        snackBarHostState.showSnackbar(errorMessage)
     }
 
     Scaffold(
@@ -73,7 +77,7 @@ fun DeviceListScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = "Device Management")
+                    Text(text = stringResource(id = R.string.top_bar_device))
                 },
             )
         },
@@ -81,7 +85,7 @@ fun DeviceListScreen(
             FloatingActionButton(onClick = onRefreshClicked) {
                 Icon(
                     Icons.Default.Refresh,
-                    contentDescription = "refresh",
+                    contentDescription = stringResource(id = R.string.label_refresh),
                 )
             }
         },

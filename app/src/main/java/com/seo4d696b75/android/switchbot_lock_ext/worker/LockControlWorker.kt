@@ -46,7 +46,9 @@ class LockControlWorker @AssistedInject constructor(
                 }
             }.onFailure {
                 widgetMediator.updateLockWidgetState(appWidgetId) {
-                    it.copy(status = LockWidgetStatus.Failure("Error"))
+                    val message =
+                        context.getString(com.seo4d696b75.android.switchbot_lock_ext.ui.R.string.message_locked_state_error)
+                    it.copy(status = LockWidgetStatus.Failure(message))
                 }
             }
             delay(3000L)

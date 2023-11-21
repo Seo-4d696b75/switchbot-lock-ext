@@ -9,8 +9,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockDevice
+import com.seo4d696b75.android.switchbot_lock_ext.ui.R
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.InfoSection
 import kotlinx.collections.immutable.ImmutableList
 
@@ -26,7 +28,7 @@ fun DeviceListSection(
     ) {
         stickyHeader {
             InfoSection(
-                description = "Not all devices are controllable.\n- Cloud service MUST be enabled\n- Not grouped with others, or is master of grouped devices",
+                description = stringResource(id = R.string.description_device_controllable),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp),

@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.seo4d696b75.android.switchbot_lock_ext.ui.R
 
@@ -36,7 +37,7 @@ fun CredentialsDescription(
         )
         Spacer(modifier = Modifier.width(12.dp))
         Text(
-            text = "User credentials are saved only in your local device with encryption AES256.",
+            text = stringResource(id = R.string.description_user_credentials),
             style = MaterialTheme.typography.bodyMedium,
         )
     }

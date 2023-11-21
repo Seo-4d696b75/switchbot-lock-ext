@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockStatus
 import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockedState
@@ -63,13 +64,13 @@ fun LockControlSection(
                         IconButton(onClick = showStatusDetail) {
                             Icon(
                                 Icons.Outlined.Info,
-                                contentDescription = "status details",
+                                contentDescription = stringResource(id = R.string.label_status_detail),
                             )
                         }
                         IconButton(onClick = { /*TODO*/ }) {
                             Icon(
                                 Icons.Outlined.Settings,
-                                contentDescription = "setting",
+                                contentDescription = stringResource(id = R.string.label_device_setting),
                             )
                         }
                     }
@@ -88,7 +89,7 @@ fun LockControlSection(
                                     modifier = Modifier.size(32.dp),
                                 )
                                 Spacer(modifier = Modifier.width(8.dp))
-                                Text(text = "Jammed")
+                                Text(text = stringResource(id = R.string.message_locked_state_jammed))
                             }
                         }
 
@@ -107,7 +108,7 @@ fun LockControlSection(
                                     modifier = Modifier.size(32.dp),
                                 )
                                 Spacer(modifier = Modifier.width(8.dp))
-                                Text(text = "Error")
+                                Text(text = stringResource(id = R.string.message_locked_state_error))
                             }
                         }
 
@@ -134,7 +135,7 @@ fun LockControlSection(
                         modifier = Modifier.size(32.dp),
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text(text = "API error")
+                    Text(text = stringResource(id = R.string.message_lock_status_error))
                 }
             }
 
@@ -146,7 +147,7 @@ fun LockControlSection(
                 ) {
                     CircularProgressIndicator(modifier = Modifier.size(32.dp))
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text(text = "Loading")
+                    Text(text = stringResource(id = R.string.message_lock_status_loading))
                 }
             }
         }

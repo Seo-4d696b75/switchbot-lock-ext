@@ -14,10 +14,12 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockDevice
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockGroup
+import com.seo4d696b75.android.switchbot_lock_ext.ui.R
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.NoDeviceSection
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.LockUiState
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.component.LockListTile
@@ -39,7 +41,9 @@ fun LockListPage(
             modifier = modifier,
             contentAlignment = Alignment.Center,
         ) {
-            NoDeviceSection(description = "No controllable devices registered yet.")
+            NoDeviceSection(
+                description = stringResource(id = R.string.description_no_controllable_device),
+            )
         }
     } else {
         LazyVerticalGrid(

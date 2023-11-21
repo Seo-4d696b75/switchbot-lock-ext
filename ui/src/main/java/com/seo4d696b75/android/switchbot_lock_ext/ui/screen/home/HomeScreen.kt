@@ -16,9 +16,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.seo4d696b75.android.switchbot_lock_ext.domain.user.UserRegistration
+import com.seo4d696b75.android.switchbot_lock_ext.ui.R
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.LoadingSection
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.NoUserSection
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.page.LockListPage
@@ -57,7 +59,7 @@ fun HomeScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = "Home")
+                    Text(text = stringResource(id = R.string.top_bar_home))
                 },
             )
         },
@@ -65,7 +67,7 @@ fun HomeScreen(
             FloatingActionButton(onClick = onRefresh) {
                 Icon(
                     Icons.Default.Refresh,
-                    contentDescription = "refresh status",
+                    contentDescription = stringResource(id = R.string.label_refresh_status),
                 )
             }
         },

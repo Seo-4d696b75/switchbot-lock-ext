@@ -13,9 +13,11 @@ import androidx.compose.ui.Modifier
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import com.seo4d696b75.android.switchbot_lock_ext.R
 import com.seo4d696b75.android.switchbot_lock_ext.secure.SecureUiState
 import com.seo4d696b75.android.switchbot_lock_ext.secure.SecureViewModel
 import com.seo4d696b75.android.switchbot_lock_ext.secure.openLockScreenSetting
+import com.seo4d696b75.android.switchbot_lock_ext.ui.common.uiMessage
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.auth.NoAuthenticatorScreen
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.auth.NotAuthenticatedScreen
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.widgetConfiguration.LockWidgetConfigurationScreen
@@ -76,7 +78,7 @@ class AppWidgetConfigureActivity : FragmentActivity() {
                         )
 
                         is SecureUiState.AuthenticationError -> NotAuthenticatedScreen(
-                            description = state.message,
+                            description = uiMessage(state.message),
                         )
 
                         SecureUiState.NoAuthenticator -> NoAuthenticatorScreen(
@@ -95,7 +97,11 @@ class AppWidgetConfigureActivity : FragmentActivity() {
         lifecycleScope.launch {
             // FIXME if no delay, authentication will be cancelled without user interaction
             delay(500L)
-            viewModel.authenticate(this@AppWidgetConfigureActivity)
+            viewModel.authenticate(
+                activity = this@AppWidgetConfigureActivity,
+                title = getString(R.string.title_user_auth),
+                subTitle = getString(R.string.description_user_auth_widget_configuration),
+            )
         }
     }
 

@@ -7,6 +7,8 @@ import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
+import com.seo4d696b75.android.switchbot_lock_ext.ui.R
+import com.seo4d696b75.android.switchbot_lock_ext.ui.common.UIMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -30,7 +32,9 @@ class SecureViewModel @Inject constructor() : ViewModel() {
             override fun onAuthenticationFailed() {
                 super.onAuthenticationFailed()
                 _uiState.update {
-                    SecureUiState.AuthenticationError("Authentication failed")
+                    SecureUiState.AuthenticationError(
+                        UIMessage.ResId(R.string.message_user_auth_fialed),
+                    )
                 }
             }
 
@@ -40,7 +44,9 @@ class SecureViewModel @Inject constructor() : ViewModel() {
             ) {
                 super.onAuthenticationError(errorCode, errString)
                 _uiState.update {
-                    SecureUiState.AuthenticationError("Error code: $errorCode ($errString)")
+                    SecureUiState.AuthenticationError(
+                        UIMessage.Raw("$errString (code: $errorCode)"),
+                    )
                 }
             }
         }
@@ -51,12 +57,12 @@ class SecureViewModel @Inject constructor() : ViewModel() {
 
     fun authenticate(
         activity: FragmentActivity,
-        title: String = "User Authentication",
-        subTitle: String = "For security of your credentials, authentication is required before using this app.",
+        title: String,
+        subTitle: String,
     ) {
         _uiState.update { SecureUiState.NotAuthenticated }
         val manager = BiometricManager.from(activity)
-        when (manager.canAuthenticate(allowedAuthenticators)) {
+        when (val result = manager.canAuthenticate(allowedAuthenticators)) {
             BiometricManager.BIOMETRIC_SUCCESS -> {
                 val executor = ContextCompat.getMainExecutor(activity)
                 val prompt = BiometricPrompt(activity, executor, authCallback)
@@ -75,7 +81,10 @@ class SecureViewModel @Inject constructor() : ViewModel() {
 
             else -> {
                 _uiState.update {
-                    SecureUiState.AuthenticationError("unexpected error")
+                    Log.d("secure", "unexpected error: $result")
+                    SecureUiState.AuthenticationError(
+                        UIMessage.ResId(R.string.message_user_auth_fialed),
+                    )
                 }
             }
         }

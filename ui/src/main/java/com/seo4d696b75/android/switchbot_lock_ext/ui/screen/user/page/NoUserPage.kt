@@ -9,6 +9,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.seo4d696b75.android.switchbot_lock_ext.ui.R
@@ -38,7 +39,7 @@ fun NoUserPage(
             NoUserSection()
         }
         PrimaryButton(
-            label = "Add user",
+            label = stringResource(id = R.string.label_add_user),
             onClick = onAddUserClicked,
             iconResId = R.drawable.ic_add_person,
             modifier = Modifier.fillMaxWidth()

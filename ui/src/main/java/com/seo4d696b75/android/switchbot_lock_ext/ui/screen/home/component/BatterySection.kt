@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
@@ -32,7 +33,7 @@ fun BatterySection(
     ) {
         Icon(
             painter = painterResource(id = R.drawable.ic_battery_4),
-            contentDescription = "battery $percent%",
+            contentDescription = null,
             tint = if (percent < 10) {
                 Color(0xFFFE2020)
             } else if (percent < 20) {
@@ -43,7 +44,7 @@ fun BatterySection(
         )
         Spacer(modifier = Modifier.width(4.dp))
         Text(
-            text = "$percent%",
+            text = stringResource(R.string.message_battery_percent, percent),
             style = MaterialTheme.typography.labelMedium,
         )
     }

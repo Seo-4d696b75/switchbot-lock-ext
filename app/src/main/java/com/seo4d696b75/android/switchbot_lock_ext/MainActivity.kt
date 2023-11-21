@@ -16,6 +16,7 @@ import com.seo4d696b75.android.switchbot_lock_ext.secure.SecureUiState
 import com.seo4d696b75.android.switchbot_lock_ext.secure.SecureViewModel
 import com.seo4d696b75.android.switchbot_lock_ext.secure.openLockScreenSetting
 import com.seo4d696b75.android.switchbot_lock_ext.service.LockService
+import com.seo4d696b75.android.switchbot_lock_ext.ui.common.uiMessage
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.auth.NoAuthenticatorScreen
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.auth.NotAuthenticatedScreen
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.main.MainScreen
@@ -56,7 +57,7 @@ class MainActivity : FragmentActivity() {
                         )
 
                         is SecureUiState.AuthenticationError -> NotAuthenticatedScreen(
-                            description = state.message,
+                            description = uiMessage(state.message),
                         )
 
                         SecureUiState.NoAuthenticator -> NoAuthenticatorScreen(
@@ -72,7 +73,11 @@ class MainActivity : FragmentActivity() {
 
     override fun onStart() {
         super.onStart()
-        viewModel.authenticate(this)
+        viewModel.authenticate(
+            activity = this,
+            title = getString(R.string.title_user_auth),
+            subTitle = getString(R.string.description_user_auth),
+        )
     }
 
     override fun onStop() {

@@ -1,6 +1,7 @@
 package com.seo4d696b75.android.switchbot_lock_ext.ui.widget.component
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
@@ -18,14 +19,14 @@ fun LockControlButtonSection(
         modifier = modifier,
     ) {
         LockControlButton(
-            label = "Unlock",
+            label = stringResource(id = R.string.label_unlock),
             icon = ImageProvider(R.drawable.ic_unlock),
             color = GlanceTheme.colors.secondary,
             onClicked = { onClicked(false) },
         )
         Spacer(modifier = GlanceModifier.width(12.dp))
         LockControlButton(
-            label = "Lock",
+            label = stringResource(id = R.string.label_lock),
             icon = ImageProvider(R.drawable.ic_lock),
             color = GlanceTheme.colors.primary,
             onClicked = { onClicked(true) },

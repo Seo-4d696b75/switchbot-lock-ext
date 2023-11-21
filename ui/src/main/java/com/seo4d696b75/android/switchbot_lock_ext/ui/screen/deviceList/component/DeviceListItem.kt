@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -54,7 +55,7 @@ fun DeviceListItem(
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
-                    text = "Not Controllable",
+                    text = stringResource(id = R.string.message_device_not_controllable),
                     style = MaterialTheme.typography.labelSmall,
                 )
             }
@@ -83,13 +84,19 @@ fun DeviceListItem(
                     overflow = TextOverflow.Ellipsis,
                 )
                 Text(
-                    text = "id: ${device.id}",
+                    text = stringResource(
+                        R.string.message_device_id,
+                        device.id,
+                    ),
                     style = MaterialTheme.typography.titleSmall,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
                 Text(
-                    text = "group: ${device.group.formatString()}",
+                    text = stringResource(
+                        R.string.message_device_group,
+                        device.group.formatString(),
+                    ),
                     style = MaterialTheme.typography.titleSmall,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -100,9 +107,10 @@ fun DeviceListItem(
     }
 }
 
+@Composable
 fun LockGroup.formatString() = when (this) {
-    LockGroup.Disabled -> "none"
-    is LockGroup.Enabled -> "$groupName (master: $isMaster)"
+    LockGroup.Disabled -> stringResource(id = R.string.message_device_group_disabled)
+    is LockGroup.Enabled -> "$groupName (${stringResource(id = R.string.message_device_group_master)}: $isMaster)"
 }
 
 @Preview

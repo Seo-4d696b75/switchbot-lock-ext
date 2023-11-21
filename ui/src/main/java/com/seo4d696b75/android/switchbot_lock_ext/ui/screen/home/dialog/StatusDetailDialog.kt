@@ -12,6 +12,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -19,6 +20,7 @@ import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockDevice
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockGroup
 import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockStatus
 import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockedState
+import com.seo4d696b75.android.switchbot_lock_ext.ui.R
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.deviceList.component.formatString
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.HomeViewModel
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.LockUiState
@@ -53,7 +55,7 @@ fun StatusDetailDialog(
         onDismissRequest = onDismiss,
         modifier = modifier,
         title = {
-            Text(text = "Status Detail")
+            Text(text = stringResource(id = R.string.title_device_status_detail))
         },
         text = {
             ProvideTextStyle(value = MaterialTheme.typography.bodyLarge) {
@@ -71,7 +73,11 @@ fun StatusDetailDialog(
 
                     when (val status = state.status) {
                         is LockStatus.Data -> {
-                            Text(text = "battery: ${status.battery}%")
+                            val batteryText = stringResource(
+                                R.string.message_battery_percent,
+                                status.battery,
+                            )
+                            Text(text = "battery: $batteryText")
                             Text(text = "version: ${status.version}")
                             Text(text = "state: ${status.state.formatString()}")
                             Text(text = "door closed: ${status.isDoorClosed}")
@@ -85,16 +91,21 @@ fun StatusDetailDialog(
         },
         confirmButton = {
             TextButton(onClick = onDismiss) {
-                Text(text = "OK")
+                Text(
+                    text = stringResource(id = R.string.dialog_button_positive),
+                )
             }
         },
     )
 }
 
+@Composable
 fun LockedState.formatString() = when (this) {
-    LockedState.Error -> "error"
-    LockedState.Jammed -> "jammed"
-    is LockedState.Normal -> if (isLocked) "locked" else "unlocked"
+    LockedState.Error -> stringResource(id = R.string.message_locked_state_error)
+    LockedState.Jammed -> stringResource(id = R.string.message_locked_state_jammed)
+    is LockedState.Normal -> stringResource(
+        if (isLocked) R.string.message_locked_state_locked else R.string.message_locked_state_unlocked,
+    )
 }
 
 @Preview

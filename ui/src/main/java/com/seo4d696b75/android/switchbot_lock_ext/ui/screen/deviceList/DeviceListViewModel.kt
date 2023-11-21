@@ -29,7 +29,7 @@ class DeviceListViewModel @Inject constructor(
 
     private val isRefreshingFlow = MutableStateFlow(false)
     private val snackBarMessageFlow =
-        MutableStateFlow<UiEvent<String>>(UiEvent.None)
+        MutableStateFlow<UiEvent<Unit>>(UiEvent.None)
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val uiState: StateFlow<DeviceListUiState> = userRepository
@@ -45,7 +45,7 @@ class DeviceListViewModel @Inject constructor(
                         user = user,
                         devices = devices.toPersistentList(),
                         isRefreshing = isRefreshing,
-                        snackBarMessage = message,
+                        showRefreshErrorMessage = message,
                     )
                 }
 
@@ -55,7 +55,7 @@ class DeviceListViewModel @Inject constructor(
                             user = user,
                             devices = persistentListOf(),
                             isRefreshing = false,
-                            snackBarMessage = UiEvent.None,
+                            showRefreshErrorMessage = UiEvent.None,
                         )
                     )
                 }
@@ -71,9 +71,7 @@ class DeviceListViewModel @Inject constructor(
         runCatching {
             deviceRepository.refresh()
         }.onFailure {
-            snackBarMessageFlow.update {
-                UiEvent.Data("Failed to refresh")
-            }
+            snackBarMessageFlow.update { UiEvent.Data(Unit) }
         }
         isRefreshingFlow.update { false }
     }

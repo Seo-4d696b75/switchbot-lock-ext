@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -28,6 +29,10 @@ fun LockToggle(
     val lockedColor = MaterialTheme.colorScheme.primary
     val unlockedColor = MaterialTheme.colorScheme.secondary
     val contentColor = MaterialTheme.colorScheme.onPrimary
+    val lockText = stringResource(id = R.string.label_lock)
+    val unlockText = stringResource(id = R.string.label_unlock)
+    val lockingText = stringResource(id = R.string.label_locking)
+    val unlockingText = stringResource(id = R.string.label_unlocking)
     AnimatedToggle(
         modifier = modifier,
         checked = state.isLocked,
@@ -42,7 +47,7 @@ fun LockToggle(
                 )
             }
             Text(
-                text = if (it) "Unlock" else "Lock",
+                text = if (it) unlockText else lockText,
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
                 color = contentColor,
@@ -60,7 +65,7 @@ fun LockToggle(
         },
         loadingLabel = {
             Text(
-                text = if (it) "Locking" else "Unlocking",
+                text = if (it) lockingText else unlockingText,
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
                 color = contentColor,

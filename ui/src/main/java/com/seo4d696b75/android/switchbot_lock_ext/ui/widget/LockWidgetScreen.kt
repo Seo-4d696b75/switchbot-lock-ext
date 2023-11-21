@@ -1,6 +1,7 @@
 package com.seo4d696b75.android.switchbot_lock_ext.ui.widget
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
@@ -34,7 +35,9 @@ fun LockWidgetScreen(
         contentAlignment = Alignment.Center,
     ) {
         if (state == null) {
-            LoadingSection(message = "Initializing")
+            LoadingSection(
+                message = stringResource(id = R.string.message_widget_initializing),
+            )
         } else {
             LockControlSection(
                 name = state.deviceName,

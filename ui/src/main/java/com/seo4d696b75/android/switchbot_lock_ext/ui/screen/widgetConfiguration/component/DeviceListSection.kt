@@ -13,8 +13,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockDevice
+import com.seo4d696b75.android.switchbot_lock_ext.ui.R
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.InfoSection
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.deviceList.component.DeviceListItem
 import kotlinx.collections.immutable.ImmutableList
@@ -36,11 +38,11 @@ fun DeviceListSection(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    text = "Select device to control by widget",
+                    text = stringResource(id = R.string.title_select_device),
                     style = MaterialTheme.typography.titleMedium,
                 )
                 InfoSection(
-                    description = "Only devices registered in local app are shown here.",
+                    description = stringResource(id = R.string.description_device_selection),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp),

@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -67,7 +68,7 @@ fun UserPage(
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     Text(
-                        text = "Token：",
+                        text = stringResource(id = R.string.label_user_token),
                         modifier = Modifier.width(80.dp),
                         textAlign = TextAlign.Start,
                         style = MaterialTheme.typography.titleSmall,
@@ -86,7 +87,7 @@ fun UserPage(
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     Text(
-                        text = "Secret：",
+                        text = stringResource(id = R.string.label_user_secret),
                         modifier = Modifier.width(80.dp),
                         textAlign = TextAlign.Start,
                         style = MaterialTheme.typography.titleSmall,
@@ -111,14 +112,14 @@ fun UserPage(
             modifier = Modifier.fillMaxWidth(),
         ) {
             PrimaryButton(
-                label = "Delete user",
+                label = stringResource(id = R.string.label_delete_user),
                 onClick = onRemoveUserClicked,
                 iconResId = R.drawable.ic_delete,
                 modifier = Modifier.weight(1f),
             )
             Spacer(modifier = Modifier.width(8.dp))
             PrimaryButton(
-                label = "Edit user",
+                label = stringResource(id = R.string.label_edit_user),
                 onClick = onEditUserClicked,
                 iconResId = R.drawable.ic_edit,
                 modifier = Modifier.weight(1f),
