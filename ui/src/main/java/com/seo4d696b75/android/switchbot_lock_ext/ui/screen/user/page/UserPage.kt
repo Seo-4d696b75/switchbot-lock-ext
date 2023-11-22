@@ -64,44 +64,30 @@ fun UserPage(
                     modifier = Modifier.size(160.dp),
                     colorFilter = ColorFilter.tint(Color.Gray),
                 )
-                Row(
+                Text(
+                    text = stringResource(
+                        R.string.message_user_token,
+                        user.credential.token,
+                    ),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Bold,
                     modifier = Modifier.fillMaxWidth(),
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.label_user_token),
-                        modifier = Modifier.width(80.dp),
-                        textAlign = TextAlign.Start,
-                        style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.Bold,
-                    )
-                    Text(
-                        text = user.credential.token,
-                        modifier = Modifier.weight(1f),
-                        style = MaterialTheme.typography.titleSmall,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        fontWeight = FontWeight.Bold,
-                    )
-                }
-                Row(
+                    textAlign = TextAlign.Start,
+                )
+                Text(
+                    text = stringResource(
+                        R.string.message_user_secret,
+                        "●".repeat(user.credential.secret.length),
+                    ),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Bold,
                     modifier = Modifier.fillMaxWidth(),
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.label_user_secret),
-                        modifier = Modifier.width(80.dp),
-                        textAlign = TextAlign.Start,
-                        style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.Bold,
-                    )
-                    Text(
-                        text = "●".repeat(user.credential.secret.length),
-                        modifier = Modifier.weight(1f),
-                        style = MaterialTheme.typography.titleSmall,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        fontWeight = FontWeight.Bold,
-                    )
-                }
+                    textAlign = TextAlign.Start,
+                )
 
                 Spacer(modifier = Modifier.height(24.dp))
 

@@ -49,5 +49,7 @@
     <string name="message_lock_status_loading">取得中</string>
     <string name="message_lock_status_error">エラー</string>
     <string name="message_widget_initializing">初期化中</string>
-    <string name="message_user_auth_fialed">認証に失敗しました</string>
+    <string name="message_user_auth_failed">認証に失敗しました</string>
+    <string name="message_user_secret">シークレット: %s</string>
+    <string name="message_user_token">トークン: %s</string>
 </resources>

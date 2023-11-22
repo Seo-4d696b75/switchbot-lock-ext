@@ -33,7 +33,7 @@ class SecureViewModel @Inject constructor() : ViewModel() {
                 super.onAuthenticationFailed()
                 _uiState.update {
                     SecureUiState.AuthenticationError(
-                        UIMessage.ResId(R.string.message_user_auth_fialed),
+                        UIMessage.ResId(R.string.message_user_auth_failed),
                     )
                 }
             }
@@ -83,7 +83,7 @@ class SecureViewModel @Inject constructor() : ViewModel() {
                 _uiState.update {
                     Log.d("secure", "unexpected error: $result")
                     SecureUiState.AuthenticationError(
-                        UIMessage.ResId(R.string.message_user_auth_fialed),
+                        UIMessage.ResId(R.string.message_user_auth_failed),
                     )
                 }
             }
