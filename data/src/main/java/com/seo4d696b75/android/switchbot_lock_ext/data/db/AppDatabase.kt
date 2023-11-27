@@ -4,13 +4,12 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.seo4d696b75.android.switchbot_lock_ext.domain.initialize.AppInitializer
+import com.seo4d696b75.android.switchbot_lock_ext.data.storage.AppStorage
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import dagger.multibindings.IntoSet
 import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
 
 @Database(entities = [LockDeviceEntity::class], version = 1)
@@ -25,21 +24,16 @@ object AppDatabaseModule {
     @Provides
     fun provideDatabase(
         @ApplicationContext context: Context,
+        storage: AppStorage,
     ): AppDatabase {
+        val password =
+            requireNotNull(storage.getDbPassword()).encodeToByteArray()
         return Room.databaseBuilder(
             context = context,
             klass = AppDatabase::class.java,
             name = "app_database",
         )
-            .openHelperFactory(
-                SupportOpenHelperFactory("test-password".toByteArray()),
-            )
+            .openHelperFactory(SupportOpenHelperFactory(password))
             .build()
-    }
-
-    @Provides
-    @IntoSet
-    fun provideInitializer() = AppInitializer {
-        System.loadLibrary("sqlcipher")
     }
 }
