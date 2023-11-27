@@ -66,6 +66,7 @@ androidx-hilt-compiler = { group = "androidx.hilt", name = "hilt-compiler", vers
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+zetetic-sqlcipher = { group = "net.zetetic", name = "sqlcipher-android", version = "4.5.5" }
 
 # security
 androidx-security = { group = "androidx.security", name = "security-crypto", version = "1.0.0" }
