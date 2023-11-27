@@ -12,9 +12,13 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
 
-@Database(entities = [LockDeviceEntity::class], version = 1)
+@Database(
+    entities = [LockDeviceEntity::class, LockGeofenceEntity::class],
+    version = 1,
+)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun lockDeviceDao(): LockDeviceDao
+    abstract fun lockGeofenceDao(): LockGeofenceDao
 }
 
 @Suppress("unused")
