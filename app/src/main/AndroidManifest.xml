@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
     <application
         android:name=".MainApplication"
@@ -51,6 +54,9 @@
         </receiver>
         <service
             android:name=".service.LockService"
+            android:exported="false" />
+        <receiver
+            android:name=".geo.GeofenceBroadcastReceiver"
             android:exported="false" />
         <provider
             android:name="androidx.startup.InitializationProvider"

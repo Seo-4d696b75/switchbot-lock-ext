@@ -82,6 +82,9 @@ retrofit-kotlinx-serialization-converter = { group = "com.jakewharton.retrofit",
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 
+# play-ervices
+android-gms-location = { group = "com.google.android.gms", name = "play-services-location", version = "21.0.1" }
+
 # test
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }

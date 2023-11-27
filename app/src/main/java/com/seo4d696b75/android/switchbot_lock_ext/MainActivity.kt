@@ -1,7 +1,11 @@
 package com.seo4d696b75.android.switchbot_lock_ext
 
+import android.Manifest
+import android.app.PendingIntent
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.WindowManager
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -10,8 +14,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.android.gms.location.Geofence
+import com.google.android.gms.location.GeofencingRequest
+import com.google.android.gms.location.LocationServices
+import com.seo4d696b75.android.switchbot_lock_ext.geo.GeofenceBroadcastReceiver
 import com.seo4d696b75.android.switchbot_lock_ext.secure.SecureUiState
 import com.seo4d696b75.android.switchbot_lock_ext.secure.SecureViewModel
 import com.seo4d696b75.android.switchbot_lock_ext.secure.openLockScreenSetting
@@ -68,6 +77,44 @@ class MainActivity : FragmentActivity() {
                     }
                 }
             }
+        }
+
+        val geofencingClient = LocationServices.getGeofencingClient(this)
+        val requestId = "geofence-test"
+        val geofence = Geofence.Builder()
+            .setRequestId(requestId)
+            .setCircularRegion(
+                35.68123,
+                139.76712,
+                100f,
+            )
+            .setExpirationDuration(3600 * 1000L)
+            .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
+            .build()
+        val geofenceRequest = GeofencingRequest.Builder().apply {
+            setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
+            addGeofence(geofence)
+        }.build()
+        val pendingIntent = PendingIntent.getBroadcast(
+            this,
+            0,
+            Intent(this, GeofenceBroadcastReceiver::class.java),
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE,
+        )
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            geofencingClient.addGeofences(geofenceRequest, pendingIntent)
+                .apply {
+                    addOnSuccessListener {
+                        Log.d("MainActivity", "Success to add geofence")
+                    }
+                    addOnFailureListener {
+                        Log.d("MainActivity", "Failed to add geofence $it")
+                    }
+                }
         }
     }
 
