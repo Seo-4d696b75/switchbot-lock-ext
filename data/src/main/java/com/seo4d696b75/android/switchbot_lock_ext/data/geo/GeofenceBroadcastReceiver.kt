@@ -1,10 +1,9 @@
-package com.seo4d696b75.android.switchbot_lock_ext.geo
+package com.seo4d696b75.android.switchbot_lock_ext.data.geo
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofenceStatusCodes
 import com.google.android.gms.location.GeofencingEvent
 
@@ -19,18 +18,17 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
             Log.d("GeofenceBroadcastReceiver", message)
             return
         }
-        val transition = event.geofenceTransition
         val geofences = event.triggeringGeofences ?: emptyList()
-        if (transition == Geofence.GEOFENCE_TRANSITION_ENTER) {
+        val transition = event.geofenceTransition.toGeofenceTransition()
+        Log.d(
+            "GeofenceBroadcastReceiver",
+            "transition: $transition",
+        )
+        geofences.forEach {
             Log.d(
                 "GeofenceBroadcastReceiver",
-                "Enter ${event.triggeringLocation}"
+                "geofence id: ${it.requestId}",
             )
-            geofences.forEach {
-                Log.d("GeofenceBroadcastReceiver", "id: ${it.requestId}")
-            }
-        } else {
-            Log.d("GeofenceBroadcastReceiver", "unexpected transition")
         }
     }
 }

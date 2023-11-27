@@ -1,11 +1,7 @@
 package com.seo4d696b75.android.switchbot_lock_ext
 
-import android.Manifest
-import android.app.PendingIntent
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.WindowManager
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -14,13 +10,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.google.android.gms.location.Geofence
-import com.google.android.gms.location.GeofencingRequest
-import com.google.android.gms.location.LocationServices
-import com.seo4d696b75.android.switchbot_lock_ext.geo.GeofenceBroadcastReceiver
+import androidx.lifecycle.lifecycleScope
+import com.seo4d696b75.android.switchbot_lock_ext.domain.geo.GeofenceRepository
+import com.seo4d696b75.android.switchbot_lock_ext.domain.geo.GeofenceTransition
 import com.seo4d696b75.android.switchbot_lock_ext.secure.SecureUiState
 import com.seo4d696b75.android.switchbot_lock_ext.secure.SecureViewModel
 import com.seo4d696b75.android.switchbot_lock_ext.secure.openLockScreenSetting
@@ -31,11 +25,17 @@ import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.auth.NotAuthenticate
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.main.MainScreen
 import com.seo4d696b75.android.switchbot_lock_ext.ui.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : FragmentActivity() {
 
     private val viewModel: SecureViewModel by viewModels()
+
+    @Inject
+    lateinit var geofenceRepository: GeofenceRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,42 +79,19 @@ class MainActivity : FragmentActivity() {
             }
         }
 
-        val geofencingClient = LocationServices.getGeofencingClient(this)
-        val requestId = "geofence-test"
-        val geofence = Geofence.Builder()
-            .setRequestId(requestId)
-            .setCircularRegion(
-                35.68123,
-                139.76712,
-                100f,
+        lifecycleScope.launch {
+            val geofences = geofenceRepository.geofenceFlow.first()
+            if (geofences.isNotEmpty()) {
+                geofenceRepository.removeGeofence(geofences.first().id)
+            }
+            geofenceRepository.addGeofence(
+                name = "test",
+                deviceId = "hoge",
+                lat = 35.68123,
+                lng = 139.76712,
+                radius = 100f,
+                transition = GeofenceTransition.Enter,
             )
-            .setExpirationDuration(3600 * 1000L)
-            .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
-            .build()
-        val geofenceRequest = GeofencingRequest.Builder().apply {
-            setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
-            addGeofence(geofence)
-        }.build()
-        val pendingIntent = PendingIntent.getBroadcast(
-            this,
-            0,
-            Intent(this, GeofenceBroadcastReceiver::class.java),
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE,
-        )
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            geofencingClient.addGeofences(geofenceRequest, pendingIntent)
-                .apply {
-                    addOnSuccessListener {
-                        Log.d("MainActivity", "Success to add geofence")
-                    }
-                    addOnFailureListener {
-                        Log.d("MainActivity", "Failed to add geofence $it")
-                    }
-                }
         }
     }
 

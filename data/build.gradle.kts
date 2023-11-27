@@ -80,5 +80,7 @@ dependencies {
     annotationProcessor(libs.androidx.room.compiler)
     implementation(libs.zetetic.sqlcipher)
 
+    implementation(libs.android.gms.location)
+
     testImplementation(libs.junit)
 }

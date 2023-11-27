@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,10 +14,13 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface LockGeofenceDao {
     @Query("SELECT * FROM lock_geofence_tb")
-    fun getAllGeofences(): Flow<List<LockGeofenceEntity>>
+    fun getAll(): Flow<List<LockGeofenceEntity>>
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    suspend fun addGeofence(entity: LockGeofenceEntity)
+    suspend fun add(entity: LockGeofenceEntity)
+
+    @Update
+    suspend fun update(entity: LockGeofenceEntity)
 
     @Query("DELETE FROM lock_geofence_tb WHERE id in (:ids)")
     suspend fun remove(ids: List<String>)
