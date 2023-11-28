@@ -6,6 +6,7 @@ import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.graphics.drawable.toBitmap
@@ -28,7 +29,7 @@ fun ImageProvider(
             )
         }
         val drawable = requireNotNull(context.getDrawable(id))
-        val src = drawable.toBitmap(256,256)
+        val src = drawable.toBitmap(256, 256)
         val dst = Bitmap.createBitmap(
             src.width,
             src.height,
@@ -40,4 +41,9 @@ fun ImageProvider(
         }
         ImageProvider(dst)
     } ?: ImageProvider(id)
+}
+
+@Composable
+fun glanceString(@StringRes id: Int): String {
+    return LocalContext.current.getString(id)
 }
