@@ -27,6 +27,7 @@
         </activity>
         <receiver
             android:name=".widget.AppWidgetReceiver"
+            android:label="@string/label_lock_widget"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
