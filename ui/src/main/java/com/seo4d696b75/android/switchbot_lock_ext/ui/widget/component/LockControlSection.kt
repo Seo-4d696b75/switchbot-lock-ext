@@ -2,6 +2,7 @@ package com.seo4d696b75.android.switchbot_lock_ext.ui.widget.component
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
 import androidx.glance.layout.Alignment
@@ -31,9 +32,10 @@ fun LockControlSection(
             text = name,
             style = TextStyle(
                 color = GlanceTheme.colors.onSurface,
+                fontSize = 14.sp,
             ),
         )
-        Spacer(modifier = GlanceModifier.height(8.dp))
+        Spacer(modifier = GlanceModifier.height(2.dp))
         Box(
             modifier = GlanceModifier.fillMaxSize(),
             contentAlignment = Alignment.Center,
