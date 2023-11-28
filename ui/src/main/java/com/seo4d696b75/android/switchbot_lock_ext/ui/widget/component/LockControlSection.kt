@@ -8,9 +8,8 @@ import androidx.glance.GlanceTheme
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Box
 import androidx.glance.layout.Column
-import androidx.glance.layout.Spacer
 import androidx.glance.layout.fillMaxSize
-import androidx.glance.layout.height
+import androidx.glance.layout.padding
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import com.seo4d696b75.android.switchbot_lock_ext.domain.widget.LockWidgetStatus
@@ -26,7 +25,6 @@ fun LockControlSection(
     Column(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = name,
@@ -34,8 +32,8 @@ fun LockControlSection(
                 color = GlanceTheme.colors.onSurface,
                 fontSize = 14.sp,
             ),
+            modifier = GlanceModifier.padding(top = 2.dp),
         )
-        Spacer(modifier = GlanceModifier.height(2.dp))
         Box(
             modifier = GlanceModifier.fillMaxSize(),
             contentAlignment = Alignment.Center,
