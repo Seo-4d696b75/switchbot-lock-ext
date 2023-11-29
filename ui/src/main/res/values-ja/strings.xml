@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="bottom_nav_home">ホーム</string>
+    <string name="bottom_nav_automation">自動化</string>
     <string name="bottom_nav_device">デバイス</string>
     <string name="bottom_nav_user">ユーザ</string>
     <string name="top_bar_home">ホーム</string>
+    <string name="top_bar_automation">自動化管理</string>
     <string name="top_bar_device">デバイス管理</string>
     <string name="top_bar_user">ユーザ設定</string>
     <string name="top_bar_edit_user">ユーザ設定の編集</string>

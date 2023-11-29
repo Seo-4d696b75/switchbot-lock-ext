@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="bottom_nav_home">Home</string>
+    <string name="bottom_nav_automation">Automation</string>
     <string name="bottom_nav_device">Device</string>
     <string name="bottom_nav_user">User</string>
     <string name="top_bar_home">Home</string>
+    <string name="top_bar_automation">Automation Management</string>
     <string name="top_bar_device">Device Management</string>
     <string name="top_bar_user">User Setting</string>
     <string name="top_bar_edit_user">Edit User</string>
