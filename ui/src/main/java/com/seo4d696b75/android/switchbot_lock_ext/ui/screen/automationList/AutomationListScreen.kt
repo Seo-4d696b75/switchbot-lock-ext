@@ -37,6 +37,8 @@ fun AutomationListScreen(
         user = uiState.user,
         isLoading = uiState.isLoading,
         automations = uiState.automations,
+        onEdit = { },
+        onEnabledChanged = { _, _ -> },
         modifier = modifier.fillMaxSize(),
     )
 }
@@ -47,6 +49,8 @@ fun AutomationListScreen(
     user: UserRegistration,
     isLoading: Boolean,
     automations: ImmutableList<LockGeofence>,
+    onEdit: (String) -> Unit,
+    onEnabledChanged: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -72,6 +76,8 @@ fun AutomationListScreen(
                 when (it) {
                     is UserRegistration.User -> AutomationListPage(
                         automations = automations,
+                        onEdit = onEdit,
+                        onEnabledChanged = onEnabledChanged,
                     )
 
                     UserRegistration.Undefined -> Box(
