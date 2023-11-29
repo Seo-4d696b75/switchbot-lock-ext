@@ -15,6 +15,7 @@
     <string name="title_error_common">An error happened</string>
     <string name="title_no_devices">No Devices</string>
     <string name="title_no_user">No user configured</string>
+    <string name="title_no_automation">No automations</string>
     <string name="title_device_status_detail">Status Detail</string>
     <string name="title_select_device">Select device to control by widget</string>
     <string name="label_retry">Retry</string>
@@ -38,6 +39,7 @@
     <string name="description_device_controllable">Not all devices are controllable.\n- Cloud service MUST be enabled\n- Not grouped with others, or is master of grouped devices</string>
     <string name="description_no_device">No devices registered in local. At the first launch, you need to synchronize with remote devices in SwitchBot.</string>
     <string name="description_no_controllable_device">No controllable devices registered yet.</string>
+    <string name="description_no_automation">Locking/unlocking can be automated with a geofence trigger. Automations registered here in this app are different from those in SwitchBot official app.</string>
     <string name="description_user_credentials">User credentials are saved only in your local device with encryption AES256.</string>
     <string name="description_device_selection">Only devices registered in local app are shown here.</string>
     <string name="description_no_selectable_device">No devices found. At the first time, device registration in app is required.</string>
