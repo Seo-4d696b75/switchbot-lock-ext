@@ -16,8 +16,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.seo4d696b75.android.switchbot_lock_ext.ui.R
-import com.seo4d696b75.android.switchbot_lock_ext.ui.theme.AppTheme
+import com.seo4d696b75.android.switchbot_lock_ext.theme.AppTheme
+import com.seo4d696b75.android.switchbot_lock_ext.theme.R
 
 @Composable
 fun ErrorSection(

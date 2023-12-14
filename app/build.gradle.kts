@@ -93,16 +93,17 @@ dependencies {
 
     implementation(libs.kotlinx.serialization.json)
 
-    implementation(libs.androidx.work)
-    implementation(libs.androidx.hilt.work)
-    ksp(libs.androidx.hilt.compiler)
-
+    implementation(project(":theme"))
     implementation(project(":ui"))
+    implementation(project(":widget"))
     implementation(project(":domain"))
     implementation(project(":data"))
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
+
+    implementation(libs.androidx.work)
+    implementation(libs.androidx.hilt.work)
 
     testImplementation(libs.junit)
 }

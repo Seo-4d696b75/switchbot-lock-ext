@@ -20,11 +20,11 @@ import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockDevice
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockGroup
 import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockStatus
 import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockedState
-import com.seo4d696b75.android.switchbot_lock_ext.ui.R
+import com.seo4d696b75.android.switchbot_lock_ext.theme.AppTheme
+import com.seo4d696b75.android.switchbot_lock_ext.theme.R
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.deviceList.component.formatString
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.HomeViewModel
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.LockUiState
-import com.seo4d696b75.android.switchbot_lock_ext.ui.theme.AppTheme
 
 @Composable
 fun StatusDetailDialog(

@@ -24,10 +24,10 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.seo4d696b75.android.switchbot_lock_ext.ui.R
+import com.seo4d696b75.android.switchbot_lock_ext.theme.AppTheme
+import com.seo4d696b75.android.switchbot_lock_ext.theme.R
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.PrimaryButton
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.user.component.CredentialsDescription
-import com.seo4d696b75.android.switchbot_lock_ext.ui.theme.AppTheme
 
 @Composable
 fun EditUserPage(
