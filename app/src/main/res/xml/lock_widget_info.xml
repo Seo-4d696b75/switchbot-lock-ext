@@ -5,8 +5,7 @@
     android:initialLayout="@layout/glance_default_loading_layout"
     android:minWidth="110dp"
     android:minHeight="40dp"
-    android:previewImage="@drawable/widget_preview"
+    android:previewImage="@drawable/lock_widget_preview"
     android:resizeMode="none"
     android:updatePeriodMillis="0"
-    android:widgetCategory="home_screen"
-    android:widgetFeatures="reconfigurable" />
+    android:widgetCategory="home_screen" />

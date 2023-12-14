@@ -26,7 +26,7 @@
             </intent-filter>
         </activity>
         <receiver
-            android:name=".widget.AppWidgetReceiver"
+            android:name=".widget.LockWidgetReceiver"
             android:label="@string/label_lock_widget"
             android:exported="true">
             <intent-filter>
@@ -34,7 +34,7 @@
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/appwidget_info" />
+                android:resource="@xml/lock_widget_info" />
         </receiver>
         <activity
             android:name=".widget.AppWidgetConfigureActivity"

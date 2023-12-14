@@ -5,20 +5,17 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.glance.GlanceId
 import androidx.glance.appwidget.GlanceAppWidget
-import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.provideContent
+import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.glance.currentState
-import com.seo4d696b75.android.switchbot_lock_ext.domain.widget.AppWidgetMediator
 import com.seo4d696b75.android.switchbot_lock_ext.domain.widget.LockWidgetState
+import com.seo4d696b75.android.switchbot_lock_ext.domain.widget.LockWidgetStatus
 import com.seo4d696b75.android.switchbot_lock_ext.theme.AppWidgetTheme
 import kotlinx.serialization.json.Json
 
-class LockWidget(
-    private val widgetMediator: AppWidgetMediator,
-) : GlanceAppWidget() {
+class LockWidget : GlanceAppWidget() {
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-        val appWidgetId = GlanceAppWidgetManager(context).getAppWidgetId(id)
         provideContent {
             val pref: Preferences = currentState()
             val state = pref[PREF_KEY_STATE]?.let {
@@ -28,10 +25,11 @@ class LockWidget(
                 LockWidgetScreen(
                     state = state,
                     onLockCommand = {
-                        widgetMediator.sendLockCommand(
-                            appWidgetId,
-                            state?.deviceId ?: throw IllegalStateException(),
-                            it,
+                        LockWorker.sendLockCommand(
+                            context = context,
+                            glanceId = id,
+                            deviceId = requireNotNull(state).deviceId,
+                            isLocked = it,
                         )
                     },
                 )
@@ -39,7 +37,44 @@ class LockWidget(
         }
     }
 
+    suspend fun initialize(
+        context: Context,
+        glanceId: GlanceId,
+        deviceId: String,
+        deviceName: String,
+    ) {
+        updateAppWidgetState(context, glanceId) {
+            it[PREF_KEY_STATE] = Json.encodeToString(
+                LockWidgetState.serializer(),
+                LockWidgetState(
+                    deviceId = deviceId,
+                    deviceName = deviceName,
+                    status = LockWidgetStatus.Idling,
+                ),
+            )
+        }
+        update(context, glanceId)
+    }
+
+    suspend fun setLockState(
+        context: Context,
+        glanceId: GlanceId,
+        update: (LockWidgetState) -> LockWidgetState,
+    ) {
+        updateAppWidgetState(context, glanceId) {
+            val state = it[PREF_KEY_STATE]?.let { str ->
+                Json.decodeFromString(LockWidgetState.serializer(), str)
+            } ?: throw IllegalStateException()
+            it[PREF_KEY_STATE] = Json.encodeToString(
+                LockWidgetState.serializer(),
+                update(state),
+            )
+        }
+        update(context, glanceId)
+    }
+
     companion object {
-        val PREF_KEY_STATE = stringPreferencesKey("pref_key_lock_widget_state")
+        private val PREF_KEY_STATE =
+            stringPreferencesKey("pref_key_lock_widget_state")
     }
 }
