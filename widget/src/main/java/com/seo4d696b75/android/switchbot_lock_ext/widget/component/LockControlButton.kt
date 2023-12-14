@@ -10,7 +10,6 @@ import androidx.glance.GlanceTheme
 import androidx.glance.Image
 import androidx.glance.ImageProvider
 import androidx.glance.action.clickable
-import androidx.glance.background
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Box
 import androidx.glance.layout.Column
@@ -34,18 +33,19 @@ fun LockControlButton(
     Box(
         modifier = modifier
             .size(46.dp)
-            .background(
-                ImageProvider(
-                    id = R.drawable.lock_button_background,
-                    tintColor = color,
-                )
-            )
-            .clickable("LockControlButton-$label", onClicked)
-            .padding(2.dp),
+            .clickable("LockControlButton-$label", onClicked),
         contentAlignment = Alignment.Center,
     ) {
-        Column(
+        Image(
+            provider = ImageProvider(R.drawable.lock_button_background),
+            contentDescription = null,
+            colorFilter = ColorFilter.tint(color),
             modifier = GlanceModifier.fillMaxSize(),
+        )
+        Column(
+            modifier = GlanceModifier
+                .fillMaxSize()
+                .padding(2.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalAlignment = Alignment.CenterVertically,
         ) {
