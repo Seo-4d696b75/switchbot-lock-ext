@@ -10,7 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.seo4d696b75.android.switchbot_lock_ext.ui.R
+import com.seo4d696b75.android.switchbot_lock_ext.theme.R
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.AppLockedSection
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.PrimaryButton
 

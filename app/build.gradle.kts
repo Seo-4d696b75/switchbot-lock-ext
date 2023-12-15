@@ -1,3 +1,6 @@
+import org.jetbrains.kotlin.konan.properties.Properties
+import java.io.FileInputStream
+
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.com.android.application)
@@ -23,6 +26,20 @@ android {
         }
     }
 
+    signingConfigs {
+        create("release") {
+            val password = project.file("password.properties").let { file ->
+                Properties().apply {
+                    load(FileInputStream(file))
+                }
+            }
+            storeFile = project.file("release.keystore")
+            storePassword = password.getProperty("store_password")
+            keyAlias = "key0"
+            keyPassword = password.getProperty("key_password")
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -30,8 +47,11 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
+            isDebuggable = false
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -73,16 +93,18 @@ dependencies {
 
     implementation(libs.kotlinx.serialization.json)
 
-    implementation(libs.androidx.work)
-    implementation(libs.androidx.hilt.work)
-    ksp(libs.androidx.hilt.compiler)
-
+    implementation(project(":theme"))
     implementation(project(":ui"))
+    implementation(project(":widget"))
     implementation(project(":domain"))
     implementation(project(":data"))
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
+
+    implementation(libs.androidx.work)
+    implementation(libs.androidx.hilt.work)
+    ksp(libs.androidx.hilt.compiler)
 
     testImplementation(libs.junit)
 }

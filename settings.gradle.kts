@@ -15,7 +15,9 @@ dependencyResolutionManagement {
 
 rootProject.name = "switchbot-lock-ext"
 include(":app")
+include(":theme")
 include(":ui")
 include(":domain")
 include(":api")
 include(":data")
+include(":widget")

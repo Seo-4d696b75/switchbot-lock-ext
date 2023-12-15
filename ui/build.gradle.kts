@@ -55,10 +55,6 @@ dependencies {
     implementation(libs.compose.navigation)
     implementation(libs.hilt.navigation.compose)
 
-    implementation(libs.androidx.glance)
-    implementation(libs.androidx.glance.material3)
-    implementation(libs.android.glance.tools.host)
-
     implementation(libs.kotlinx.serialization.json)
 
     implementation(libs.hilt.android)
@@ -67,6 +63,7 @@ dependencies {
     implementation(libs.kotlinx.collections.immutable)
 
     implementation(project(":domain"))
+    implementation(project(":theme"))
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)

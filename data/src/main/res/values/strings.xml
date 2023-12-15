@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_name_runner">Lock Runner</string>
+    <string name="notification_channel_description_runner">Displayed while (un)locking operation is running if prior to Android 12. Note: except when operated manually from the app.</string>
+</resources>

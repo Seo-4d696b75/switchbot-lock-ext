@@ -19,7 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.seo4d696b75.android.switchbot_lock_ext.ui.R
+import com.seo4d696b75.android.switchbot_lock_ext.theme.R
 
 @Composable
 fun AppLockedSection(

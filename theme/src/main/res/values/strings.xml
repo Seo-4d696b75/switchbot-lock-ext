@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="bottom_nav_home">Home</string>
+    <string name="bottom_nav_automation">Automation</string>
+    <string name="bottom_nav_device">Device</string>
+    <string name="bottom_nav_user">User</string>
+    <string name="top_bar_home">Home</string>
+    <string name="top_bar_automation">Automation Management</string>
+    <string name="top_bar_device">Device Management</string>
+    <string name="top_bar_user">User Setting</string>
+    <string name="top_bar_edit_user">Edit User</string>
+    <string name="top_bar_widget_configuration">Widget Configuration</string>
+    <string name="dialog_button_positive" translatable="false">OK</string>
+    <string name="title_app_locked">App Locked</string>
+    <string name="title_error_common">An error happened</string>
+    <string name="title_no_devices">No Devices</string>
+    <string name="title_no_user">No user configured</string>
+    <string name="title_no_automation">No automations</string>
+    <string name="title_device_status_detail">Status Detail</string>
+    <string name="title_select_device">Select device to control by widget</string>
+    <string name="label_retry">Retry</string>
+    <string name="label_configure_lock_screen">Configure screen look</string>
+    <string name="label_refresh">Refresh</string>
+    <string name="label_refresh_status">Refresh status</string>
+    <string name="label_status_detail">Status detail</string>
+    <string name="label_device_setting">Device setting</string>
+    <string name="label_lock">Lock</string>
+    <string name="label_unlock">Unlock</string>
+    <string name="label_locking">Locking</string>
+    <string name="label_unlocking">Unlocking</string>
+    <string name="label_user_secret">Secret</string>
+    <string name="label_user_token">Token</string>
+    <string name="label_clear_input">Clear input</string>
+    <string name="label_save">Save</string>
+    <string name="label_add_user">Add user</string>
+    <string name="label_edit_user">Edit User</string>
+    <string name="label_delete_user">Delete user</string>
+    <string name="description_no_authenticator">This app uses your device\'s screen lock for security of your credentials. You need to setup screen lock at first.</string>
+    <string name="description_device_controllable">Not all devices are controllable.\n- Cloud service MUST be enabled\n- Not grouped with others, or is master of grouped devices</string>
+    <string name="description_no_device">No devices registered in local. At the first launch, you need to synchronize with remote devices in SwitchBot.</string>
+    <string name="description_no_controllable_device">No controllable devices registered yet.</string>
+    <string name="description_no_automation">Locking/unlocking can be automated with a geofence trigger. Automations registered here in this app are different from those in SwitchBot official app.</string>
+    <string name="description_user_credentials">User credentials are saved only in your local device with encryption AES256.</string>
+    <string name="description_device_selection">Only devices registered in local app are shown here.</string>
+    <string name="description_no_selectable_device">No devices found. At the first time, device registration in app is required.</string>
+    <string name="message_battery_percent" translatable="false">%1$d%%</string>
+    <string name="message_refresh_failure">Failed to refresh</string>
+    <string name="message_device_not_controllable">Not Controllable</string>
+    <string name="message_device_id" translatable="false">id: %1$s</string>
+    <string name="message_device_group" translatable="false">group: %1$s</string>
+    <string name="message_device_group_disabled">none</string>
+    <string name="message_device_group_master">master</string>
+    <string name="message_locked_state_jammed">Jammed</string>
+    <string name="message_locked_state_error">Error</string>
+    <string name="message_locked_state_locked">Locked</string>
+    <string name="message_locked_state_unlocked">Unlocked</string>
+    <string name="message_lock_status_loading">Loading</string>
+    <string name="message_lock_status_error">Error</string>
+    <string name="message_widget_initializing">Initializing</string>
+    <string name="message_user_auth_failed">Authentication failed</string>
+    <string name="message_user_secret">Secret: %s</string>
+    <string name="message_user_token">Token: %s</string>
+    <string name="message_device_name">Device: %s</string>
+    <string name="message_geofence_location">Location: %s</string>
+    <string name="message_geofence_radius">Radius: %.0f m</string>
+    <string name="notification_title_widget_running">Widget is (un)locking…</string>
+    <string name="notification_text_widget_running">This notification will disappear when completed.</string>
+</resources>

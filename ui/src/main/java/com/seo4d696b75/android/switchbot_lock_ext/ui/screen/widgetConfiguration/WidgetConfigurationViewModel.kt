@@ -53,7 +53,7 @@ class WidgetConfigurationViewModel @Inject constructor(
     }
 
     fun onDeviceSelected(device: LockDevice) = viewModelScope.launch {
-        widgetMediator.initializeLockWidgetState(
+        widgetMediator.initializeLockWidget(
             appWidgetId,
             device.id,
             device.name,
