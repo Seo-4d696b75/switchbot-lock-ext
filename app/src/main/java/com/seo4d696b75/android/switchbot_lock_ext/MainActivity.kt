@@ -12,9 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import com.seo4d696b75.android.switchbot_lock_ext.domain.geo.GeofenceRepository
-import com.seo4d696b75.android.switchbot_lock_ext.domain.geo.GeofenceTransition
 import com.seo4d696b75.android.switchbot_lock_ext.secure.SecureUiState
 import com.seo4d696b75.android.switchbot_lock_ext.secure.SecureViewModel
 import com.seo4d696b75.android.switchbot_lock_ext.secure.openLockScreenSetting
@@ -25,8 +23,6 @@ import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.auth.NotAuthenticate
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.main.MainScreen
 import com.seo4d696b75.android.switchbot_lock_ext.ui.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -77,21 +73,6 @@ class MainActivity : FragmentActivity() {
                     }
                 }
             }
-        }
-
-        lifecycleScope.launch {
-            val geofences = geofenceRepository.geofenceFlow.first()
-            if (geofences.isNotEmpty()) {
-                geofenceRepository.removeGeofence(geofences.first().id)
-            }
-            geofenceRepository.addGeofence(
-                name = "test",
-                deviceId = "hoge",
-                lat = 35.68123,
-                lng = 139.76712,
-                radius = 100f,
-                transition = GeofenceTransition.Enter,
-            )
         }
     }
 

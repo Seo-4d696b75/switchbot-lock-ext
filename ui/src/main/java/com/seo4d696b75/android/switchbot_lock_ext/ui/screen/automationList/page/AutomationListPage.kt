@@ -9,6 +9,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.seo4d696b75.android.switchbot_lock_ext.domain.automation.LockAutomation
+import com.seo4d696b75.android.switchbot_lock_ext.domain.automation.LockAutomationType
+import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockDevice
+import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockGroup
 import com.seo4d696b75.android.switchbot_lock_ext.domain.geo.GeofenceTransition
 import com.seo4d696b75.android.switchbot_lock_ext.domain.geo.LockGeofence
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.automationList.component.AutomationListSection
@@ -19,7 +23,7 @@ import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun AutomationListPage(
-    automations: ImmutableList<LockGeofence>,
+    automations: ImmutableList<LockAutomation>,
     onEdit: (String) -> Unit,
     onEnabledChanged: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier,
@@ -66,26 +70,48 @@ private fun AutomationListPagePreview() {
         Surface {
             AutomationListPage(
                 automations = persistentListOf(
-                    LockGeofence(
-                        id = "tokyo-station",
+                    LockAutomation(
+                        id = "tokyo-automation",
                         name = "東京駅",
-                        deviceId = "device-id",
-                        lat = 35.68123,
-                        lng = 139.76712,
-                        radius = 100f,
+                        type = LockAutomationType.Unlock,
                         enabled = true,
-                        transition = GeofenceTransition.Enter,
+                        device = LockDevice(
+                            id = "tokyo-device",
+                            name = "東京駅の鍵",
+                            enableCloudService = true,
+                            hubDeviceId = "hoge",
+                            group = LockGroup.Disabled,
+                        ),
+                        geofence = LockGeofence(
+                            id = "tokyo-location",
+                            lat = 35.68123,
+                            lng = 139.76712,
+                            radius = 100f,
+                            enabled = true,
+                            transition = GeofenceTransition.Enter,
+                        ),
                     ),
-                    LockGeofence(
-                        id = "shinjuku-station",
+                    LockAutomation(
+                        id = "shinjuku-automation",
                         name = "新宿駅",
-                        deviceId = "device-id",
-                        lat = 35.68979454111181,
-                        lng = 139.70028237975413,
-                        radius = 200f,
-                        enabled = false,
-                        transition = GeofenceTransition.Exit,
-                    ),
+                        type = LockAutomationType.Lock,
+                        enabled = true,
+                        device = LockDevice(
+                            id = "shinjuku-device",
+                            name = "新宿駅の鍵",
+                            enableCloudService = true,
+                            hubDeviceId = "hoge",
+                            group = LockGroup.Disabled,
+                        ),
+                        geofence = LockGeofence(
+                            id = "shinjuku-location",
+                            lat = 35.68979454111181,
+                            lng = 139.70028237975413,
+                            radius = 200f,
+                            enabled = false,
+                            transition = GeofenceTransition.Exit,
+                        ),
+                    )
                 ),
                 onEdit = {},
                 onEnabledChanged = { _, _ -> },

@@ -60,6 +60,7 @@
     <string name="message_user_auth_failed">Authentication failed</string>
     <string name="message_user_secret">Secret: %s</string>
     <string name="message_user_token">Token: %s</string>
+    <string name="message_device_name">Device: %s</string>
     <string name="message_geofence_location">Location: %s</string>
     <string name="message_geofence_radius">Radius: %.0f m</string>
 </resources>

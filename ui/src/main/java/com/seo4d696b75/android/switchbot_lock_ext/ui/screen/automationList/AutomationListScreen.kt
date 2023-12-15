@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.seo4d696b75.android.switchbot_lock_ext.domain.geo.LockGeofence
+import com.seo4d696b75.android.switchbot_lock_ext.domain.automation.LockAutomation
 import com.seo4d696b75.android.switchbot_lock_ext.domain.user.UserRegistration
 import com.seo4d696b75.android.switchbot_lock_ext.ui.R
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.LoadingSection
@@ -48,7 +48,7 @@ fun AutomationListScreen(
 fun AutomationListScreen(
     user: UserRegistration,
     isLoading: Boolean,
-    automations: ImmutableList<LockGeofence>,
+    automations: ImmutableList<LockAutomation>,
     onEdit: (String) -> Unit,
     onEnabledChanged: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier,

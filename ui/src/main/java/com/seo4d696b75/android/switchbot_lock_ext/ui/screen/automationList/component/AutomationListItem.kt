@@ -21,6 +21,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.seo4d696b75.android.switchbot_lock_ext.domain.automation.LockAutomation
+import com.seo4d696b75.android.switchbot_lock_ext.domain.automation.LockAutomationType
+import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockDevice
+import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockGroup
 import com.seo4d696b75.android.switchbot_lock_ext.domain.geo.GeofenceTransition
 import com.seo4d696b75.android.switchbot_lock_ext.domain.geo.LockGeofence
 import com.seo4d696b75.android.switchbot_lock_ext.ui.R
@@ -29,7 +33,7 @@ import kotlin.math.absoluteValue
 
 @Composable
 fun AutomationListItem(
-    automation: LockGeofence,
+    automation: LockAutomation,
     onClick: () -> Unit,
     onEnabledChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
@@ -47,7 +51,7 @@ fun AutomationListItem(
         ) {
             Icon(
                 painter = painterResource(
-                    if (automation.transition == GeofenceTransition.Enter) R.drawable.ic_geofence_enter else R.drawable.ic_geofence_exit,
+                    if (automation.geofence.transition == GeofenceTransition.Enter) R.drawable.ic_geofence_enter else R.drawable.ic_geofence_exit,
                 ),
                 contentDescription = null,
                 modifier = Modifier.size(40.dp),
@@ -64,8 +68,20 @@ fun AutomationListItem(
                 )
                 Text(
                     text = stringResource(
+                        R.string.message_device_name,
+                        automation.device.name,
+                    ),
+                    style = MaterialTheme.typography.titleSmall,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                Text(
+                    text = stringResource(
                         R.string.message_geofence_location,
-                        formatLocation(automation.lat, automation.lng),
+                        formatLocation(
+                            automation.geofence.lat,
+                            automation.geofence.lng
+                        ),
                     ),
                     style = MaterialTheme.typography.titleSmall,
                     maxLines = 1,
@@ -74,7 +90,7 @@ fun AutomationListItem(
                 Text(
                     text = stringResource(
                         R.string.message_geofence_radius,
-                        automation.radius,
+                        automation.geofence.radius,
                     ),
                     style = MaterialTheme.typography.titleSmall,
                     maxLines = 1,
@@ -108,15 +124,27 @@ fun formatLocation(lat: Double, lng: Double): String {
 private fun AutomationListItemPreview() {
     AppTheme {
         AutomationListItem(
-            automation = LockGeofence(
-                id = "geofence-id",
+            automation =
+            LockAutomation(
+                id = "tokyo-automation",
                 name = "東京駅",
-                deviceId = "device-id",
-                lat = 35.68123,
-                lng = 139.76712,
-                radius = 100f,
+                type = LockAutomationType.Unlock,
                 enabled = true,
-                transition = GeofenceTransition.Enter,
+                device = LockDevice(
+                    id = "tokyo-device",
+                    name = "東京駅の鍵",
+                    enableCloudService = true,
+                    hubDeviceId = "hoge",
+                    group = LockGroup.Disabled,
+                ),
+                geofence = LockGeofence(
+                    id = "tokyo-location",
+                    lat = 35.68123,
+                    lng = 139.76712,
+                    radius = 100f,
+                    enabled = true,
+                    transition = GeofenceTransition.Enter,
+                ),
             ),
             onClick = { },
             onEnabledChanged = { },

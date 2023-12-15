@@ -2,7 +2,7 @@ package com.seo4d696b75.android.switchbot_lock_ext.ui.screen.automationList
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.seo4d696b75.android.switchbot_lock_ext.domain.geo.GeofenceRepository
+import com.seo4d696b75.android.switchbot_lock_ext.domain.automation.AutomationRepository
 import com.seo4d696b75.android.switchbot_lock_ext.domain.user.UserRegistration
 import com.seo4d696b75.android.switchbot_lock_ext.domain.user.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AutomationListViewModel @Inject constructor(
     userRepository: UserRepository,
-    geofenceRepository: GeofenceRepository,
+    automationRepository: AutomationRepository,
 ) : ViewModel() {
 
     private val isLoadingFlow = MutableStateFlow(false)
@@ -32,12 +32,12 @@ class AutomationListViewModel @Inject constructor(
         .flatMapLatest { user ->
             when (user) {
                 is UserRegistration.User -> combine(
-                    geofenceRepository.geofenceFlow,
+                    automationRepository.automationFlow,
                     isLoadingFlow,
-                ) { geofences, isLoading ->
+                ) { automations, isLoading ->
                     AutomationListUiState(
                         user = user,
-                        automations = geofences.toPersistentList(),
+                        automations = automations.toPersistentList(),
                         isLoading = isLoading,
                     )
                 }
