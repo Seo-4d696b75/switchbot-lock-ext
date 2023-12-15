@@ -4,6 +4,7 @@ import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -16,7 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import com.seo4d696b75.android.switchbot_lock_ext.R
 import com.seo4d696b75.android.switchbot_lock_ext.secure.SecureUiState
 import com.seo4d696b75.android.switchbot_lock_ext.secure.SecureViewModel
-import com.seo4d696b75.android.switchbot_lock_ext.secure.openLockScreenSetting
+import com.seo4d696b75.android.switchbot_lock_ext.secure.launchLockScreenSetting
 import com.seo4d696b75.android.switchbot_lock_ext.theme.AppTheme
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.uiMessage
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.auth.NoAuthenticatorScreen
@@ -37,6 +38,10 @@ class AppWidgetConfigureActivity : FragmentActivity() {
             AppWidgetManager.INVALID_APPWIDGET_ID,
         ) ?: AppWidgetManager.INVALID_APPWIDGET_ID
     }
+
+    private val lockScreenSettingLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult(),
+    ) {}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,7 +88,7 @@ class AppWidgetConfigureActivity : FragmentActivity() {
 
                         SecureUiState.NoAuthenticator -> NoAuthenticatorScreen(
                             navigateToSetting = {
-                                openLockScreenSetting {}
+                                lockScreenSettingLauncher.launchLockScreenSetting()
                             },
                         )
                     }
