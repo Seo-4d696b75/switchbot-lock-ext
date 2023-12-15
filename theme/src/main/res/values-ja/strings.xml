@@ -52,4 +52,8 @@
     <string name="message_user_auth_failed">認証に失敗しました</string>
     <string name="message_user_secret">シークレット: %s</string>
     <string name="message_user_token">トークン: %s</string>
+    <string name="notification_channel_name_runner">Lock Runner</string>
+    <string name="notification_channel_description_runner">ウィジェットや自動化による解錠・施錠中に表示されます（Android 12 未満のみ）。アプリから手動で操作した場合は除きます。</string>
+    <string name="notification_title_widget_running">ウィジェットが解錠・施錠中</string>
+    <string name="notification_text_widget_running">操作が完了すると通知は自動で消えます</string>
 </resources>
