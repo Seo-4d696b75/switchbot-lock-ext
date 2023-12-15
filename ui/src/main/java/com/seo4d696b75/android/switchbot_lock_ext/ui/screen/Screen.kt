@@ -2,7 +2,7 @@ package com.seo4d696b75.android.switchbot_lock_ext.ui.screen
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import com.seo4d696b75.android.switchbot_lock_ext.ui.R
+import com.seo4d696b75.android.switchbot_lock_ext.theme.R
 
 /**
  * navigationの全routeを定義

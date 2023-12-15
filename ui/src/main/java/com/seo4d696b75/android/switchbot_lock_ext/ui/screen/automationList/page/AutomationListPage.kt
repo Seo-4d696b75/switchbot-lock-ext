@@ -15,9 +15,9 @@ import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockDevice
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockGroup
 import com.seo4d696b75.android.switchbot_lock_ext.domain.geo.GeofenceTransition
 import com.seo4d696b75.android.switchbot_lock_ext.domain.geo.LockGeofence
+import com.seo4d696b75.android.switchbot_lock_ext.theme.AppTheme
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.automationList.component.AutomationListSection
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.automationList.component.NoAutomationSection
-import com.seo4d696b75.android.switchbot_lock_ext.ui.theme.AppTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 

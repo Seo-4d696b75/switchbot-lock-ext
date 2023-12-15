@@ -27,8 +27,8 @@ import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockDevice
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockGroup
 import com.seo4d696b75.android.switchbot_lock_ext.domain.geo.GeofenceTransition
 import com.seo4d696b75.android.switchbot_lock_ext.domain.geo.LockGeofence
-import com.seo4d696b75.android.switchbot_lock_ext.ui.R
-import com.seo4d696b75.android.switchbot_lock_ext.ui.theme.AppTheme
+import com.seo4d696b75.android.switchbot_lock_ext.theme.AppTheme
+import com.seo4d696b75.android.switchbot_lock_ext.theme.R
 import kotlin.math.absoluteValue
 
 @Composable
