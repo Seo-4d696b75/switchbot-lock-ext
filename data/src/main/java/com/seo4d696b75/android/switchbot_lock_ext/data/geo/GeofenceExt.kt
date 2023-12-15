@@ -4,11 +4,8 @@ import com.google.android.gms.location.Geofence
 import com.seo4d696b75.android.switchbot_lock_ext.domain.geo.GeofenceTransition
 import com.seo4d696b75.android.switchbot_lock_ext.domain.geo.LockGeofence
 
-val LockGeofence.requestId: String
-    get() = "switchbot-lock-ext-$id"
-
 fun LockGeofence.toGeofence() = Geofence.Builder()
-    .setRequestId(requestId)
+    .setRequestId(id)
     .setCircularRegion(lat, lng, radius)
     .setExpirationDuration(Geofence.NEVER_EXPIRE)
     .setTransitionTypes(transition.toType())

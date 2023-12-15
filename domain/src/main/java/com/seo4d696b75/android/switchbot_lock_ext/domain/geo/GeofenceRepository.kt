@@ -4,14 +4,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface GeofenceRepository {
     val geofenceFlow: Flow<List<LockGeofence>>
-    suspend fun addGeofence(
-        name: String,
-        deviceId: String,
-        lat: Double,
-        lng: Double,
-        radius: Float,
-        transition: GeofenceTransition,
-    )
+    suspend fun addGeofence(geofence: LockGeofence): String
+
     suspend fun updateGeofence(geofence: LockGeofence)
-    suspend fun removeGeofence(id: String)
+    suspend fun removeGeofence(geofence: LockGeofence)
 }

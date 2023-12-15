@@ -7,8 +7,7 @@ import com.seo4d696b75.android.switchbot_lock_ext.domain.device.DeviceRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityRetainedComponent
-import dagger.hilt.android.scopes.ActivityRetainedScoped
+import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -33,9 +32,8 @@ class DeviceRepositoryImpl @Inject constructor(
 
 @Suppress("unused")
 @Module
-@InstallIn(ActivityRetainedComponent::class)
+@InstallIn(SingletonComponent::class)
 interface DeviceRepositoryModule {
     @Binds
-    @ActivityRetainedScoped
     fun bindDeviceRepository(impl: DeviceRepositoryImpl): DeviceRepository
 }

@@ -13,10 +13,6 @@ data class LockGeofenceEntity(
     val id: String,
     @ColumnInfo(name = "enabled")
     val enabled: Boolean,
-    @ColumnInfo(name = "name")
-    val name: String,
-    @ColumnInfo(name = "device_id")
-    val deviceId: String,
     @ColumnInfo(name = "lat")
     val lat: Double,
     @ColumnInfo(name = "lng")
@@ -29,8 +25,6 @@ data class LockGeofenceEntity(
     fun toModel() = LockGeofence(
         id = id,
         enabled = enabled,
-        name = name,
-        deviceId = deviceId,
         lat = lat,
         lng = lng,
         radius = radius,
@@ -41,8 +35,6 @@ data class LockGeofenceEntity(
         fun fromModel(model: LockGeofence) = LockGeofenceEntity(
             id = model.id,
             enabled = model.enabled,
-            name = model.name,
-            deviceId = model.deviceId,
             lat = model.lat,
             lng = model.lng,
             radius = model.radius,

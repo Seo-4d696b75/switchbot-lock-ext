@@ -17,7 +17,6 @@ import com.google.android.gms.location.LocationServices
 import com.seo4d696b75.android.switchbot_lock_ext.data.db.LockGeofenceDao
 import com.seo4d696b75.android.switchbot_lock_ext.data.db.LockGeofenceEntity
 import com.seo4d696b75.android.switchbot_lock_ext.domain.geo.GeofenceRepository
-import com.seo4d696b75.android.switchbot_lock_ext.domain.geo.GeofenceTransition
 import com.seo4d696b75.android.switchbot_lock_ext.domain.geo.LockGeofence
 import dagger.Binds
 import dagger.Module
@@ -42,44 +41,37 @@ class GeofenceRepositoryImpl @Inject constructor(
         .getAll()
         .map { list -> list.map { it.toModel() } }
 
-    override suspend fun addGeofence(
-        name: String,
-        deviceId: String,
-        lat: Double,
-        lng: Double,
-        radius: Float,
-        transition: GeofenceTransition,
-    ) {
-        val geofence = LockGeofence(
+    override suspend fun addGeofence(geofence: LockGeofence): String {
+        val geofenceWithId = geofence.copy(
             id = UUID.randomUUID().toString(),
-            name = name,
-            deviceId = deviceId,
-            lat = lat,
-            lng = lng,
-            radius = radius,
-            transition = transition,
-            enabled = true,
         )
-        dao.add(LockGeofenceEntity.fromModel(geofence))
-        registerGeofences(listOf(geofence))
+        dao.add(LockGeofenceEntity.fromModel(geofenceWithId))
+        registerGeofences(listOf(geofenceWithId))
+        return geofenceWithId.id
     }
 
     override suspend fun updateGeofence(geofence: LockGeofence) {
         val old = geofenceFlow.first().first { it.id == geofence.id }
         val entity = LockGeofenceEntity.fromModel(geofence)
         dao.update(entity)
-        if (old.enabled && !geofence.enabled) {
-            unregisterGeofence(listOf(geofence))
-        } else if (!old.enabled && geofence.enabled) {
+        val isTurnOff = old.enabled && !geofence.enabled
+        val isTurnOn = !old.enabled && geofence.enabled
+        val isGeofenceChanged = geofence.enabled &&
+                (old.lat != geofence.lat ||
+                        old.lng != geofence.lng ||
+                        old.radius != geofence.radius)
+        if (isTurnOff || isGeofenceChanged) {
+            unregisterGeofence(listOf(old))
+        }
+        if (isTurnOn || isGeofenceChanged) {
             registerGeofences(listOf(geofence))
         }
     }
 
-    override suspend fun removeGeofence(id: String) {
-        val old = geofenceFlow.first().first { it.id == id }
-        dao.remove(listOf(id))
-        if (old.enabled) {
-            unregisterGeofence(listOf(old))
+    override suspend fun removeGeofence(geofence: LockGeofence) {
+        dao.remove(listOf(geofence.id))
+        if (geofence.enabled) {
+            unregisterGeofence(listOf(geofence))
         }
     }
 
@@ -130,7 +122,7 @@ class GeofenceRepositoryImpl @Inject constructor(
 
     private fun unregisterGeofence(geofences: List<LockGeofence>) {
         geofenceClient.removeGeofences(
-            geofences.map { it.requestId }
+            geofences.map { it.id }
         ).apply {
             addOnSuccessListener {
                 Log.d("GeofenceRepository", "Success to remove geofence")
