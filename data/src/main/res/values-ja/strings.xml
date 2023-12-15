@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_name_runner">ロック操作</string>
+    <string name="notification_channel_description_runner">ウィジェットや自動化による解錠・施錠中に表示されます（Android 12 未満のみ）。アプリから手動で操作した場合は除きます。</string>
+</resources>

@@ -56,8 +56,6 @@
     <string name="message_user_auth_failed">Authentication failed</string>
     <string name="message_user_secret">Secret: %s</string>
     <string name="message_user_token">Token: %s</string>
-    <string name="notification_channel_name_runner">Lock Runner</string>
-    <string name="notification_channel_description_runner">Displayed while (un)locking operation is running if prior to Android 12. Note: except when operated manually from the app.</string>
     <string name="notification_title_widget_running">Widget is (un)locking…</string>
     <string name="notification_text_widget_running">This notification will disappear when completed.</string>
 </resources>

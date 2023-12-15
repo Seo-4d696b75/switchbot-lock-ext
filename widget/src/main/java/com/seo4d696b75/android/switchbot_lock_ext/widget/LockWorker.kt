@@ -1,8 +1,6 @@
 package com.seo4d696b75.android.switchbot_lock_ext.widget
 
 import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.content.Context
 import androidx.glance.GlanceId
 import androidx.glance.appwidget.GlanceAppWidgetManager
@@ -15,6 +13,7 @@ import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import com.seo4d696b75.android.switchbot_lock_ext.domain.control.LockControlRepository
+import com.seo4d696b75.android.switchbot_lock_ext.domain.notification.AppNotificationChannel
 import com.seo4d696b75.android.switchbot_lock_ext.domain.widget.LockWidgetStatus
 import com.seo4d696b75.android.switchbot_lock_ext.theme.R
 import dagger.assisted.Assisted
@@ -66,19 +65,8 @@ class LockWorker @AssistedInject constructor(
     }.getOrElse { Result.failure() }
 
     override suspend fun getForegroundInfo(): ForegroundInfo {
-        val notificationManager =
-            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val notificationChannel = NotificationChannel(
-            NOTIFICATION_CHANNEL_ID_LOCK_RUNNER,
-            context.getString(R.string.notification_channel_name_runner),
-            NotificationManager.IMPORTANCE_DEFAULT,
-        ).apply {
-            description =
-                context.getString(R.string.notification_channel_description_runner)
-        }
-        notificationManager.createNotificationChannel(notificationChannel)
         val notification = Notification
-            .Builder(context, NOTIFICATION_CHANNEL_ID_LOCK_RUNNER)
+            .Builder(context, AppNotificationChannel.LockRunner.id)
             .setSmallIcon(R.drawable.ic_lock)
             .setContentTitle(context.getString(R.string.notification_title_widget_running))
             .setContentText(context.getString(R.string.notification_text_widget_running))
@@ -91,7 +79,6 @@ class LockWorker @AssistedInject constructor(
         private const val KEY_IS_LOCKED = "key_is_locked"
         private const val KEY_DEVICE_ID = "key_device_id"
 
-        private const val NOTIFICATION_CHANNEL_ID_LOCK_RUNNER = "lock_runner"
         private const val FOREGROUND_NOTIFICATION_ID = 393900
 
         fun sendLockCommand(
