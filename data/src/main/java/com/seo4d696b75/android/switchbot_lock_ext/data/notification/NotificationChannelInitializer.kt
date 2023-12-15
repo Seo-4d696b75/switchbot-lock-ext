@@ -4,15 +4,17 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import com.seo4d696b75.android.switchbot_lock_ext.data.R
+import com.seo4d696b75.android.switchbot_lock_ext.domain.initialize.AppInitializer
 import com.seo4d696b75.android.switchbot_lock_ext.domain.notification.AppNotificationChannel
-import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import dagger.multibindings.IntoSet
 import javax.inject.Inject
 
-class NotificationChannelInitializer @Inject constructor(
-    @ApplicationContext private val context: Context,
-) {
-    // TODO run on app launched
-    fun onCreate() {
+class NotificationChannelInitializer @Inject constructor() : AppInitializer {
+    override suspend fun invoke(context: Context) {
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val notificationChannel = NotificationChannel(
@@ -25,4 +27,13 @@ class NotificationChannelInitializer @Inject constructor(
         }
         notificationManager.createNotificationChannel(notificationChannel)
     }
+}
+
+@Suppress("unused")
+@Module
+@InstallIn(SingletonComponent::class)
+interface NotificationChannelInitializerModule {
+    @Binds
+    @IntoSet
+    fun bindNotificationChannelInitializer(impl: NotificationChannelInitializer): AppInitializer
 }
