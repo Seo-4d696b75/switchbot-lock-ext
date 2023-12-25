@@ -1,4 +1,4 @@
-package com.seo4d696b75.android.switchbot_lock_ext.widget.lock
+package com.seo4d696b75.android.switchbot_lock_ext.widget.simpleLock
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
@@ -13,18 +13,18 @@ import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.padding
 import com.seo4d696b75.android.switchbot_lock_ext.theme.R
 import com.seo4d696b75.android.switchbot_lock_ext.widget.common.glanceString
-import com.seo4d696b75.android.switchbot_lock_ext.widget.lock.component.LoadingSection
-import com.seo4d696b75.android.switchbot_lock_ext.widget.lock.component.LockControlSection
+import com.seo4d696b75.android.switchbot_lock_ext.widget.simpleLock.component.SimpleLoadingSection
+import com.seo4d696b75.android.switchbot_lock_ext.widget.simpleLock.component.SimpleLockControlSection
 
 @Composable
-fun LockWidgetScreen(
-    state: LockWidgetState?,
-    onLockCommand: (Boolean) -> Unit,
+fun SimpleLockWidgetScreen(
+    name: String?,
+    status: SimpleLockWidgetStatus?,
+    onLockCommand: () -> Unit,
     modifier: GlanceModifier = GlanceModifier,
 ) {
     Box(
         modifier = modifier.fillMaxSize(),
-
         contentAlignment = Alignment.Center,
     ) {
         Image(
@@ -33,14 +33,14 @@ fun LockWidgetScreen(
             colorFilter = ColorFilter.tint(GlanceTheme.colors.surface),
             modifier = GlanceModifier.fillMaxSize(),
         )
-        if (state == null) {
-            LoadingSection(
+        if (name == null || status == null) {
+            SimpleLoadingSection(
                 message = glanceString(id = R.string.message_widget_initializing),
             )
         } else {
-            LockControlSection(
-                name = state.deviceName,
-                status = state.status,
+            SimpleLockControlSection(
+                name = name,
+                status = status,
                 onLockCommand = onLockCommand,
                 modifier = GlanceModifier.padding(4.dp),
             )

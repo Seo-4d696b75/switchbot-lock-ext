@@ -9,6 +9,7 @@ import androidx.glance.layout.Row
 import androidx.glance.layout.Spacer
 import androidx.glance.layout.width
 import com.seo4d696b75.android.switchbot_lock_ext.theme.R
+import com.seo4d696b75.android.switchbot_lock_ext.widget.common.glanceString
 
 @Composable
 fun LockControlButtonSection(

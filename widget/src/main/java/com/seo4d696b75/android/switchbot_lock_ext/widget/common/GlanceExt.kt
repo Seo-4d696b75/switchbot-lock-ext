@@ -1,4 +1,4 @@
-package com.seo4d696b75.android.switchbot_lock_ext.widget.lock.component
+package com.seo4d696b75.android.switchbot_lock_ext.widget.common
 
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
