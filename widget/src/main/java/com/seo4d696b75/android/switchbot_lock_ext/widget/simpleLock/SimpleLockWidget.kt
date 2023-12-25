@@ -36,6 +36,23 @@ class SimpleLockWidget : GlanceAppWidget() {
         }
     }
 
+    suspend fun initialize(
+        context: Context,
+        glanceId: GlanceId,
+        deviceId: String,
+        deviceName: String,
+    ) {
+        updateAppWidgetState(context, glanceId) {
+            it[PREF_KEY_DEVICE_ID] = deviceId
+            it[PREF_KEY_DEVICE_NAME] = deviceName
+            it[PREF_KEY_STATUS] = Json.encodeToString(
+                SimpleLockWidgetStatus.serializer(),
+                SimpleLockWidgetStatus.Idling,
+            )
+        }
+        update(context, glanceId)
+    }
+
     suspend fun setStatus(
         context: Context,
         glanceId: GlanceId,
