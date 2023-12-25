@@ -1,4 +1,4 @@
-package com.seo4d696b75.android.switchbot_lock_ext.widget
+package com.seo4d696b75.android.switchbot_lock_ext.widget.lock
 
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver

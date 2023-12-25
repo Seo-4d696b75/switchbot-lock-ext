@@ -1,4 +1,4 @@
-package com.seo4d696b75.android.switchbot_lock_ext.widget.component
+package com.seo4d696b75.android.switchbot_lock_ext.widget.lock.component
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
@@ -12,8 +12,8 @@ import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.padding
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
-import com.seo4d696b75.android.switchbot_lock_ext.domain.widget.LockWidgetStatus
 import com.seo4d696b75.android.switchbot_lock_ext.theme.R
+import com.seo4d696b75.android.switchbot_lock_ext.widget.lock.LockWidgetStatus
 
 @Composable
 fun LockControlSection(

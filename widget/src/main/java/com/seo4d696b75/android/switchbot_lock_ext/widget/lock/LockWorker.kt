@@ -1,4 +1,4 @@
-package com.seo4d696b75.android.switchbot_lock_ext.widget
+package com.seo4d696b75.android.switchbot_lock_ext.widget.lock
 
 import android.app.Notification
 import android.content.Context
@@ -14,7 +14,6 @@ import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import com.seo4d696b75.android.switchbot_lock_ext.domain.control.LockControlRepository
 import com.seo4d696b75.android.switchbot_lock_ext.domain.notification.AppNotificationChannel
-import com.seo4d696b75.android.switchbot_lock_ext.domain.widget.LockWidgetStatus
 import com.seo4d696b75.android.switchbot_lock_ext.theme.R
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject

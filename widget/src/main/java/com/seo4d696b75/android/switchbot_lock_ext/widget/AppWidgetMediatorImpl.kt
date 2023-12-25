@@ -3,6 +3,7 @@ package com.seo4d696b75.android.switchbot_lock_ext.widget
 import android.content.Context
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import com.seo4d696b75.android.switchbot_lock_ext.domain.widget.AppWidgetMediator
+import com.seo4d696b75.android.switchbot_lock_ext.widget.lock.LockWidget
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

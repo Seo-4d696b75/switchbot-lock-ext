@@ -1,4 +1,4 @@
-package com.seo4d696b75.android.switchbot_lock_ext.widget
+package com.seo4d696b75.android.switchbot_lock_ext.widget.lock
 
 import android.content.Context
 import androidx.datastore.preferences.core.Preferences
@@ -8,8 +8,6 @@ import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.provideContent
 import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.glance.currentState
-import com.seo4d696b75.android.switchbot_lock_ext.domain.widget.LockWidgetState
-import com.seo4d696b75.android.switchbot_lock_ext.domain.widget.LockWidgetStatus
 import com.seo4d696b75.android.switchbot_lock_ext.theme.AppWidgetTheme
 import kotlinx.serialization.json.Json
 
