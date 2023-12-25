@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.glance.GlanceId
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.provideContent
+import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.glance.currentState
 import com.seo4d696b75.android.switchbot_lock_ext.theme.AppWidgetTheme
 import kotlinx.serialization.json.Json
@@ -23,10 +24,30 @@ class SimpleLockWidget : GlanceAppWidget() {
                 SimpleLockWidgetScreen(
                     name = deviceName,
                     status = status,
-                    onLockCommand = { /*TODO*/ },
+                    onLockCommand = {
+                        SimpleLockWorker.sendLockCommand(
+                            context = context,
+                            glanceId = id,
+                            deviceId = requireNotNull(deviceId),
+                        )
+                    },
                 )
             }
         }
+    }
+
+    suspend fun setStatus(
+        context: Context,
+        glanceId: GlanceId,
+        status: SimpleLockWidgetStatus,
+    ) {
+        updateAppWidgetState(context, glanceId) {
+            it[PREF_KEY_STATUS] = Json.encodeToString(
+                SimpleLockWidgetStatus.serializer(),
+                status,
+            )
+        }
+        update(context, glanceId)
     }
 
     companion object {
