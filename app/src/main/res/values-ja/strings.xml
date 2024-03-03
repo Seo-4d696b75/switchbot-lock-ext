@@ -6,5 +6,5 @@
     <string name="label_lock_widget">施錠・解錠</string>
     <string name="description_lock_widget">施錠と解錠のコマンドを素早く送れます</string>
     <string name="label_simple_lock_widget">シンプル制御</string>
-    <string name="description_simple_lock_widget">解錠状態なら施錠コマンド、施錠状態なら解錠コマンドを簡単に送れます</string>
+    <string name="description_simple_lock_widget">現在の状態に応じて施錠・解錠コマンドを簡単に送れます</string>
 </resources>

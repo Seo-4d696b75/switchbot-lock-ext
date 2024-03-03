@@ -7,5 +7,5 @@
     <string name="label_lock_widget">Lock and Unlock</string>
     <string name="description_lock_widget">Send lock/unlock command to a Lock device</string>
     <string name="label_simple_lock_widget">Simple Lock</string>
-    <string name="description_simple_lock_widget">Send lock command if the door is unlocked, or unlock command if locked</string>
+    <string name="description_simple_lock_widget">Send lock/unlock command according to current state</string>
 </resources>
