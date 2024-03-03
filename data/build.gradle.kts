@@ -78,6 +78,9 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
     annotationProcessor(libs.androidx.room.compiler)
+    implementation(libs.zetetic.sqlcipher)
+
+    implementation(libs.android.gms.location)
 
     testImplementation(libs.junit)
 }

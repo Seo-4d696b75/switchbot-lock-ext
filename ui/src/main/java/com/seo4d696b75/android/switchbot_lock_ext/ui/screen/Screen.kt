@@ -1,11 +1,7 @@
 package com.seo4d696b75.android.switchbot_lock_ext.ui.screen
 
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Lock
-import androidx.compose.material.icons.outlined.Person
-import androidx.compose.ui.graphics.vector.ImageVector
 import com.seo4d696b75.android.switchbot_lock_ext.theme.R
 
 /**
@@ -22,7 +18,9 @@ sealed interface Screen {
 
         @get:StringRes
         val labelId: Int
-        val icon: ImageVector
+
+        @get:DrawableRes
+        val iconId: Int
     }
 
     sealed interface Home : Screen {
@@ -38,7 +36,19 @@ sealed interface Screen {
         companion object : BottomTab {
             override val tabRoute = "home"
             override val labelId = R.string.bottom_nav_home
-            override val icon = Icons.Outlined.Home
+            override val iconId = R.drawable.ic_home
+        }
+    }
+
+    sealed interface Automation : Screen {
+        data object List : Automation {
+            override val route = "$tabRoute/list"
+        }
+
+        companion object : BottomTab {
+            override val tabRoute = "automation"
+            override val labelId = R.string.bottom_nav_automation
+            override val iconId = R.drawable.ic_rocket
         }
     }
 
@@ -50,7 +60,7 @@ sealed interface Screen {
         companion object : BottomTab {
             override val tabRoute = "device"
             override val labelId = R.string.bottom_nav_device
-            override val icon = Icons.Outlined.Lock
+            override val iconId = R.drawable.ic_lock
         }
     }
 
@@ -66,7 +76,7 @@ sealed interface Screen {
         companion object : BottomTab {
             override val tabRoute = "user"
             override val labelId = R.string.bottom_nav_user
-            override val icon = Icons.Outlined.Person
+            override val iconId = R.drawable.ic_person
         }
     }
 }

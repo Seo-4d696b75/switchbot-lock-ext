@@ -13,8 +13,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockDevice
 import com.seo4d696b75.android.switchbot_lock_ext.domain.user.UserRegistration
 import com.seo4d696b75.android.switchbot_lock_ext.theme.R
@@ -28,7 +28,7 @@ import kotlinx.collections.immutable.ImmutableList
 fun LockWidgetConfigurationScreen(
     onCompleted: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: WidgetConfigurationViewModel = hiltViewModel(),
+    viewModel: WidgetConfigurationViewModel = viewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 

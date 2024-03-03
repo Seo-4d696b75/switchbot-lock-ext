@@ -4,6 +4,7 @@ import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -12,24 +13,34 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.seo4d696b75.android.switchbot_lock_ext.R
+import com.seo4d696b75.android.switchbot_lock_ext.domain.widget.AppWidgetType
 import com.seo4d696b75.android.switchbot_lock_ext.secure.SecureUiState
 import com.seo4d696b75.android.switchbot_lock_ext.secure.SecureViewModel
-import com.seo4d696b75.android.switchbot_lock_ext.secure.openLockScreenSetting
+import com.seo4d696b75.android.switchbot_lock_ext.secure.launchLockScreenSetting
 import com.seo4d696b75.android.switchbot_lock_ext.theme.AppTheme
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.uiMessage
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.auth.NoAuthenticatorScreen
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.auth.NotAuthenticatedScreen
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.widgetConfiguration.LockWidgetConfigurationScreen
+import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.widgetConfiguration.WidgetConfigurationViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class AppWidgetConfigureActivity : FragmentActivity() {
+abstract class AppWidgetConfigureActivity : FragmentActivity() {
 
-    private val viewModel: SecureViewModel by viewModels()
+    private val secureViewModel: SecureViewModel by viewModels()
+
+    abstract val appWidgetType: AppWidgetType
+
+    @Inject
+    lateinit var configureViewModelFactory: WidgetConfigurationViewModel.Factory
 
     private val appWidgetId by lazy {
         intent?.extras?.getInt(
@@ -37,6 +48,10 @@ class AppWidgetConfigureActivity : FragmentActivity() {
             AppWidgetManager.INVALID_APPWIDGET_ID,
         ) ?: AppWidgetManager.INVALID_APPWIDGET_ID
     }
+
+    private val lockScreenSettingLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult(),
+    ) {}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +71,7 @@ class AppWidgetConfigureActivity : FragmentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background,
                 ) {
-                    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+                    val uiState by secureViewModel.uiState.collectAsStateWithLifecycle()
                     when (val state = uiState) {
                         SecureUiState.Authenticated -> LockWidgetConfigurationScreen(
                             onCompleted = {
@@ -70,7 +85,13 @@ class AppWidgetConfigureActivity : FragmentActivity() {
                                     },
                                 )
                                 finish()
-                            }
+                            },
+                            viewModel = viewModel {
+                                configureViewModelFactory.create(
+                                    createSavedStateHandle(),
+                                    appWidgetType,
+                                )
+                            },
                         )
 
                         SecureUiState.NotAuthenticated -> NotAuthenticatedScreen(
@@ -83,7 +104,7 @@ class AppWidgetConfigureActivity : FragmentActivity() {
 
                         SecureUiState.NoAuthenticator -> NoAuthenticatorScreen(
                             navigateToSetting = {
-                                openLockScreenSetting {}
+                                lockScreenSettingLauncher.launchLockScreenSetting()
                             },
                         )
                     }
@@ -97,7 +118,7 @@ class AppWidgetConfigureActivity : FragmentActivity() {
         lifecycleScope.launch {
             // FIXME if no delay, authentication will be cancelled without user interaction
             delay(500L)
-            viewModel.authenticate(
+            secureViewModel.authenticate(
                 activity = this@AppWidgetConfigureActivity,
                 title = getString(R.string.title_user_auth),
                 subTitle = getString(R.string.description_user_auth_widget_configuration),
@@ -107,6 +128,6 @@ class AppWidgetConfigureActivity : FragmentActivity() {
 
     override fun onStop() {
         super.onStop()
-        viewModel.lockApp()
+        secureViewModel.lockApp()
     }
 }

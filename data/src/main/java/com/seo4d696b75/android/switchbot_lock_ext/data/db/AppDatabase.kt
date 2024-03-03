@@ -4,15 +4,26 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.seo4d696b75.android.switchbot_lock_ext.data.storage.AppStorage
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
 
-@Database(entities = [LockDeviceEntity::class], version = 1)
+@Database(
+    entities = [
+        LockDeviceEntity::class,
+        LockGeofenceEntity::class,
+        LockAutomationEntity::class,
+    ],
+    version = 1,
+)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun lockDeviceDao(): LockDeviceDao
+    abstract fun lockGeofenceDao(): LockGeofenceDao
+    abstract fun lockAutomationDao(): LockAutomationDao
 }
 
 @Suppress("unused")
@@ -22,11 +33,16 @@ object AppDatabaseModule {
     @Provides
     fun provideDatabase(
         @ApplicationContext context: Context,
+        storage: AppStorage,
     ): AppDatabase {
+        val password =
+            requireNotNull(storage.getDbPassword()).encodeToByteArray()
         return Room.databaseBuilder(
             context = context,
             klass = AppDatabase::class.java,
             name = "app_database",
-        ).build()
+        )
+            .openHelperFactory(SupportOpenHelperFactory(password))
+            .build()
     }
 }

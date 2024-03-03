@@ -33,8 +33,16 @@ class AppStorage @Inject constructor(
         .remove(KEY_USER_SECRET)
         .apply()
 
+    fun getDbPassword(): String? = preferences.getString(KEY_DATABASE_PASSWORD, null)
+
+    fun saveDbPassword(value: String) = preferences
+        .edit()
+        .putString(KEY_DATABASE_PASSWORD, value)
+        .apply()
+
     companion object {
         private const val KEY_USER_TOKEN = "pref_key_user_token"
         private const val KEY_USER_SECRET = "pref_key_user_secret"
+        private const val KEY_DATABASE_PASSWORD = "pref_key_database_password"
     }
 }
