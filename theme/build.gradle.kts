@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.seo4d696b75.android.switchbot_lock_ext.theme"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 27
