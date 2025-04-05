@@ -14,36 +14,33 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockDevice
-import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockGroup
+import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockStatus
 import com.seo4d696b75.android.switchbot_lock_ext.theme.AppTheme
-import com.seo4d696b75.android.switchbot_lock_ext.theme.R
+import com.seo4d696b75.android.switchbot_lock_ext.ui.common.LoadingSection
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.NoDeviceSection
-import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.LockUiState
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.component.LockListTile
-import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.component.LockListTilePreviewParamProvider
+import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.component.LockStatusPreviewParamProvider
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 fun LockListPage(
-    devices: ImmutableList<LockUiState>,
+    devices: ImmutableList<LockStatus>?,
     onLockedChanged: (String, Boolean) -> Unit,
     showStatusDetail: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    if (devices.isEmpty()) {
+    if (devices == null) {
+        LoadingSection(modifier = modifier)
+    } else if (devices.isEmpty()) {
         Box(
             modifier = modifier,
             contentAlignment = Alignment.Center,
         ) {
-            NoDeviceSection(
-                description = stringResource(id = R.string.description_no_controllable_device),
-            )
+            NoDeviceSection()
         }
     } else {
         LazyVerticalGrid(
@@ -55,7 +52,7 @@ fun LockListPage(
         ) {
             items(devices) {
                 LockListTile(
-                    state = it,
+                    status = it,
                     onLockedChanged = onLockedChanged,
                     showStatusDetail = showStatusDetail,
                 )
@@ -93,20 +90,8 @@ private fun LockListPagePreview() {
     AppTheme {
         Surface {
             LockListPage(
-                devices = LockListTilePreviewParamProvider()
+                devices = LockStatusPreviewParamProvider()
                     .values
-                    .map {
-                        LockUiState(
-                            device = LockDevice(
-                                id = "device-id",
-                                name = "Sample Lock",
-                                enableCloudService = true,
-                                hubDeviceId = "hub-device-id",
-                                group = LockGroup.Disabled,
-                            ),
-                            status = it,
-                        )
-                    }
                     .toPersistentList(),
                 onLockedChanged = { _, _ -> },
                 showStatusDetail = {},

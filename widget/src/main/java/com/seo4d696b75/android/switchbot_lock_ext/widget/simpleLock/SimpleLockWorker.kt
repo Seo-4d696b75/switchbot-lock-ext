@@ -14,8 +14,8 @@ import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import com.seo4d696b75.android.switchbot_lock_ext.domain.control.LockControlRepository
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.DeviceRemoteRepository
+import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockedState
 import com.seo4d696b75.android.switchbot_lock_ext.domain.notification.AppNotificationChannel
-import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockedState
 import com.seo4d696b75.android.switchbot_lock_ext.theme.R
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -44,7 +44,7 @@ class SimpleLockWorker @AssistedInject constructor(
         )
         runCatching {
             val current = deviceRepository.getLockDeviceStatus(deviceId)
-            val lock = when (val state = current.state) {
+            val lock = when (val state = current.locked) {
                 is LockedState.Normal -> !state.isLocked
                 else -> throw RuntimeException("unexpected current state: $state")
             }

@@ -14,17 +14,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockDevice
-import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockGroup
+import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockedState
 import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockStatus
-import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockedState
 import com.seo4d696b75.android.switchbot_lock_ext.theme.AppTheme
 import com.seo4d696b75.android.switchbot_lock_ext.theme.R
-import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.deviceList.component.formatString
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.HomeViewModel
-import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.LockUiState
+import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.component.LockStatusPreviewParamProvider
+import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.widgetConfiguration.component.formatString
 
 @Composable
 fun StatusDetailDialog(
@@ -34,11 +33,11 @@ fun StatusDetailDialog(
     modifier: Modifier = Modifier,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val state = uiState.devices.firstOrNull { it.device.id == deviceId }
+    val state = uiState.devices?.firstOrNull { it.device.id == deviceId }
 
     if (state != null) {
         StatusDetailDialog(
-            state = state,
+            status = state,
             onDismiss = onDismiss,
             modifier = modifier,
         )
@@ -47,7 +46,7 @@ fun StatusDetailDialog(
 
 @Composable
 fun StatusDetailDialog(
-    state: LockUiState,
+    status: LockStatus,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -62,7 +61,7 @@ fun StatusDetailDialog(
                 Column(
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    val device = state.device
+                    val device = status.device
                     Text(text = "name: ${device.name}")
                     Text(text = "id: ${device.id}")
                     Text(text = "cloud service: ${device.enableCloudService}")
@@ -71,17 +70,17 @@ fun StatusDetailDialog(
 
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    when (val status = state.status) {
+                    when (status) {
                         is LockStatus.Data -> {
                             val batteryText = stringResource(
                                 R.string.message_battery_percent,
-                                status.battery,
+                                status.state.battery,
                             )
                             Text(text = "battery: $batteryText")
-                            Text(text = "version: ${status.version}")
-                            Text(text = "state: ${status.state.formatString()}")
-                            Text(text = "door closed: ${status.isDoorClosed}")
-                            Text(text = "calibrated: ${status.isCalibrated}")
+                            Text(text = "version: ${status.state.version}")
+                            Text(text = "state: ${status.state.locked.formatString()}")
+                            Text(text = "door closed: ${status.state.isDoorClosed}")
+                            Text(text = "calibrated: ${status.state.isCalibrated}")
                         }
 
                         else -> {}
@@ -110,25 +109,13 @@ fun LockedState.formatString() = when (this) {
 
 @Preview
 @Composable
-private fun StatusDetailDialogPreview() {
+private fun StatusDetailDialogPreview(
+    @PreviewParameter(LockStatusPreviewParamProvider::class)
+    status: LockStatus,
+) {
     AppTheme {
         StatusDetailDialog(
-            state = LockUiState(
-                device = LockDevice(
-                    id = "device-id",
-                    name = "Sample Lock",
-                    enableCloudService = true,
-                    hubDeviceId = "hub-device-id",
-                    group = LockGroup.Disabled,
-                ),
-                status = LockStatus.Data(
-                    battery = 90,
-                    version = "new",
-                    state = LockedState.Normal(true),
-                    isDoorClosed = true,
-                    isCalibrated = true,
-                ),
-            ),
+            status = status,
             onDismiss = { },
         )
     }

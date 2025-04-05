@@ -1,40 +1,28 @@
 package com.seo4d696b75.android.switchbot_lock_ext.domain.status
 
+import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockDevice
+import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockDeviceState
+
 sealed interface LockStatus {
+    val device: LockDevice
+
     data class Data(
-        val battery: Int,
-        val version: String,
-        val state: LockedState,
-        val isDoorClosed: Boolean,
-        val isCalibrated: Boolean,
+        override val device: LockDevice,
+        val state: LockDeviceState,
     ) : LockStatus
 
     /**
      * No status available while fetching at the first time
      */
-    data object Loading : LockStatus
+    data class Loading(
+        override val device: LockDevice,
+    ) : LockStatus
 
     /**
      * No status available and an error happened while fetching
      */
-    data object Error : LockStatus
+    data class Error(
+        override val device: LockDevice,
+    ) : LockStatus
 }
 
-sealed interface LockedState {
-    data class Normal(
-        val isLocked: Boolean,
-        val isLoading: Boolean = false,
-    ) : LockedState
-
-    data object Jammed : LockedState
-
-    /**
-     * An error happened while updating 'locked' state,
-     * and current state is ambiguous
-     */
-    data object Error : LockedState
-}
-
-interface LockStatusStore {
-    operator fun get(id: String): LockStatus
-}

@@ -17,15 +17,15 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockDevice
+import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockDeviceState
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockGroup
+import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockedState
 import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockStatus
-import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockedState
 import com.seo4d696b75.android.switchbot_lock_ext.theme.AppTheme
-import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.LockUiState
 
 @Composable
 fun LockListTile(
-    state: LockUiState,
+    status: LockStatus,
     onLockedChanged: (String, Boolean) -> Unit,
     showStatusDetail: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -40,18 +40,18 @@ fun LockListTile(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
-                text = state.device.name,
+                text = status.device.name,
                 style = MaterialTheme.typography.titleLarge,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
             LockControlSection(
-                status = state.status,
+                status = status,
                 onLockedChanged = {
-                    onLockedChanged(state.device.id, it)
+                    onLockedChanged(status.device.id, it)
                 },
                 showStatusDetail = {
-                    showStatusDetail(state.device.id)
+                    showStatusDetail(status.device.id)
                 },
                 modifier = Modifier
                     .height(100.dp)
@@ -61,38 +61,58 @@ fun LockListTile(
     }
 }
 
-internal class LockListTilePreviewParamProvider :
+internal val previewDevice = LockDevice(
+    id = "device-id",
+    name = "Sample Lock",
+    enableCloudService = true,
+    hubDeviceId = "hub-device-id",
+    group = LockGroup.Disabled,
+)
+
+internal class LockStatusPreviewParamProvider :
     PreviewParameterProvider<LockStatus> {
     override val values = sequenceOf(
-        LockStatus.Loading,
-        LockStatus.Error,
+        LockStatus.Loading(previewDevice),
+        LockStatus.Error(previewDevice),
         LockStatus.Data(
-            battery = 90,
-            version = "new",
-            state = LockedState.Normal(true),
-            isDoorClosed = true,
-            isCalibrated = true,
+            device = previewDevice,
+            state = LockDeviceState(
+                battery = 90,
+                version = "new",
+                locked = LockedState.Normal(true),
+                isDoorClosed = true,
+                isCalibrated = true,
+            )
         ),
         LockStatus.Data(
-            battery = 90,
-            version = "new",
-            state = LockedState.Normal(false),
-            isDoorClosed = true,
-            isCalibrated = true,
+            device = previewDevice,
+            state = LockDeviceState(
+                battery = 90,
+                version = "new",
+                locked = LockedState.Normal(false),
+                isDoorClosed = true,
+                isCalibrated = true,
+            )
         ),
         LockStatus.Data(
-            battery = 90,
-            version = "new",
-            state = LockedState.Jammed,
-            isDoorClosed = true,
-            isCalibrated = true,
+            device = previewDevice,
+            state = LockDeviceState(
+                battery = 90,
+                version = "new",
+                locked = LockedState.Jammed,
+                isDoorClosed = true,
+                isCalibrated = true,
+            )
         ),
         LockStatus.Data(
-            battery = 90,
-            version = "new",
-            state = LockedState.Error,
-            isDoorClosed = true,
-            isCalibrated = true,
+            device = previewDevice,
+            state = LockDeviceState(
+                battery = 90,
+                version = "new",
+                locked = LockedState.Error,
+                isDoorClosed = true,
+                isCalibrated = true,
+            )
         ),
     )
 }
@@ -100,21 +120,12 @@ internal class LockListTilePreviewParamProvider :
 @Preview
 @Composable
 private fun LockListTilePreview(
-    @PreviewParameter(LockListTilePreviewParamProvider::class)
+    @PreviewParameter(LockStatusPreviewParamProvider::class)
     status: LockStatus,
 ) {
     AppTheme {
         LockListTile(
-            state = LockUiState(
-                device = LockDevice(
-                    id = "device-id",
-                    name = "Sample Lock",
-                    enableCloudService = true,
-                    hubDeviceId = "hub-device-id",
-                    group = LockGroup.Disabled,
-                ),
-                status = status,
-            ),
+            status = status,
             modifier = Modifier.width(180.dp),
             onLockedChanged = { _, _ -> },
             showStatusDetail = {},

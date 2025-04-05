@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
@@ -17,8 +16,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockDevice
 import com.seo4d696b75.android.switchbot_lock_ext.theme.R
-import com.seo4d696b75.android.switchbot_lock_ext.ui.common.InfoSection
-import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.deviceList.component.DeviceListItem
 import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -40,12 +37,6 @@ fun DeviceListSection(
                 Text(
                     text = stringResource(id = R.string.title_select_device),
                     style = MaterialTheme.typography.titleMedium,
-                )
-                InfoSection(
-                    description = stringResource(id = R.string.description_device_selection),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
                 )
             }
         }

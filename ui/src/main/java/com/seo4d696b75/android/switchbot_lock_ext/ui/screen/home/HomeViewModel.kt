@@ -4,21 +4,20 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.seo4d696b75.android.switchbot_lock_ext.domain.control.LockControlRepository
-import com.seo4d696b75.android.switchbot_lock_ext.domain.device.DeviceRepository
+import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockedState
 import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockStatusRepository
-import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockedState
 import com.seo4d696b75.android.switchbot_lock_ext.domain.user.UserRegistration
 import com.seo4d696b75.android.switchbot_lock_ext.domain.user.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,7 +25,6 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     userRepository: UserRepository,
-    private val deviceRepository: DeviceRepository,
     private val statusRepository: LockStatusRepository,
     private val controlRepository: LockControlRepository,
 ) : ViewModel() {
@@ -36,26 +34,24 @@ class HomeViewModel @Inject constructor(
         .userFlow
         .flatMapLatest { user ->
             when (user) {
-                is UserRegistration.User -> combine(
-                    deviceRepository.controlDeviceFlow,
-                    statusRepository.statusFlow,
-                ) { devices, statusStore ->
-                    HomeUiState(
-                        user = user,
-                        devices = devices.map {
-                            LockUiState(
-                                device = it,
-                                status = statusStore[it.id],
-                            )
-                        }.toPersistentList(),
-                    )
-                }
+                is UserRegistration.User -> statusRepository
+                    .statusFlow
+                    .onStart {
+                        // initialize
+                        refresh()
+                    }
+                    .map { list ->
+                        HomeUiState(
+                            user = user,
+                            devices = list?.toPersistentList(),
+                        )
+                    }
 
                 else -> flow {
                     emit(
                         HomeUiState(
                             user = user,
-                            devices = persistentListOf(),
+                            devices = null,
                         )
                     )
                 }
@@ -67,7 +63,13 @@ class HomeViewModel @Inject constructor(
         )
 
     fun refresh() {
-        statusRepository.refresh()
+        viewModelScope.launch {
+            runCatching {
+                statusRepository.refresh()
+            }.onFailure {
+                Log.d("HomeViewModel", "Failed to refresh by $it")
+            }
+        }
     }
 
     fun onLockedChanged(id: String, locked: Boolean) {

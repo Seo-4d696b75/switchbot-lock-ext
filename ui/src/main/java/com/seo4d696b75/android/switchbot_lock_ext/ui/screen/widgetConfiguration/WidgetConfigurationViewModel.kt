@@ -1,6 +1,7 @@
 package com.seo4d696b75.android.switchbot_lock_ext.ui.screen.widgetConfiguration
 
 import android.appwidget.AppWidgetManager
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,6 +18,7 @@ import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -42,14 +44,23 @@ class WidgetConfigurationViewModel @AssistedInject constructor(
 
     val uiState = combine(
         userRepository.userFlow,
-        deviceRepository.controlDeviceFlow,
+        deviceRepository.deviceFlow,
         onConfigurationCompletedFlow,
     ) { user, devices, event ->
         WidgetConfigurationUiState(
             user = user,
-            devices = devices.toPersistentList(),
+            devices = devices?.toPersistentList(),
             onConfigurationCompleted = event,
         )
+    }.onStart {
+        // initialize device list
+        viewModelScope.launch {
+            runCatching {
+                deviceRepository.refresh()
+            }.onFailure {
+                Log.d("ConfigureViewModel", "Failed to get device list")
+            }
+        }
     }.stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(),

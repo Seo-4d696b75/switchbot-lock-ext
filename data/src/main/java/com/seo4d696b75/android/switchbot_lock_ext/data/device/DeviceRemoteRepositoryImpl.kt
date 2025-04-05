@@ -5,9 +5,9 @@ import com.seo4d696b75.android.switchbot_lock_ext.api.response.device.PhysicalDe
 import com.seo4d696b75.android.switchbot_lock_ext.api.response.status.PhysicalDeviceStatus
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.DeviceRemoteRepository
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockDevice
+import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockDeviceState
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockGroup
-import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockStatus
-import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockedState
+import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockedState
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -25,7 +25,7 @@ class DeviceRemoteRepositoryImpl @Inject constructor(
             .map { it.toModel() }
     }
 
-    override suspend fun getLockDeviceStatus(id: String): LockStatus.Data {
+    override suspend fun getLockDeviceStatus(id: String): LockDeviceState {
         val response = api.getStatus(id)
         return response.toModel()
     }
@@ -48,11 +48,11 @@ private fun PhysicalDevice.Lock.toModel(): LockDevice {
     )
 }
 
-private fun PhysicalDeviceStatus.toModel(): LockStatus.Data {
-    return LockStatus.Data(
+private fun PhysicalDeviceStatus.toModel(): LockDeviceState {
+    return LockDeviceState(
         battery = battery,
         version = version,
-        state = when (lockState) {
+        locked = when (lockState) {
             "locked" -> LockedState.Normal(isLocked = true)
             "unlocked" -> LockedState.Normal(isLocked = false)
             "jammed" -> LockedState.Jammed

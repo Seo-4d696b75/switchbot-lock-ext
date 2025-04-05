@@ -25,8 +25,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockedState
 import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockStatus
-import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockedState
 import com.seo4d696b75.android.switchbot_lock_ext.theme.R
 
 @Composable
@@ -38,8 +38,8 @@ fun LockControlSection(
 ) {
     Crossfade(
         targetState = when (status) {
-            LockStatus.Loading -> "loading"
-            LockStatus.Error -> "error"
+            is LockStatus.Loading -> "loading"
+            is LockStatus.Error -> "error"
             is LockStatus.Data -> "data"
         },
         label = "LockControlSection",
@@ -58,7 +58,7 @@ fun LockControlSection(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         BatterySection(
-                            percent = status.battery,
+                            percent = status.state.battery,
                             modifier = Modifier.padding(8.dp),
                         )
                         IconButton(onClick = showStatusDetail) {
@@ -74,7 +74,7 @@ fun LockControlSection(
                             )
                         }
                     }
-                    when (val state = status.state) {
+                    when (val state = status.state.locked) {
                         LockedState.Jammed -> {
                             Row(
                                 modifier = Modifier
@@ -122,7 +122,7 @@ fun LockControlSection(
                 }
             }
 
-            LockStatus.Error -> {
+            is LockStatus.Error -> {
                 Row(
                     modifier = modifier,
                     verticalAlignment = Alignment.CenterVertically,
@@ -139,7 +139,7 @@ fun LockControlSection(
                 }
             }
 
-            LockStatus.Loading -> {
+            is LockStatus.Loading -> {
                 Row(
                     modifier = modifier,
                     verticalAlignment = Alignment.CenterVertically,

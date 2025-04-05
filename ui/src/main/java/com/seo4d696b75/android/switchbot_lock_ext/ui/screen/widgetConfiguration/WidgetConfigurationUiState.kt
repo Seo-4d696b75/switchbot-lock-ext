@@ -10,7 +10,7 @@ import kotlinx.collections.immutable.persistentListOf
 @Immutable
 data class WidgetConfigurationUiState(
     val user: UserRegistration,
-    val devices: ImmutableList<LockDevice>,
+    val devices: ImmutableList<LockDevice>?,
     val onConfigurationCompleted: UiEvent<Unit>,
 ) {
     companion object {

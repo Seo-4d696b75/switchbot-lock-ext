@@ -27,7 +27,6 @@ import com.seo4d696b75.android.switchbot_lock_ext.theme.R
 
 @Composable
 fun NoDeviceSection(
-    description: String,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -46,7 +45,7 @@ fun NoDeviceSection(
         )
         Spacer(modifier = Modifier.height(24.dp))
         Text(
-            text = description,
+            text = stringResource(id = R.string.description_device_controllable),
             style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier
                 .fillMaxWidth()
@@ -61,7 +60,7 @@ fun NoDeviceSection(
 private fun NoDeviceSectionPreview() {
     AppTheme {
         Surface {
-            NoDeviceSection(description = "description")
+            NoDeviceSection()
         }
     }
 }

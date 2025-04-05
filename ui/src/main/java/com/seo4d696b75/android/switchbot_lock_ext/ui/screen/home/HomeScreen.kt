@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockStatus
 import com.seo4d696b75.android.switchbot_lock_ext.domain.user.UserRegistration
 import com.seo4d696b75.android.switchbot_lock_ext.theme.R
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.LoadingSection
@@ -48,7 +49,7 @@ fun HomeScreen(
 @Composable
 fun HomeScreen(
     user: UserRegistration,
-    devices: ImmutableList<LockUiState>,
+    devices: ImmutableList<LockStatus>?,
     onLockedChanged: (String, Boolean) -> Unit,
     onRefresh: () -> Unit,
     showStatusDetail: (String) -> Unit,

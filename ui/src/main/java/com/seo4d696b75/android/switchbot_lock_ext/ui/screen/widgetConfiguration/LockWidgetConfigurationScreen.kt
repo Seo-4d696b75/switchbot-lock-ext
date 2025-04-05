@@ -48,7 +48,7 @@ fun LockWidgetConfigurationScreen(
 @Composable
 fun LockWidgetConfigurationScreen(
     user: UserRegistration,
-    devices: ImmutableList<LockDevice>,
+    devices: ImmutableList<LockDevice>?,
     onSelected: (LockDevice) -> Unit,
     modifier: Modifier = Modifier,
 ) {
