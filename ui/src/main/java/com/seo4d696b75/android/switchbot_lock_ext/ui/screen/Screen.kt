@@ -40,30 +40,6 @@ sealed interface Screen {
         }
     }
 
-    sealed interface Automation : Screen {
-        data object List : Automation {
-            override val route = "$tabRoute/list"
-        }
-
-        companion object : BottomTab {
-            override val tabRoute = "automation"
-            override val labelId = R.string.bottom_nav_automation
-            override val iconId = R.drawable.ic_rocket
-        }
-    }
-
-    sealed interface Device : Screen {
-        data object List : Device {
-            override val route = "$tabRoute/list"
-        }
-
-        companion object : BottomTab {
-            override val tabRoute = "device"
-            override val labelId = R.string.bottom_nav_device
-            override val iconId = R.drawable.ic_lock
-        }
-    }
-
     sealed interface User : Screen {
         data object Top : User {
             override val route = "$tabRoute/top"

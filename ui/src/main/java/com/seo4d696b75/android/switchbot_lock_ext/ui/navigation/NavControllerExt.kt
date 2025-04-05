@@ -9,8 +9,6 @@ val NavBackStackEntry.currentBottomTab: Screen.BottomTab?
         val route = destination.route ?: return null
         return when (route.split("/").firstOrNull()) {
             Screen.Home.tabRoute -> Screen.Home
-            Screen.Automation.tabRoute -> Screen.Automation
-            Screen.Device.tabRoute -> Screen.Device
             Screen.User.tabRoute -> Screen.User
             else -> null
         }

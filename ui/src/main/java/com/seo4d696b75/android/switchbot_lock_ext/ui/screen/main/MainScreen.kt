@@ -6,8 +6,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.seo4d696b75.android.switchbot_lock_ext.ui.navigation.automationNavGraph
-import com.seo4d696b75.android.switchbot_lock_ext.ui.navigation.deviceNavGraph
 import com.seo4d696b75.android.switchbot_lock_ext.ui.navigation.homeNavGraph
 import com.seo4d696b75.android.switchbot_lock_ext.ui.navigation.userNavGraph
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.Screen
@@ -27,8 +25,6 @@ fun MainScreen() {
             startDestination = Screen.Home.tabRoute,
         ) {
             homeNavGraph(navController)
-            automationNavGraph(navController)
-            deviceNavGraph(navController)
             userNavGraph(navController)
         }
     }

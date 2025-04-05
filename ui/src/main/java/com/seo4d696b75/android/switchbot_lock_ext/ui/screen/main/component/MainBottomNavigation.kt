@@ -29,8 +29,6 @@ fun MainBottomNavigation(
     ) {
         listOf(
             Screen.Home,
-            Screen.Automation,
-            Screen.Device,
             Screen.User,
         ).forEach { tab ->
             NavigationBarItem(
