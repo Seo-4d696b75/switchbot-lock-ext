@@ -4,7 +4,11 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -42,8 +46,11 @@ fun LockWidgetConfigurationScreen(
     LockWidgetConfigurationScreen(
         modifier = modifier,
         user = uiState.user,
+        isError = uiState.isError,
+        isLoading = uiState.isLoading,
         devices = uiState.devices,
         onSelected = viewModel::onDeviceSelected,
+        onRefresh = viewModel::refresh,
     )
 }
 
@@ -51,8 +58,11 @@ fun LockWidgetConfigurationScreen(
 @Composable
 fun LockWidgetConfigurationScreen(
     user: UserRegistration,
+    isError: Boolean,
+    isLoading: Boolean,
     devices: ImmutableList<LockDevice>?,
     onSelected: (LockDevice) -> Unit,
+    onRefresh: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -63,6 +73,16 @@ fun LockWidgetConfigurationScreen(
                     Text(text = stringResource(id = R.string.top_bar_widget_configuration))
                 },
             )
+        },
+        floatingActionButton = {
+            if (devices != null) {
+                FloatingActionButton(onClick = onRefresh) {
+                    Icon(
+                        Icons.Default.Refresh,
+                        contentDescription = stringResource(id = R.string.label_refresh_status),
+                    )
+                }
+            }
         },
     ) { innerPadding ->
         Box(
@@ -77,8 +97,11 @@ fun LockWidgetConfigurationScreen(
             ) {
                 when (it) {
                     is UserRegistration.User -> DeviceSelectionPage(
+                        isError = isError,
+                        isLoading = isLoading,
                         devices = devices,
                         onSelected = onSelected,
+                        onRefresh = onRefresh,
                     )
 
                     UserRegistration.Undefined -> Box(

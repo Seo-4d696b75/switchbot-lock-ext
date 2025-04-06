@@ -24,7 +24,7 @@ import com.seo4d696b75.android.switchbot_lock_ext.domain.user.UserRegistration
 import com.seo4d696b75.android.switchbot_lock_ext.theme.R
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.LoadingSection
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.NoUserSection
-import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.page.LockListPage
+import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.page.LockStatusPage
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
@@ -37,6 +37,8 @@ fun HomeScreen(
 
     HomeScreen(
         user = uiState.user,
+        isError = uiState.isError,
+        isLoading = uiState.isLoading,
         devices = uiState.devices,
         onLockedChanged = viewModel::onLockedChanged,
         onRefresh = viewModel::refresh,
@@ -49,6 +51,8 @@ fun HomeScreen(
 @Composable
 fun HomeScreen(
     user: UserRegistration,
+    isError: Boolean,
+    isLoading: Boolean,
     devices: ImmutableList<LockStatus>?,
     onLockedChanged: (String, Boolean) -> Unit,
     onRefresh: () -> Unit,
@@ -65,11 +69,13 @@ fun HomeScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = onRefresh) {
-                Icon(
-                    Icons.Default.Refresh,
-                    contentDescription = stringResource(id = R.string.label_refresh_status),
-                )
+            if (devices != null) {
+                FloatingActionButton(onClick = onRefresh) {
+                    Icon(
+                        Icons.Default.Refresh,
+                        contentDescription = stringResource(id = R.string.label_refresh_status),
+                    )
+                }
             }
         },
     ) { innerPadding ->
@@ -81,8 +87,11 @@ fun HomeScreen(
                 .padding(innerPadding),
         ) {
             when (it) {
-                is UserRegistration.User -> LockListPage(
+                is UserRegistration.User -> LockStatusPage(
+                    isError = isError,
+                    isLoading = isLoading,
                     devices = devices,
+                    onRetry = onRefresh,
                     onLockedChanged = onLockedChanged,
                     showStatusDetail = showStatusDetail,
                     modifier = Modifier.fillMaxSize(),

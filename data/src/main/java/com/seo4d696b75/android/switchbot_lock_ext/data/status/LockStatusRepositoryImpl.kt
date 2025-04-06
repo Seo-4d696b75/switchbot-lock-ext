@@ -28,33 +28,47 @@ class LockStatusRepositoryImpl @Inject constructor(
     private val lockStateCacheFlow =
         MutableStateFlow<Map<String, LockedState>>(emptyMap())
 
+    private val isRefresh = MutableStateFlow(false)
+
     @OptIn(ExperimentalCoroutinesApi::class)
-    private val remoteStatusFlow = deviceRepository
-        .deviceFlow
-        .transformLatest { list ->
-            if (list == null) {
-                emit(null)
-            } else {
-                emit(
-                    list.map { LockStatus.Loading(it) }
-                )
-                val result = coroutineScope {
-                    list.map { device ->
-                        async {
-                            runCatching {
-                                remoteRepository.getLockDeviceStatus(device.id)
-                            }.getOrNull()?.let {
-                                LockStatus.Data(
-                                    device = device,
-                                    state = it,
-                                )
-                            } ?: LockStatus.Error(device)
-                        }
-                    }.awaitAll()
-                }
-                emit(result)
+    private val remoteStatusFlow = combine(
+        deviceRepository.deviceFlow,
+        isRefresh,
+    ) { list, isRefreshing ->
+        list to isRefreshing
+    }.transformLatest { (list, isRefreshing) ->
+        if (list == null) {
+            emit(null)
+        } else if (isRefreshing) {
+            // maintain previous value (no emit)
+        } else {
+            // clear cache
+            lockStateCacheFlow.update { emptyMap() }
+
+            emit(
+                list.map { LockStatus.Loading(it) }
+            )
+
+            // fetch latest status
+            val result = coroutineScope {
+                list.map { device ->
+                    async {
+                        runCatching {
+                            remoteRepository.getLockDeviceStatus(
+                                device.id
+                            )
+                        }.getOrNull()?.let {
+                            LockStatus.Data(
+                                device = device,
+                                state = it,
+                            )
+                        } ?: LockStatus.Error(device)
+                    }
+                }.awaitAll()
             }
+            emit(result)
         }
+    }
 
     override val statusFlow = combine(
         remoteStatusFlow,
@@ -76,8 +90,12 @@ class LockStatusRepositoryImpl @Inject constructor(
     }
 
     override suspend fun refresh() {
-        deviceRepository.refresh()
-        lockStateCacheFlow.update { emptyMap() }
+        try {
+            isRefresh.update { true }
+            deviceRepository.refresh()
+        } finally {
+            isRefresh.update { false }
+        }
     }
 
     override fun update(id: String, state: LockedState) {

@@ -6,11 +6,15 @@ import kotlinx.collections.immutable.ImmutableList
 
 data class HomeUiState(
     val user: UserRegistration,
+    val isError: Boolean,
+    val isLoading: Boolean,
     val devices: ImmutableList<LockStatus>?,
 ) {
     companion object {
         val InitialValue = HomeUiState(
             user = UserRegistration.Loading,
+            isError = false,
+            isLoading = true,
             devices = null,
         )
     }
