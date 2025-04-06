@@ -21,6 +21,7 @@ import com.seo4d696b75.android.switchbot_lock_ext.theme.R
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.LoadingSection
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.NoUserSection
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.ObserveEvent
+import com.seo4d696b75.android.switchbot_lock_ext.ui.error.ErrorHandler
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.widgetConfiguration.page.DeviceSelectionPage
 import kotlinx.collections.immutable.ImmutableList
 
@@ -35,6 +36,8 @@ fun LockWidgetConfigurationScreen(
     ObserveEvent(uiState.onConfigurationCompleted) {
         onCompleted()
     }
+
+    ErrorHandler()
 
     LockWidgetConfigurationScreen(
         modifier = modifier,

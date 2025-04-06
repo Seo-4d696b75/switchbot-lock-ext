@@ -47,4 +47,7 @@
     <string name="message_user_token">トークン: %s</string>
     <string name="notification_title_widget_running">ウィジェットが解錠・施錠中</string>
     <string name="notification_text_widget_running">操作が完了すると通知は自動で消えます</string>
+    <string name="error_dialog_title">エラー</string>
+    <string name="error_dialog_message">不明なエラーが発生しました %s</string>
+    <string name="error_dialog_button_close">閉じる</string>
 </resources>
