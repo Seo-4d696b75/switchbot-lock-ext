@@ -7,6 +7,8 @@ import androidx.glance.GlanceTheme
 import androidx.glance.ImageProvider
 import androidx.glance.layout.Row
 import androidx.glance.layout.Spacer
+import androidx.glance.layout.fillMaxWidth
+import androidx.glance.layout.padding
 import androidx.glance.layout.width
 import com.seo4d696b75.android.switchbot_lock_ext.theme.R
 import com.seo4d696b75.android.switchbot_lock_ext.widget.common.glanceString
@@ -17,13 +19,19 @@ fun LockControlButtonSection(
     modifier: GlanceModifier = GlanceModifier,
 ) {
     Row(
-        modifier = modifier,
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(
+                vertical = 12.dp,
+                horizontal = 16.dp,
+            ),
     ) {
         LockControlButton(
             label = glanceString(id = R.string.label_unlock),
             icon = ImageProvider(R.drawable.ic_unlock),
             color = GlanceTheme.colors.secondary,
             onClicked = { onClicked(false) },
+            modifier = GlanceModifier.defaultWeight(),
         )
         Spacer(modifier = GlanceModifier.width(12.dp))
         LockControlButton(
@@ -31,6 +39,7 @@ fun LockControlButtonSection(
             icon = ImageProvider(R.drawable.ic_lock),
             color = GlanceTheme.colors.primary,
             onClicked = { onClicked(true) },
+            modifier = GlanceModifier.defaultWeight(),
         )
     }
 }

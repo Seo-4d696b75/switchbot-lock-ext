@@ -9,9 +9,9 @@ import androidx.glance.appwidget.CircularProgressIndicator
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Column
 import androidx.glance.layout.Spacer
-import androidx.glance.layout.size
-import androidx.glance.layout.width
-import androidx.glance.layout.wrapContentSize
+import androidx.glance.layout.fillMaxSize
+import androidx.glance.layout.height
+import androidx.glance.layout.padding
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 
@@ -21,14 +21,16 @@ fun SimpleLoadingSection(
     modifier: GlanceModifier = GlanceModifier,
 ) {
     Column(
-        modifier = modifier.wrapContentSize(),
+        modifier = modifier
+            .fillMaxSize()
+            .padding(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         CircularProgressIndicator(
-            modifier = GlanceModifier.size(32.dp),
+            modifier = GlanceModifier.defaultWeight(),
             color = GlanceTheme.colors.primary,
         )
-        Spacer(modifier = GlanceModifier.width(2.dp))
+        Spacer(modifier = GlanceModifier.height(2.dp))
         Text(
             text = message,
             style = TextStyle(

@@ -11,9 +11,9 @@ import androidx.glance.ImageProvider
 import androidx.glance.action.clickable
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Box
+import androidx.glance.layout.fillMaxHeight
 import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.padding
-import androidx.glance.layout.size
 import androidx.glance.unit.ColorProvider
 import com.seo4d696b75.android.switchbot_lock_ext.theme.R
 
@@ -28,7 +28,7 @@ fun LockControlButton(
 ) {
     Box(
         modifier = modifier
-            .size(46.dp)
+            .fillMaxHeight()
             .clickable("LockControlButton-$label", onClicked),
         contentAlignment = Alignment.Center,
     ) {
@@ -44,7 +44,7 @@ fun LockControlButton(
             colorFilter = ColorFilter.tint(GlanceTheme.colors.onPrimary),
             modifier = GlanceModifier
                 .fillMaxSize()
-                .padding(2.dp),
+                .padding(4.dp),
         )
     }
 }

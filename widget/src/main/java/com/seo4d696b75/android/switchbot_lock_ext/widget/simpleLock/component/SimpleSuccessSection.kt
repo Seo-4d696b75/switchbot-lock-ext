@@ -11,9 +11,10 @@ import androidx.glance.ImageProvider
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Column
 import androidx.glance.layout.Spacer
-import androidx.glance.layout.size
-import androidx.glance.layout.width
-import androidx.glance.layout.wrapContentSize
+import androidx.glance.layout.fillMaxSize
+import androidx.glance.layout.fillMaxWidth
+import androidx.glance.layout.height
+import androidx.glance.layout.padding
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import com.seo4d696b75.android.switchbot_lock_ext.theme.R
@@ -24,16 +25,20 @@ fun SimpleSuccessSection(
     modifier: GlanceModifier = GlanceModifier,
 ) {
     Column(
-        modifier = modifier.wrapContentSize(),
+        modifier = modifier
+            .fillMaxSize()
+            .padding(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Image(
             provider = ImageProvider(R.drawable.ic_check),
             contentDescription = null,
             colorFilter = ColorFilter.tint(GlanceTheme.colors.primary),
-            modifier = GlanceModifier.size(32.dp)
+            modifier = GlanceModifier
+                .defaultWeight()
+                .fillMaxWidth(),
         )
-        Spacer(modifier = GlanceModifier.width(2.dp))
+        Spacer(modifier = GlanceModifier.height(2.dp))
         Text(
             text = message,
             style = TextStyle(

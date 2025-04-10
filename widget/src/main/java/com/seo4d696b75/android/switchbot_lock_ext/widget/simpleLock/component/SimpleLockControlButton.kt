@@ -12,7 +12,7 @@ import androidx.glance.action.clickable
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Box
 import androidx.glance.layout.fillMaxSize
-import androidx.glance.layout.size
+import androidx.glance.layout.padding
 import com.seo4d696b75.android.switchbot_lock_ext.theme.R
 
 @OptIn(ExperimentalGlanceApi::class)
@@ -23,8 +23,8 @@ fun SimpleLockControlButton(
 ) {
     Box(
         modifier = modifier
-            .size(40.dp)
-            .clickable("SimpleLockControlButton", onClicked),
+            .clickable("SimpleLockControlButton", onClicked)
+            .padding(8.dp),
         contentAlignment = Alignment.Center,
     ) {
         Image(
@@ -37,7 +37,9 @@ fun SimpleLockControlButton(
             provider = ImageProvider(R.drawable.ic_lock),
             contentDescription = null,
             colorFilter = ColorFilter.tint(GlanceTheme.colors.onPrimary),
-            modifier = GlanceModifier.size(32.dp),
+            modifier = GlanceModifier
+                .fillMaxSize()
+                .padding(8.dp),
         )
     }
 }
