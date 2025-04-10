@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.seo4d696b75.android.switchbot_lock_ext.domain.async.AsyncValue
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockDevice
 import com.seo4d696b75.android.switchbot_lock_ext.domain.user.UserRegistration
 import com.seo4d696b75.android.switchbot_lock_ext.theme.R
@@ -27,7 +28,6 @@ import com.seo4d696b75.android.switchbot_lock_ext.ui.common.NoUserSection
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.ObserveEvent
 import com.seo4d696b75.android.switchbot_lock_ext.ui.error.ErrorHandler
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.widgetConfiguration.page.DeviceSelectionPage
-import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 fun LockWidgetConfigurationScreen(
@@ -46,8 +46,6 @@ fun LockWidgetConfigurationScreen(
     LockWidgetConfigurationScreen(
         modifier = modifier,
         user = uiState.user,
-        isError = uiState.isError,
-        isLoading = uiState.isLoading,
         devices = uiState.devices,
         onSelected = viewModel::onDeviceSelected,
         onRefresh = viewModel::refresh,
@@ -58,9 +56,7 @@ fun LockWidgetConfigurationScreen(
 @Composable
 fun LockWidgetConfigurationScreen(
     user: UserRegistration,
-    isError: Boolean,
-    isLoading: Boolean,
-    devices: ImmutableList<LockDevice>?,
+    devices: AsyncValue<List<LockDevice>>,
     onSelected: (LockDevice) -> Unit,
     onRefresh: () -> Unit,
     modifier: Modifier = Modifier,
@@ -75,7 +71,7 @@ fun LockWidgetConfigurationScreen(
             )
         },
         floatingActionButton = {
-            if (devices != null) {
+            if (devices.data != null) {
                 FloatingActionButton(onClick = onRefresh) {
                     Icon(
                         Icons.Default.Refresh,
@@ -97,8 +93,6 @@ fun LockWidgetConfigurationScreen(
             ) {
                 when (it) {
                     is UserRegistration.User -> DeviceSelectionPage(
-                        isError = isError,
-                        isLoading = isLoading,
                         devices = devices,
                         onSelected = onSelected,
                         onRefresh = onRefresh,

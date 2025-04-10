@@ -4,6 +4,7 @@ import android.appwidget.AppWidgetManager
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.seo4d696b75.android.switchbot_lock_ext.domain.async.asyncValueOf
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.DeviceRepository
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockDevice
 import com.seo4d696b75.android.switchbot_lock_ext.domain.error.ErrorHandler
@@ -14,12 +15,10 @@ import com.seo4d696b75.android.switchbot_lock_ext.ui.common.UiEvent
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
 class WidgetConfigurationViewModel @AssistedInject constructor(
     @Assisted savedStateHandle: SavedStateHandle,
@@ -41,21 +40,18 @@ class WidgetConfigurationViewModel @AssistedInject constructor(
     private val onConfigurationCompletedFlow =
         MutableStateFlow<UiEvent<Unit>>(UiEvent.None)
 
-    private val isError = MutableStateFlow(false)
-    private val isRefreshing = MutableStateFlow(false)
+    private val devices = asyncValueOf(deviceRepository.deviceFlow) {
+        deviceRepository.refresh()
+    }
 
     val uiState = combine(
-        isError,
-        isRefreshing,
         userRepository.userFlow,
-        deviceRepository.deviceFlow.catchingError(isError),
+        devices(),
         onConfigurationCompletedFlow,
-    ) { isError, isRefreshing, user, devices, event ->
+    ) { user, devices, event ->
         WidgetConfigurationUiState(
             user = user,
-            isError = isError,
-            isLoading = (devices == null && !isError) || isRefreshing,
-            devices = devices?.toPersistentList(),
+            devices = devices,
             onConfigurationCompleted = event,
         )
     }.stateInCatching(
@@ -65,11 +61,8 @@ class WidgetConfigurationViewModel @AssistedInject constructor(
     )
 
     fun refresh() {
-        viewModelScope.launchCatching(
-            isError = isError,
-            isLoading = isRefreshing,
-        ) {
-            deviceRepository.refresh()
+        viewModelScope.launchCatching {
+            devices.refresh()
         }
     }
 
@@ -78,7 +71,7 @@ class WidgetConfigurationViewModel @AssistedInject constructor(
             ?: AppWidgetManager.INVALID_APPWIDGET_ID
     }
 
-    fun onDeviceSelected(device: LockDevice) = viewModelScope.launch {
+    fun onDeviceSelected(device: LockDevice) = viewModelScope.launchCatching {
         widgetMediator.initializeAppWidget(
             appWidgetType,
             appWidgetId,

@@ -11,29 +11,24 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
+import com.seo4d696b75.android.switchbot_lock_ext.domain.async.AsyncValue
 import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockStatus
-import com.seo4d696b75.android.switchbot_lock_ext.domain.user.UserRegistration
 import com.seo4d696b75.android.switchbot_lock_ext.theme.AppTheme
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.ErrorSection
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.LoadingSection
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.NoDeviceSection
-import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.HomeUiState
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.component.LockStatusPreviewParamProvider
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.component.StatusListSection
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 fun LockStatusPage(
-    isError: Boolean,
-    isLoading: Boolean,
-    devices: ImmutableList<LockStatus>?,
+    devices: AsyncValue<List<LockStatus>>,
     onRetry: () -> Unit,
     onLockedChanged: (String, Boolean) -> Unit,
     showStatusDetail: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -43,61 +38,55 @@ fun LockStatusPage(
             ),
         contentAlignment = Alignment.Center,
     ) {
-        if (!devices.isNullOrEmpty()) {
-            StatusListSection(
-                devices = devices,
-                onLockedChanged = onLockedChanged,
-                showStatusDetail = showStatusDetail,
-                modifier = Modifier.fillMaxSize(),
-            )
-        } else if (devices != null && devices.isEmpty()) {
-            NoDeviceSection()
-        } else if (isError) {
-            ErrorSection(
-                onRetryClicked = onRetry,
-            )
-        }
+        when (devices) {
+            is AsyncValue.Loading -> {}
 
-        if (isLoading) {
+            is AsyncValue.Error -> {
+                ErrorSection(
+                    onRetryClicked = onRetry,
+                )
+            }
+
+            is AsyncValue.Data -> {
+                if (devices.data.isEmpty()) {
+                    NoDeviceSection()
+                } else {
+                    StatusListSection(
+                        devices = devices.data.toPersistentList(),
+                        onLockedChanged = onLockedChanged,
+                        showStatusDetail = showStatusDetail,
+                        modifier = Modifier.fillMaxSize(),
+                    )
+                }
+            }
+        }
+        if (devices.isLoading) {
             LoadingSection()
         }
     }
 }
 
 private class LockStatusPagePreviewParamProvider :
-    PreviewParameterProvider<HomeUiState> {
-    override val values = sequenceOf(
+    PreviewParameterProvider<AsyncValue<List<LockStatus>>> {
+    override val values = sequenceOf<AsyncValue<List<LockStatus>>>(
         // initial loading
-        HomeUiState(
-            user = UserRegistration.Loading,
-            isError = false,
-            isLoading = true,
-            devices = null,
-        ),
+        AsyncValue.Loading(),
         // initial error
-        HomeUiState(
-            user = UserRegistration.Loading,
-            isError = true,
-            isLoading = false,
-            devices = null,
+        AsyncValue.Error(
+            error = Throwable("Error"),
         ),
         // data
-        HomeUiState(
-            user = UserRegistration.Loading,
-            isError = false,
-            isLoading = false,
-            devices = LockStatusPreviewParamProvider()
+        AsyncValue.Data(
+            data = LockStatusPreviewParamProvider()
                 .values
                 .toPersistentList(),
         ),
         // refreshing
-        HomeUiState(
-            user = UserRegistration.Loading,
-            isError = false,
-            isLoading = true,
-            devices = LockStatusPreviewParamProvider()
+        AsyncValue.Data(
+            data = LockStatusPreviewParamProvider()
                 .values
                 .toPersistentList(),
+            isLoading = true,
         ),
     )
 }
@@ -106,14 +95,12 @@ private class LockStatusPagePreviewParamProvider :
 @Composable
 private fun LockStatusPagePreview(
     @PreviewParameter(LockStatusPagePreviewParamProvider::class)
-    param: HomeUiState
+    devices: AsyncValue<List<LockStatus>>,
 ) {
     AppTheme {
         Surface {
             LockStatusPage(
-                isError = param.isError,
-                isLoading = param.isLoading,
-                devices = param.devices,
+                devices = devices,
                 onRetry = {},
                 onLockedChanged = { _, _ -> },
                 showStatusDetail = {},

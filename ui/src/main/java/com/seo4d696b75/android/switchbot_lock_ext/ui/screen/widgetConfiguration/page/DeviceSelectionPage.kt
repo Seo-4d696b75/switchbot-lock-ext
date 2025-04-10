@@ -11,24 +11,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
+import com.seo4d696b75.android.switchbot_lock_ext.domain.async.AsyncValue
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockDevice
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockGroup
-import com.seo4d696b75.android.switchbot_lock_ext.domain.user.UserRegistration
 import com.seo4d696b75.android.switchbot_lock_ext.theme.AppTheme
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.ErrorSection
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.LoadingSection
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.NoDeviceSection
-import com.seo4d696b75.android.switchbot_lock_ext.ui.common.UiEvent
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.widgetConfiguration.WidgetConfigurationUiState
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.widgetConfiguration.component.DeviceListSection
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 fun DeviceSelectionPage(
-    isError: Boolean,
-    isLoading: Boolean,
-    devices: ImmutableList<LockDevice>?,
+    devices: AsyncValue<List<LockDevice>>,
     onSelected: (LockDevice) -> Unit,
     onRefresh: () -> Unit,
     modifier: Modifier = Modifier,
@@ -42,50 +38,45 @@ fun DeviceSelectionPage(
             ),
         contentAlignment = Alignment.Center,
     ) {
-        if (!devices.isNullOrEmpty()) {
-            DeviceListSection(
-                devices = devices,
-                onClick = onSelected,
-            )
-        } else if (devices != null && devices.isEmpty()) {
-            NoDeviceSection()
-        } else if (isError) {
-            ErrorSection(
-                onRetryClicked = onRefresh,
-            )
+        when (devices) {
+            is AsyncValue.Loading -> {}
+
+            is AsyncValue.Error -> {
+                ErrorSection(
+                    onRetryClicked = onRefresh,
+                )
+            }
+
+            is AsyncValue.Data -> {
+                if (devices.data.isEmpty()) {
+                    NoDeviceSection()
+                } else {
+                    DeviceListSection(
+                        devices = devices.data.toPersistentList(),
+                        onClick = onSelected,
+                    )
+                }
+            }
         }
 
-        if (isLoading) {
+        if (devices.isLoading) {
             LoadingSection()
         }
     }
 }
 
 private class DeviceSelectionPagePreviewParamProvider :
-    PreviewParameterProvider<WidgetConfigurationUiState> {
-    override val values = sequenceOf(
+    PreviewParameterProvider<AsyncValue<List<LockDevice>>> {
+    override val values = sequenceOf<AsyncValue<List<LockDevice>>>(
         // initial loading
-        WidgetConfigurationUiState(
-            user = UserRegistration.Loading,
-            isError = false,
-            isLoading = true,
-            devices = null,
-            onConfigurationCompleted = UiEvent.None,
-        ),
+        AsyncValue.Loading(),
         // initial error
-        WidgetConfigurationUiState(
-            user = UserRegistration.Loading,
-            isError = true,
-            isLoading = false,
-            devices = null,
-            onConfigurationCompleted = UiEvent.None,
+        AsyncValue.Error(
+            error = RuntimeException(),
         ),
         // data
-        WidgetConfigurationUiState(
-            user = UserRegistration.Loading,
-            isError = false,
-            isLoading = false,
-            devices = persistentListOf(
+        AsyncValue.Data(
+            data = listOf(
                 LockDevice(
                     id = "1",
                     name = "Sample Lock",
@@ -104,14 +95,10 @@ private class DeviceSelectionPagePreviewParamProvider :
                     ),
                 ),
             ),
-            onConfigurationCompleted = UiEvent.None,
         ),
         // refreshing
-        WidgetConfigurationUiState(
-            user = UserRegistration.Loading,
-            isError = false,
-            isLoading = true,
-            devices = persistentListOf(
+        AsyncValue.Data(
+            data = listOf(
                 LockDevice(
                     id = "1",
                     name = "Sample Lock",
@@ -130,7 +117,7 @@ private class DeviceSelectionPagePreviewParamProvider :
                     ),
                 ),
             ),
-            onConfigurationCompleted = UiEvent.None,
+            isLoading = true,
         ),
     )
 }
@@ -144,8 +131,6 @@ private fun DeviceSelectionPagePreview(
     AppTheme {
         Surface {
             DeviceSelectionPage(
-                isError = param.isError,
-                isLoading = param.isLoading,
                 devices = param.devices,
                 onSelected = {},
                 onRefresh = {},

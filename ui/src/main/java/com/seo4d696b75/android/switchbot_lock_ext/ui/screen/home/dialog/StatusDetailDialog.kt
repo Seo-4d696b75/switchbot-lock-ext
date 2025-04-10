@@ -33,11 +33,11 @@ fun StatusDetailDialog(
     modifier: Modifier = Modifier,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val state = uiState.devices?.firstOrNull { it.device.id == deviceId }
+    val status = uiState.devices.data?.firstOrNull { it.device.id == deviceId }
 
-    if (state != null) {
+    if (status != null) {
         StatusDetailDialog(
-            status = state,
+            status = status,
             onDismiss = onDismiss,
             modifier = modifier,
         )

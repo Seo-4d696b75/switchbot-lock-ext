@@ -19,13 +19,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.seo4d696b75.android.switchbot_lock_ext.domain.async.AsyncValue
 import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockStatus
 import com.seo4d696b75.android.switchbot_lock_ext.domain.user.UserRegistration
 import com.seo4d696b75.android.switchbot_lock_ext.theme.R
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.LoadingSection
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.NoUserSection
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.page.LockStatusPage
-import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 fun HomeScreen(
@@ -37,8 +37,6 @@ fun HomeScreen(
 
     HomeScreen(
         user = uiState.user,
-        isError = uiState.isError,
-        isLoading = uiState.isLoading,
         devices = uiState.devices,
         onLockedChanged = viewModel::onLockedChanged,
         onRefresh = viewModel::refresh,
@@ -51,9 +49,7 @@ fun HomeScreen(
 @Composable
 fun HomeScreen(
     user: UserRegistration,
-    isError: Boolean,
-    isLoading: Boolean,
-    devices: ImmutableList<LockStatus>?,
+    devices: AsyncValue<List<LockStatus>>,
     onLockedChanged: (String, Boolean) -> Unit,
     onRefresh: () -> Unit,
     showStatusDetail: (String) -> Unit,
@@ -69,7 +65,7 @@ fun HomeScreen(
             )
         },
         floatingActionButton = {
-            if (devices != null) {
+            if (devices is AsyncValue.Data) {
                 FloatingActionButton(onClick = onRefresh) {
                     Icon(
                         Icons.Default.Refresh,
@@ -88,8 +84,6 @@ fun HomeScreen(
         ) {
             when (it) {
                 is UserRegistration.User -> LockStatusPage(
-                    isError = isError,
-                    isLoading = isLoading,
                     devices = devices,
                     onRetry = onRefresh,
                     onLockedChanged = onLockedChanged,

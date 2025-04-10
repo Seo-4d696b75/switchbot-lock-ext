@@ -4,7 +4,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlin.coroutines.CoroutineContext
@@ -19,8 +18,6 @@ interface ErrorHandler {
     fun CoroutineScope.launchCatching(
         context: CoroutineContext = EmptyCoroutineContext,
         start: CoroutineStart = CoroutineStart.DEFAULT,
-        isError: MutableStateFlow<Boolean>? = null,
-        isLoading: MutableStateFlow<Boolean>? = null,
         block: suspend CoroutineScope.() -> Unit,
     ): Job
 
@@ -35,17 +32,6 @@ interface ErrorHandler {
         started: SharingStarted,
         initialValue: T,
     ): StateFlow<T>
-
-    /**
-     * Catch error and update [isError]
-     *
-     * If any error happens from the original flow,
-     * [isError] is updated to `true` and collecting the flow is stopped.
-     * After [isError] is updated to `false`, the collecting will be restarted.
-     */
-    fun <T> Flow<T>.catchingError(
-        isError: MutableStateFlow<Boolean>,
-    ): Flow<T>
 
     /**
      * Show error message

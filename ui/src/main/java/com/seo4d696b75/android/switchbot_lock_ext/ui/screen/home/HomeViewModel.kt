@@ -3,6 +3,8 @@ package com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.seo4d696b75.android.switchbot_lock_ext.domain.async.AsyncValue
+import com.seo4d696b75.android.switchbot_lock_ext.domain.async.asyncValueOf
 import com.seo4d696b75.android.switchbot_lock_ext.domain.control.LockControlRepository
 import com.seo4d696b75.android.switchbot_lock_ext.domain.device.LockedState
 import com.seo4d696b75.android.switchbot_lock_ext.domain.error.ErrorHandler
@@ -10,15 +12,13 @@ import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockStatusReposi
 import com.seo4d696b75.android.switchbot_lock_ext.domain.user.UserRegistration
 import com.seo4d696b75.android.switchbot_lock_ext.domain.user.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -30,24 +30,19 @@ class HomeViewModel @Inject constructor(
     handler: ErrorHandler,
 ) : ViewModel(), ErrorHandler by handler {
 
-    private val isError = MutableStateFlow(false)
-    private val isRefreshing = MutableStateFlow(false)
+    private val status = asyncValueOf(statusRepository.statusFlow) {
+        statusRepository.refresh()
+    }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val uiState: StateFlow<HomeUiState> = userRepository
         .userFlow
         .flatMapLatest { user ->
             when (user) {
-                is UserRegistration.User -> combine(
-                    isError,
-                    isRefreshing,
-                    statusRepository.statusFlow.catchingError(isError),
-                ) { isError, isRefreshing, list ->
+                is UserRegistration.User -> status().map {
                     HomeUiState(
                         user = user,
-                        isError = isError,
-                        isLoading = (list == null && !isError) || isRefreshing,
-                        devices = list?.toPersistentList(),
+                        devices = it,
                     )
                 }
 
@@ -55,9 +50,7 @@ class HomeViewModel @Inject constructor(
                     emit(
                         HomeUiState(
                             user = user,
-                            isError = false,
-                            isLoading = false,
-                            devices = null,
+                            devices = AsyncValue.Loading(),
                         )
                     )
                 }
@@ -69,11 +62,8 @@ class HomeViewModel @Inject constructor(
         )
 
     fun refresh() {
-        viewModelScope.launchCatching(
-            isError = isError,
-            isLoading = isRefreshing,
-        ) {
-            statusRepository.refresh()
+        viewModelScope.launchCatching {
+            status.refresh()
         }
     }
 
