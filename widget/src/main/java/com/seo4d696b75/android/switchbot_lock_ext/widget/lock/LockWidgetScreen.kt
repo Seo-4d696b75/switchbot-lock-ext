@@ -2,17 +2,16 @@ package com.seo4d696b75.android.switchbot_lock_ext.widget.lock
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
-import androidx.glance.ColorFilter
 import androidx.glance.GlanceModifier
-import androidx.glance.GlanceTheme
 import androidx.glance.Image
-import androidx.glance.ImageProvider
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Box
+import androidx.glance.layout.ContentScale
 import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.padding
 import com.seo4d696b75.android.switchbot_lock_ext.theme.R
 import com.seo4d696b75.android.switchbot_lock_ext.widget.common.glanceString
+import com.seo4d696b75.android.switchbot_lock_ext.widget.common.rememberWidgetBackground
 import com.seo4d696b75.android.switchbot_lock_ext.widget.lock.component.LoadingSection
 import com.seo4d696b75.android.switchbot_lock_ext.widget.lock.component.LockControlSection
 
@@ -24,14 +23,15 @@ fun LockWidgetScreen(
 ) {
     Box(
         modifier = modifier.fillMaxSize(),
-
         contentAlignment = Alignment.Center,
     ) {
         Image(
-            provider = ImageProvider(R.drawable.lock_widget_background),
+            provider = rememberWidgetBackground(
+                alpha = state?.opacity ?: 1f,
+            ),
             contentDescription = null,
-            colorFilter = ColorFilter.tint(GlanceTheme.colors.surface),
             modifier = GlanceModifier.fillMaxSize(),
+            contentScale = ContentScale.FillBounds,
         )
         if (state == null) {
             LoadingSection(
