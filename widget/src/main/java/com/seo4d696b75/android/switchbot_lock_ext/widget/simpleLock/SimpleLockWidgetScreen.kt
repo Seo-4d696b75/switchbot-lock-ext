@@ -18,8 +18,7 @@ import com.seo4d696b75.android.switchbot_lock_ext.widget.simpleLock.component.Si
 
 @Composable
 fun SimpleLockWidgetScreen(
-    name: String?,
-    status: SimpleLockWidgetStatus?,
+    state: SimpleLockWidgetState?,
     onLockCommand: () -> Unit,
     modifier: GlanceModifier = GlanceModifier,
 ) {
@@ -33,14 +32,14 @@ fun SimpleLockWidgetScreen(
             colorFilter = ColorFilter.tint(GlanceTheme.colors.surface),
             modifier = GlanceModifier.fillMaxSize(),
         )
-        if (name == null || status == null) {
+        if (state == null) {
             SimpleLoadingSection(
                 message = glanceString(id = R.string.message_widget_initializing),
             )
         } else {
             SimpleLockControlSection(
-                name = name,
-                status = status,
+                name = state.deviceName,
+                status = state.status,
                 onLockCommand = onLockCommand,
                 modifier = GlanceModifier.padding(4.dp),
             )

@@ -15,20 +15,17 @@ class SimpleLockWidget : GlanceAppWidget() {
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         provideContent {
             val pref: Preferences = currentState()
-            val deviceId = pref[PREF_KEY_DEVICE_ID]
-            val deviceName = pref[PREF_KEY_DEVICE_NAME]
-            val status = pref[PREF_KEY_STATUS]?.let {
-                Json.decodeFromString(SimpleLockWidgetStatus.serializer(), it)
+            val state = pref[PREF_KEY_STATE]?.let {
+                Json.decodeFromString(SimpleLockWidgetState.serializer(), it)
             }
             AppWidgetTheme {
                 SimpleLockWidgetScreen(
-                    name = deviceName,
-                    status = status,
+                    state = state,
                     onLockCommand = {
                         SimpleLockWorker.sendLockCommand(
                             context = context,
                             glanceId = id,
-                            deviceId = requireNotNull(deviceId),
+                            deviceId = requireNotNull(state).deviceId,
                         )
                     },
                 )
@@ -43,11 +40,13 @@ class SimpleLockWidget : GlanceAppWidget() {
         deviceName: String,
     ) {
         updateAppWidgetState(context, glanceId) {
-            it[PREF_KEY_DEVICE_ID] = deviceId
-            it[PREF_KEY_DEVICE_NAME] = deviceName
-            it[PREF_KEY_STATUS] = Json.encodeToString(
-                SimpleLockWidgetStatus.serializer(),
-                SimpleLockWidgetStatus.Idling,
+            it[PREF_KEY_STATE] = Json.encodeToString(
+                SimpleLockWidgetState.serializer(),
+                SimpleLockWidgetState(
+                    deviceId = deviceId,
+                    deviceName = deviceName,
+                    status = SimpleLockWidgetStatus.Idling,
+                ),
             )
         }
         update(context, glanceId)
@@ -59,20 +58,19 @@ class SimpleLockWidget : GlanceAppWidget() {
         status: SimpleLockWidgetStatus,
     ) {
         updateAppWidgetState(context, glanceId) {
-            it[PREF_KEY_STATUS] = Json.encodeToString(
-                SimpleLockWidgetStatus.serializer(),
-                status,
+            val state = it[PREF_KEY_STATE]?.let {
+                Json.decodeFromString(SimpleLockWidgetState.serializer(), it)
+            } ?: throw IllegalStateException()
+            it[PREF_KEY_STATE] = Json.encodeToString(
+                SimpleLockWidgetState.serializer(),
+                state.copy(status = status),
             )
         }
         update(context, glanceId)
     }
 
     companion object {
-        private val PREF_KEY_DEVICE_ID =
-            stringPreferencesKey("pref_key_simple_lock_widget_device_id")
-        private val PREF_KEY_DEVICE_NAME =
-            stringPreferencesKey("pref_key_simple_lock_widget_device_name")
-        private val PREF_KEY_STATUS =
-            stringPreferencesKey("pref_key_simple_lock_widget_status")
+        private val PREF_KEY_STATE =
+            stringPreferencesKey("pref_key_simple_lock_widget_state")
     }
 }
