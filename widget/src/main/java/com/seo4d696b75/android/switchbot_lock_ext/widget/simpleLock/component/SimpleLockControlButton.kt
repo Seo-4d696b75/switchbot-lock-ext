@@ -3,7 +3,6 @@ package com.seo4d696b75.android.switchbot_lock_ext.widget.simpleLock.component
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import androidx.glance.ColorFilter
-import androidx.glance.ExperimentalGlanceApi
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
 import androidx.glance.Image
@@ -15,7 +14,6 @@ import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.padding
 import com.seo4d696b75.android.switchbot_lock_ext.theme.R
 
-@OptIn(ExperimentalGlanceApi::class)
 @Composable
 fun SimpleLockControlButton(
     onClicked: () -> Unit,
@@ -23,7 +21,7 @@ fun SimpleLockControlButton(
 ) {
     Box(
         modifier = modifier
-            .clickable("SimpleLockControlButton", onClicked)
+            .clickable(onClicked)
             .padding(8.dp),
         contentAlignment = Alignment.Center,
     ) {

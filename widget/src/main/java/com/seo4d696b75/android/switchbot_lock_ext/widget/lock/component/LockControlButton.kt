@@ -3,7 +3,6 @@ package com.seo4d696b75.android.switchbot_lock_ext.widget.lock.component
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import androidx.glance.ColorFilter
-import androidx.glance.ExperimentalGlanceApi
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
 import androidx.glance.Image
@@ -17,7 +16,6 @@ import androidx.glance.layout.padding
 import androidx.glance.unit.ColorProvider
 import com.seo4d696b75.android.switchbot_lock_ext.theme.R
 
-@OptIn(ExperimentalGlanceApi::class)
 @Composable
 fun LockControlButton(
     label: String,
@@ -29,7 +27,7 @@ fun LockControlButton(
     Box(
         modifier = modifier
             .fillMaxHeight()
-            .clickable("LockControlButton-$label", onClicked),
+            .clickable(onClicked),
         contentAlignment = Alignment.Center,
     ) {
         Image(
