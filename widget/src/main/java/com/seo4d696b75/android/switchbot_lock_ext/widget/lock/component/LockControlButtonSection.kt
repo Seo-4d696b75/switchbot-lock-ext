@@ -10,6 +10,9 @@ import androidx.glance.layout.Spacer
 import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.padding
 import androidx.glance.layout.width
+import androidx.glance.preview.ExperimentalGlancePreviewApi
+import androidx.glance.preview.Preview
+import com.seo4d696b75.android.switchbot_lock_ext.theme.AppWidgetTheme
 import com.seo4d696b75.android.switchbot_lock_ext.theme.R
 import com.seo4d696b75.android.switchbot_lock_ext.widget.common.glanceString
 
@@ -40,6 +43,17 @@ fun LockControlButtonSection(
             color = GlanceTheme.colors.primary,
             onClicked = { onClicked(true) },
             modifier = GlanceModifier.defaultWeight(),
+        )
+    }
+}
+
+@OptIn(ExperimentalGlancePreviewApi::class)
+@Preview
+@Composable
+private fun LockControlButtonSectionPreview() {
+    AppWidgetTheme {
+        LockControlButtonSection(
+            onClicked = {},
         )
     }
 }

@@ -10,8 +10,11 @@ import androidx.glance.layout.Box
 import androidx.glance.layout.Column
 import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.padding
+import androidx.glance.preview.ExperimentalGlancePreviewApi
+import androidx.glance.preview.Preview
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
+import com.seo4d696b75.android.switchbot_lock_ext.theme.AppWidgetTheme
 import com.seo4d696b75.android.switchbot_lock_ext.theme.R
 import com.seo4d696b75.android.switchbot_lock_ext.widget.common.glanceString
 import com.seo4d696b75.android.switchbot_lock_ext.widget.lock.LockWidgetStatus
@@ -33,6 +36,7 @@ fun LockControlSection(
                 color = GlanceTheme.colors.onSurface,
                 fontSize = 14.sp,
             ),
+            maxLines = 1,
             modifier = GlanceModifier.padding(top = 2.dp),
         )
         Box(
@@ -67,5 +71,18 @@ fun LockControlSection(
                 }
             }
         }
+    }
+}
+
+@OptIn(ExperimentalGlancePreviewApi::class)
+@Preview(widthDp = 120)
+@Composable
+private fun LockControlSectionPreview() {
+    AppWidgetTheme {
+        LockControlSection(
+            name = "Device Name",
+            status = LockWidgetStatus.Idling,
+            onLockCommand = {},
+        )
     }
 }

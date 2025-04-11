@@ -13,8 +13,11 @@ import androidx.glance.layout.Spacer
 import androidx.glance.layout.size
 import androidx.glance.layout.width
 import androidx.glance.layout.wrapContentSize
+import androidx.glance.preview.ExperimentalGlancePreviewApi
+import androidx.glance.preview.Preview
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
+import com.seo4d696b75.android.switchbot_lock_ext.theme.AppWidgetTheme
 import com.seo4d696b75.android.switchbot_lock_ext.theme.R
 
 @Composable
@@ -39,5 +42,14 @@ fun ErrorSection(
                 color = GlanceTheme.colors.onSurface,
             ),
         )
+    }
+}
+
+@OptIn(ExperimentalGlancePreviewApi::class)
+@Preview
+@Composable
+private fun ErrorSectionPreview() {
+    AppWidgetTheme {
+        ErrorSection("Error")
     }
 }

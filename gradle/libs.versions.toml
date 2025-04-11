@@ -49,8 +49,11 @@ hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-com
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version = "1.7.0" }
 
 # glance
-androidx-glance = { group = "androidx.glance", name = "glance-appwidget", version.ref = "glance" }
+androidx-glance = { group = "androidx.glance", name = "glance", version.ref = "glance" }
+androidx-glance-appwidget = { group = "androidx.glance", name = "glance-appwidget", version.ref = "glance" }
 androidx-glance-material3 = { group = "androidx.glance", name = "glance-material3", version.ref = "glance" }
+androidx-glance-preview = { group = "androidx.glance", name = "glance-preview", version.ref = "glance" }
+androidx-glance-appwidget-preview = { group = "androidx.glance", name = "glance-appwidget-preview", version.ref = "glance" }
 android-glance-tools-host = { group = "com.google.android.glance.tools", name = "appwidget-host", version.ref = "glance-tools" }
 android-glance-tools-configuration = { group = "com.google.android.glance.tools", name = "appwidget-configuration", version.ref = "glance-tools" }
 android-glance-tools-viewer = { group = "com.google.android.glance.tools", name = "appwidget-viewer", version.ref = "glance-tools" }

@@ -10,8 +10,11 @@ import androidx.glance.layout.Box
 import androidx.glance.layout.Column
 import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.padding
+import androidx.glance.preview.ExperimentalGlancePreviewApi
+import androidx.glance.preview.Preview
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
+import com.seo4d696b75.android.switchbot_lock_ext.theme.AppWidgetTheme
 import com.seo4d696b75.android.switchbot_lock_ext.theme.R
 import com.seo4d696b75.android.switchbot_lock_ext.widget.common.glanceString
 import com.seo4d696b75.android.switchbot_lock_ext.widget.simpleLock.SimpleLockWidgetStatus
@@ -33,6 +36,7 @@ fun SimpleLockControlSection(
                 color = GlanceTheme.colors.onSurface,
                 fontSize = 12.sp,
             ),
+            maxLines = 1,
             modifier = GlanceModifier.padding(top = 2.dp),
         )
         Box(
@@ -69,5 +73,57 @@ fun SimpleLockControlSection(
                 }
             }
         }
+    }
+}
+
+@OptIn(ExperimentalGlancePreviewApi::class)
+@Preview
+@Composable
+private fun SimpleLockControlSectionPreview_Idling() {
+    AppWidgetTheme {
+        SimpleLockControlSection(
+            name = "Device Name",
+            status = SimpleLockWidgetStatus.Idling,
+            onLockCommand = {},
+        )
+    }
+}
+
+@OptIn(ExperimentalGlancePreviewApi::class)
+@Preview
+@Composable
+private fun SimpleLockControlSectionPreview_Loading() {
+    AppWidgetTheme {
+        SimpleLockControlSection(
+            name = "Device Name",
+            status = SimpleLockWidgetStatus.SendingCommand(true),
+            onLockCommand = {},
+        )
+    }
+}
+
+@OptIn(ExperimentalGlancePreviewApi::class)
+@Preview
+@Composable
+private fun SimpleLockControlSectionPreview_Success() {
+    AppWidgetTheme {
+        SimpleLockControlSection(
+            name = "Device Name",
+            status = SimpleLockWidgetStatus.Success(true),
+            onLockCommand = {},
+        )
+    }
+}
+
+@OptIn(ExperimentalGlancePreviewApi::class)
+@Preview
+@Composable
+private fun SimpleLockControlSectionPreview_Failure() {
+    AppWidgetTheme {
+        SimpleLockControlSection(
+            name = "Device Name",
+            status = SimpleLockWidgetStatus.Failure("Error"),
+            onLockCommand = {},
+        )
     }
 }

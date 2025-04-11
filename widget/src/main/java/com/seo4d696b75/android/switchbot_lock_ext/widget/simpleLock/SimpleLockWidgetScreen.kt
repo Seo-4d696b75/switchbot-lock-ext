@@ -9,6 +9,9 @@ import androidx.glance.layout.Box
 import androidx.glance.layout.ContentScale
 import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.padding
+import androidx.glance.preview.ExperimentalGlancePreviewApi
+import androidx.glance.preview.Preview
+import com.seo4d696b75.android.switchbot_lock_ext.theme.AppWidgetTheme
 import com.seo4d696b75.android.switchbot_lock_ext.theme.R
 import com.seo4d696b75.android.switchbot_lock_ext.widget.common.glanceString
 import com.seo4d696b75.android.switchbot_lock_ext.widget.common.rememberWidgetBackground
@@ -45,5 +48,21 @@ fun SimpleLockWidgetScreen(
                 modifier = GlanceModifier.padding(4.dp),
             )
         }
+    }
+}
+
+@OptIn(ExperimentalGlancePreviewApi::class)
+@Preview
+@Composable
+private fun SimpleLockWidgetScreenPreview() {
+    AppWidgetTheme {
+        SimpleLockWidgetScreen(
+            state = SimpleLockWidgetState(
+                deviceId = "id",
+                deviceName = "Door Lock",
+                status = SimpleLockWidgetStatus.Idling,
+            ),
+            onLockCommand = {},
+        )
     }
 }
