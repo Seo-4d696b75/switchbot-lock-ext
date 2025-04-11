@@ -11,12 +11,12 @@ plugins {
 
 android {
     namespace = "com.seo4d696b75.android.switchbot_lock_ext"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.seo4d696b75.android.switchbot_lock_ext"
         minSdk = 27
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
