@@ -31,7 +31,7 @@ fun LockControlButton(
         contentAlignment = Alignment.Center,
     ) {
         Image(
-            provider = ImageProvider(R.drawable.lock_widget_background),
+            provider = ImageProvider(R.drawable.rounded_background_100),
             contentDescription = null,
             colorFilter = ColorFilter.tint(color),
             modifier = GlanceModifier.fillMaxSize(),

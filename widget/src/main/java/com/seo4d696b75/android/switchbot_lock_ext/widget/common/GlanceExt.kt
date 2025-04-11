@@ -1,19 +1,15 @@
 package com.seo4d696b75.android.switchbot_lock_ext.widget.common
 
-import android.graphics.Canvas
-import android.graphics.PorterDuff
+import androidx.annotation.DrawableRes
 import androidx.annotation.FloatRange
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.graphics.toArgb
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.toBitmap
-import androidx.glance.GlanceTheme
 import androidx.glance.ImageProvider
 import androidx.glance.LocalContext
 import androidx.glance.unit.ColorProvider
 import com.seo4d696b75.android.switchbot_lock_ext.theme.R
+import kotlin.math.roundToInt
 
 @Composable
 fun glanceString(@StringRes id: Int): String {
@@ -45,25 +41,14 @@ fun ColorProvider.copy(
 fun rememberWidgetBackground(
     @FloatRange(from = 0.0, to = 1.0)
     alpha: Float = 1f,
-    width: Int = 256,
-    height: Int = 256,
-): ImageProvider {
-    val context = LocalContext.current
-    val c = GlanceTheme.colors.surface.getColor(context)
-    val bitmap = remember(context, c) {
-        requireNotNull(
-            ContextCompat.getDrawable(
-                context,
-                R.drawable.lock_widget_background,
-            ),
-        ).toBitmap(width, height).also {
-            Canvas(it).apply {
-                this.drawColor(
-                    c.copy(alpha = alpha).toArgb(),
-                    PorterDuff.Mode.SRC_IN,
-                )
-            }
-        }
+): ImageProvider = remember(alpha) {
+    @DrawableRes
+    val id = when ((alpha * 4f).roundToInt()) {
+        4 -> R.drawable.rounded_background_100
+        3 -> R.drawable.rounded_background_75
+        2 -> R.drawable.rounded_background_50
+        1, 0 -> R.drawable.rounded_background_25
+        else -> throw IllegalArgumentException()
     }
-    return ImageProvider(bitmap)
+    ImageProvider(id)
 }

@@ -2,11 +2,12 @@ package com.seo4d696b75.android.switchbot_lock_ext.widget.lock
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
+import androidx.glance.ColorFilter
 import androidx.glance.GlanceModifier
+import androidx.glance.GlanceTheme
 import androidx.glance.Image
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Box
-import androidx.glance.layout.ContentScale
 import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.padding
 import androidx.glance.preview.ExperimentalGlancePreviewApi
@@ -29,12 +30,10 @@ fun LockWidgetScreen(
         contentAlignment = Alignment.Center,
     ) {
         Image(
-            provider = rememberWidgetBackground(
-                alpha = state?.opacity ?: 1f,
-            ),
+            provider = rememberWidgetBackground(state?.opacity ?: 1f),
+            colorFilter = ColorFilter.tint(GlanceTheme.colors.surface),
             contentDescription = null,
             modifier = GlanceModifier.fillMaxSize(),
-            contentScale = ContentScale.FillBounds,
         )
         if (state == null) {
             LoadingSection(
