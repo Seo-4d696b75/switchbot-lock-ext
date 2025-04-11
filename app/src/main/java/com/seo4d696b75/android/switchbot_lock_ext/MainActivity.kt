@@ -1,6 +1,5 @@
 package com.seo4d696b75.android.switchbot_lock_ext
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.compose.setContent
@@ -16,7 +15,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.seo4d696b75.android.switchbot_lock_ext.secure.SecureUiState
 import com.seo4d696b75.android.switchbot_lock_ext.secure.SecureViewModel
 import com.seo4d696b75.android.switchbot_lock_ext.secure.launchLockScreenSetting
-import com.seo4d696b75.android.switchbot_lock_ext.service.LockService
 import com.seo4d696b75.android.switchbot_lock_ext.theme.AppTheme
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.uiMessage
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.auth.NoAuthenticatorScreen
@@ -40,13 +38,6 @@ class MainActivity : FragmentActivity() {
             WindowManager.LayoutParams.FLAG_SECURE,
             WindowManager.LayoutParams.FLAG_SECURE,
         )
-
-        Intent(this, LockService::class.java).apply {
-            putExtra(
-                LockService.KEY_WHEN_STARTS,
-                LockService.START_ACTIVITY_LAUNCHED,
-            )
-        }.also(::startService)
 
         setContent {
             AppTheme {
