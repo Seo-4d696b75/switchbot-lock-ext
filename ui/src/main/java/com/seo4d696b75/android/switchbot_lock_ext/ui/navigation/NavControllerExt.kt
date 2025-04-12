@@ -2,20 +2,35 @@ package com.seo4d696b75.android.switchbot_lock_ext.ui.navigation
 
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.NavType
+import androidx.navigation.toRoute
+import com.seo4d696b75.android.switchbot_lock_ext.domain.widget.AppWidgetType
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.Screen
+import kotlin.reflect.KType
+import kotlin.reflect.typeOf
 
-val NavBackStackEntry.currentBottomTab: Screen.BottomTab?
-    get() {
-        val route = destination.route ?: return null
-        return when (route.split("/").firstOrNull()) {
-            Screen.Home.tabRoute -> Screen.Home
-            Screen.User.tabRoute -> Screen.User
-            else -> null
-        }
-    }
+fun NavBackStackEntry.toRoute(): Screen = when {
+    destination.hasRoute<Screen.Home.Top>() -> Screen.Home.Top
+    destination.hasRoute<Screen.Home.StatusDetailDialog>() -> toRoute<Screen.Home.StatusDetailDialog>()
+    destination.hasRoute<Screen.User.Top>() -> Screen.User.Top
+    destination.hasRoute<Screen.User.Edit>() -> Screen.User.Edit
+    destination.hasRoute<Screen.Configuration.Top>() -> toRoute<Screen.Configuration.Top>()
+    destination.hasRoute<Screen.Configuration.SelectDevice>() -> Screen.Configuration.SelectDevice
+    else -> throw IllegalStateException()
+}
 
-fun NavController.navigateSingleTop(route: String) {
+fun Screen.Main.toTab(): Screen.BottomTab = when (this) {
+    is Screen.Home -> Screen.Home.Tab
+    is Screen.User -> Screen.User.Tab
+}
+
+fun NavController.navigateSingleTop(route: Screen) {
     navigate(route) {
         launchSingleTop = true
     }
 }
+
+val typeMap: Map<KType, @JvmSuppressWildcards NavType<*>> = mapOf(
+    typeOf<AppWidgetType>() to NavType.EnumType(AppWidgetType::class.java),
+)

@@ -13,7 +13,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.seo4d696b75.android.switchbot_lock_ext.ui.navigation.currentBottomTab
+import com.seo4d696b75.android.switchbot_lock_ext.ui.navigation.toRoute
+import com.seo4d696b75.android.switchbot_lock_ext.ui.navigation.toTab
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.Screen
 
 @Composable
@@ -22,19 +23,20 @@ fun MainBottomNavigation(
     modifier: Modifier = Modifier,
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
-    val current = backStackEntry?.currentBottomTab
+    val screen = backStackEntry?.toRoute() as? Screen.Main
+    val current = screen?.toTab()
 
     NavigationBar(
         modifier = modifier.fillMaxWidth(),
     ) {
         listOf(
-            Screen.Home,
-            Screen.User,
+            Screen.Home.Tab,
+            Screen.User.Tab,
         ).forEach { tab ->
             NavigationBarItem(
                 selected = current == tab,
                 onClick = {
-                    navController.navigate(tab.tabRoute) {
+                    navController.navigate(tab) {
                         popUpTo(navController.graph.findStartDestination().id) {
                             saveState = true
                         }

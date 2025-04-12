@@ -24,7 +24,7 @@ fun MainScreen() {
         NavHost(
             navController = navController,
             modifier = Modifier.padding(innerPadding),
-            startDestination = Screen.Home.tabRoute,
+            startDestination = Screen.Home.Tab,
         ) {
             homeNavGraph(navController)
             userNavGraph(navController)

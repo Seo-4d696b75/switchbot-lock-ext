@@ -3,19 +3,17 @@ package com.seo4d696b75.android.switchbot_lock_ext.ui.screen
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.seo4d696b75.android.switchbot_lock_ext.theme.R
+import kotlinx.serialization.Serializable
 
 /**
  * navigationの全routeを定義
  */
 sealed interface Screen {
-    val route: String
 
     /**
      * BottomNavigationに対応させるタブ
      */
     sealed interface BottomTab {
-        val tabRoute: String
-
         @get:StringRes
         val labelId: Int
 
@@ -23,34 +21,33 @@ sealed interface Screen {
         val iconId: Int
     }
 
-    sealed interface Home : Screen {
-        data object Top : Home {
-            override val route = "$tabRoute/top"
-        }
+    sealed interface Main : Screen
 
-        data object StatusDetailDialog : Home {
-            override val route = "$tabRoute/statusDetailDialog/{deviceId}"
-            fun createRoute(id: String) = "$tabRoute/statusDetailDialog/$id"
-        }
+    sealed interface Home : Main {
+        @Serializable
+        data object Top : Home
 
-        companion object : BottomTab {
-            override val tabRoute = "home"
+        @Serializable
+        data class StatusDetailDialog(
+            val deviceId: String,
+        ) : Home
+
+        @Serializable
+        data object Tab : BottomTab {
             override val labelId = R.string.bottom_nav_home
             override val iconId = R.drawable.ic_home
         }
     }
 
-    sealed interface User : Screen {
-        data object Top : User {
-            override val route = "$tabRoute/top"
-        }
+    sealed interface User : Main {
+        @Serializable
+        data object Top : User
 
-        data object Edit : User {
-            override val route = "$tabRoute/edit"
-        }
+        @Serializable
+        data object Edit : User
 
-        companion object : BottomTab {
-            override val tabRoute = "user"
+        @Serializable
+        data object Tab : BottomTab {
             override val labelId = R.string.bottom_nav_user
             override val iconId = R.drawable.ic_person
         }

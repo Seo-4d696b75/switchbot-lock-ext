@@ -4,11 +4,10 @@ import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.dialog
-import androidx.navigation.navArgument
 import androidx.navigation.navigation
+import androidx.navigation.toRoute
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.Screen
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.HomeScreen
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.dialog.StatusDetailDialog
@@ -16,36 +15,25 @@ import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.dialog.StatusDe
 fun NavGraphBuilder.homeNavGraph(
     navController: NavController,
 ) {
-    navigation(
-        startDestination = Screen.Home.Top.route,
-        route = Screen.Home.tabRoute,
+    navigation<Screen.Home.Tab>(
+        startDestination = Screen.Home.Top,
     ) {
-        composable(
-            route = Screen.Home.Top.route,
-        ) {
+        composable<Screen.Home.Top> {
             HomeScreen(
                 navigateToStatusDetail = {
-                    val route = Screen.Home.StatusDetailDialog.createRoute(it)
+                    val route = Screen.Home.StatusDetailDialog(it)
                     navController.navigateSingleTop(route)
                 },
             )
         }
 
-        dialog(
-            route = Screen.Home.StatusDetailDialog.route,
-            arguments = listOf(
-                navArgument("deviceId") {
-                    type = NavType.StringType
-                    nullable = false
-                },
-            ),
-        ) { backStackEntry ->
+        dialog<Screen.Home.StatusDetailDialog> { backStackEntry ->
             val topBackStackEntry = remember(backStackEntry) {
-                navController.getBackStackEntry(Screen.Home.Top.route)
+                navController.getBackStackEntry<Screen.Home.Top>()
             }
-            val deviceId = requireNotNull(
-                backStackEntry.arguments?.getString("deviceId")
-            )
+            val deviceId = backStackEntry
+                .toRoute<Screen.Home.StatusDetailDialog>()
+                .deviceId
             StatusDetailDialog(
                 viewModel = hiltViewModel(topBackStackEntry),
                 deviceId = deviceId,

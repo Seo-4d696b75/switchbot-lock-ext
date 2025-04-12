@@ -11,23 +11,18 @@ import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.user.UserScreen
 fun NavGraphBuilder.userNavGraph(
     navController: NavController,
 ) {
-    navigation(
-        startDestination = Screen.User.Top.route,
-        route = Screen.User.tabRoute,
+    navigation<Screen.User.Tab>(
+        startDestination = Screen.User.Top,
     ) {
-        composable(
-            route = Screen.User.Top.route,
-        ) {
+        composable<Screen.User.Top> {
             UserScreen(
                 navigateToEdit = {
-                    navController.navigateSingleTop(Screen.User.Edit.route)
+                    navController.navigateSingleTop(Screen.User.Edit)
                 },
             )
         }
 
-        composable(
-            route = Screen.User.Edit.route,
-        ) {
+        composable<Screen.User.Edit> {
             EditUserScreen(
                 navigateBack = {
                     navController.popBackStack()
