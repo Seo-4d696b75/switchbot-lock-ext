@@ -39,26 +39,34 @@ class LockWorker @AssistedInject constructor(
             val glanceId = glanceAppWidgetManager.getGlanceIdBy(appWidgetId)
             val widget = LockWidget()
 
-            widget.setLockState(context, glanceId) {
-                it.copy(status = LockWidgetStatus.Loading(isLocked))
-            }
+            widget.update(
+                context,
+                glanceId,
+                LockWidgetStatus.Loading(isLocked),
+            )
             widget.runCatching {
                 controlRepository.setLocked(deviceId, isLocked)
             }.onSuccess {
-                widget.setLockState(context, glanceId) {
-                    it.copy(status = LockWidgetStatus.Success(isLocked))
-                }
+                widget.update(
+                    context,
+                    glanceId,
+                    LockWidgetStatus.Success(isLocked),
+                )
             }.onFailure {
-                widget.setLockState(context, glanceId) {
-                    val message =
-                        context.getString(R.string.message_locked_state_error)
-                    it.copy(status = LockWidgetStatus.Failure(message))
-                }
+                widget.update(
+                    context,
+                    glanceId,
+                    LockWidgetStatus.Failure(
+                        context.getString(R.string.message_locked_state_error),
+                    ),
+                )
             }
             delay(3000L)
-            widget.setLockState(context, glanceId) {
-                it.copy(status = LockWidgetStatus.Idling)
-            }
+            widget.update(
+                context,
+                glanceId,
+                LockWidgetStatus.Idling,
+            )
             Result.success()
         }
     }.getOrElse { Result.failure() }

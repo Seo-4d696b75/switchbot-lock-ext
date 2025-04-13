@@ -6,8 +6,11 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.glance.GlanceId
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.provideContent
+import androidx.glance.appwidget.state.getAppWidgetState
 import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.glance.currentState
+import com.seo4d696b75.android.switchbot_lock_ext.domain.widget.AppWidgetConfiguration
+import com.seo4d696b75.android.switchbot_lock_ext.domain.widget.AppWidgetType
 import com.seo4d696b75.android.switchbot_lock_ext.theme.AppWidgetTheme
 import kotlinx.serialization.json.Json
 
@@ -33,11 +36,28 @@ class SimpleLockWidget : GlanceAppWidget() {
         }
     }
 
-    suspend fun initialize(
+    suspend fun getConfiguration(
+        context: Context,
+        glanceId: GlanceId,
+    ): AppWidgetConfiguration? {
+        val preferences = getAppWidgetState<Preferences>(context, glanceId)
+        val state = preferences[PREF_KEY_STATE]?.let {
+            Json.decodeFromString(SimpleLockWidgetState.serializer(), it)
+        } ?: return null
+        return AppWidgetConfiguration(
+            type = AppWidgetType.Simple,
+            deviceId = state.deviceId,
+            deviceName = state.deviceName,
+            opacity = state.opacity,
+        )
+    }
+
+    suspend fun configure(
         context: Context,
         glanceId: GlanceId,
         deviceId: String,
         deviceName: String,
+        opacity: Float,
     ) {
         updateAppWidgetState(context, glanceId) {
             it[PREF_KEY_STATE] = Json.encodeToString(
@@ -46,13 +66,14 @@ class SimpleLockWidget : GlanceAppWidget() {
                     deviceId = deviceId,
                     deviceName = deviceName,
                     status = SimpleLockWidgetStatus.Idling,
+                    opacity = opacity,
                 ),
             )
         }
         update(context, glanceId)
     }
 
-    suspend fun setStatus(
+    suspend fun update(
         context: Context,
         glanceId: GlanceId,
         status: SimpleLockWidgetStatus,

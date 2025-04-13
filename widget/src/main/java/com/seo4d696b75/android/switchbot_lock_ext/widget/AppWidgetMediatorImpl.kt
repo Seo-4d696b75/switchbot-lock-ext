@@ -2,6 +2,7 @@ package com.seo4d696b75.android.switchbot_lock_ext.widget
 
 import android.content.Context
 import androidx.glance.appwidget.GlanceAppWidgetManager
+import com.seo4d696b75.android.switchbot_lock_ext.domain.widget.AppWidgetConfiguration
 import com.seo4d696b75.android.switchbot_lock_ext.domain.widget.AppWidgetMediator
 import com.seo4d696b75.android.switchbot_lock_ext.domain.widget.AppWidgetType
 import com.seo4d696b75.android.switchbot_lock_ext.widget.lock.LockWidget
@@ -20,29 +21,43 @@ class AppWidgetMediatorImpl @Inject constructor(
 
     private val glanceAppWidgetManager = GlanceAppWidgetManager(context)
 
-    override suspend fun initializeAppWidget(
-        type: AppWidgetType,
+    override suspend fun getConfiguration(
         appWidgetId: Int,
-        deviceId: String,
-        deviceName: String
+        type: AppWidgetType
+    ): AppWidgetConfiguration? {
+        val glanceId = glanceAppWidgetManager.getGlanceIdBy(appWidgetId)
+        return when (type) {
+            AppWidgetType.Standard ->
+                LockWidget().getConfiguration(context, glanceId)
+
+            AppWidgetType.Simple ->
+                SimpleLockWidget().getConfiguration(context, glanceId)
+        }
+    }
+
+    override suspend fun configure(
+        appWidgetId: Int,
+        configuration: AppWidgetConfiguration
     ) {
         val glanceId = glanceAppWidgetManager.getGlanceIdBy(appWidgetId)
-        when (type) {
+        when (configuration.type) {
             AppWidgetType.Standard -> {
-                LockWidget().initialize(
+                LockWidget().configure(
                     context,
                     glanceId,
-                    deviceId,
-                    deviceName,
+                    configuration.deviceId,
+                    configuration.deviceName,
+                    configuration.opacity,
                 )
             }
 
             AppWidgetType.Simple -> {
-                SimpleLockWidget().initialize(
+                SimpleLockWidget().configure(
                     context,
                     glanceId,
-                    deviceId,
-                    deviceName,
+                    configuration.deviceId,
+                    configuration.deviceName,
+                    configuration.opacity,
                 )
             }
         }

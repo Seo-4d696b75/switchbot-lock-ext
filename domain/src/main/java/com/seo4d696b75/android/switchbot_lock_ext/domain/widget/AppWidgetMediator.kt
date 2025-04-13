@@ -1,10 +1,13 @@
 package com.seo4d696b75.android.switchbot_lock_ext.domain.widget
 
 interface AppWidgetMediator {
-    suspend fun initializeAppWidget(
-        type: AppWidgetType,
+    suspend fun getConfiguration(
         appWidgetId: Int,
-        deviceId: String,
-        deviceName: String
+        type: AppWidgetType,
+    ): AppWidgetConfiguration?
+
+    suspend fun configure(
+        appWidgetId: Int,
+        configuration: AppWidgetConfiguration,
     )
 }

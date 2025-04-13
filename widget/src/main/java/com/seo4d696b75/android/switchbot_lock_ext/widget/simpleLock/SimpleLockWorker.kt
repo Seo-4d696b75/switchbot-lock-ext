@@ -37,7 +37,7 @@ class SimpleLockWorker @AssistedInject constructor(
         val glanceId = glanceAppWidgetManager.getGlanceIdBy(appWidgetId)
         val widget = SimpleLockWidget()
 
-        widget.setStatus(
+        widget.update(
             context,
             glanceId,
             SimpleLockWidgetStatus.FetchingCurrent,
@@ -48,7 +48,7 @@ class SimpleLockWorker @AssistedInject constructor(
                 is LockedState.Normal -> !state.isLocked
                 else -> throw RuntimeException("unexpected current state: $state")
             }
-            widget.setStatus(
+            widget.update(
                 context,
                 glanceId,
                 SimpleLockWidgetStatus.SendingCommand(lock),
@@ -56,13 +56,13 @@ class SimpleLockWorker @AssistedInject constructor(
             controlRepository.setLocked(deviceId, lock)
             lock
         }.onSuccess {
-            widget.setStatus(
+            widget.update(
                 context,
                 glanceId,
                 SimpleLockWidgetStatus.Success(it)
             )
         }.onFailure {
-            widget.setStatus(
+            widget.update(
                 context,
                 glanceId,
                 SimpleLockWidgetStatus.Failure(
@@ -71,7 +71,7 @@ class SimpleLockWorker @AssistedInject constructor(
             )
         }
         delay(3000L)
-        widget.setStatus(
+        widget.update(
             context,
             glanceId,
             SimpleLockWidgetStatus.Idling,
