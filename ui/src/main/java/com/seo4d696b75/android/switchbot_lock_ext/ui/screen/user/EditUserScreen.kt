@@ -56,7 +56,7 @@ fun EditUserScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = stringResource(id = R.string.top_bar_home))
+                    Text(text = stringResource(id = R.string.top_bar_edit_user))
                 },
             )
         },
