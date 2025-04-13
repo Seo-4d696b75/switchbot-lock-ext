@@ -1,4 +1,4 @@
-package com.seo4d696b75.android.switchbot_lock_ext.ui.screen.widgetConfiguration.component
+package com.seo4d696b75.android.switchbot_lock_ext.ui.screen.device.component
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement

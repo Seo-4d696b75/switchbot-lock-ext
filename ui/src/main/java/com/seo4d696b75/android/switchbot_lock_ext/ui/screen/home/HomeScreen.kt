@@ -55,6 +55,7 @@ fun HomeScreen(
     showStatusDetail: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    // TODO add widget from app
     Scaffold(
         modifier = modifier,
         topBar = {

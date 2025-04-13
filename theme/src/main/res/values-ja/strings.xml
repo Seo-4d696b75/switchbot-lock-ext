@@ -6,11 +6,14 @@
     <string name="top_bar_user">ユーザ設定</string>
     <string name="top_bar_edit_user">ユーザ設定の編集</string>
     <string name="top_bar_widget_configuration">ウィジェット設定</string>
+    <string name="top_bar_select_device">デバイス選択</string>
     <string name="title_app_locked">アプリはロックされています</string>
     <string name="title_error_common">エラーが発生しました</string>
     <string name="title_no_devices">デバイスがありません</string>
     <string name="title_no_user">ユーザ設定が未登録です</string>
     <string name="title_device_status_detail">ステータス詳細</string>
+    <string name="title_widget_device">制御対象のデバイス</string>
+    <string name="title_widget_opacity">背景の不透明度</string>
     <string name="title_select_device">ウィジェットで操作するデバイスを選択します</string>
     <string name="label_retry">再試行</string>
     <string name="label_configure_lock_screen">画面ロックを設定する</string>
@@ -29,6 +32,10 @@
     <string name="label_add_user">ユーザを登録</string>
     <string name="label_edit_user">ユーザを編集</string>
     <string name="label_delete_user">ユーザを削除</string>
+    <string name="label_transparent">透明</string>
+    <string name="label_not_transparent">不透明</string>
+    <string name="label_complete">完了</string>
+    <string name="placeholder_select_device">選択してください</string>
     <string name="description_no_authenticator">アプリでは機密情報を保護するために端末の画面ロックを使用します。先に画面ロックを設定してください。</string>
     <string name="description_device_controllable">以下の条件を満たすデバイスのみ制御コマンドの対象です。\n1. クラウドサービスが有効化されている\n2. 他のデバイスとグループ化されていない、もしくはグループの親機に設定されている</string>
     <string name="description_user_credentials">ユーザの機密情報はAES256方式で暗号化されローカルの端末のみに保存されます。</string>

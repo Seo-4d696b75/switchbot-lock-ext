@@ -13,9 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.seo4d696b75.android.switchbot_lock_ext.R
 import com.seo4d696b75.android.switchbot_lock_ext.domain.widget.AppWidgetType
 import com.seo4d696b75.android.switchbot_lock_ext.secure.SecureUiState
@@ -25,12 +23,10 @@ import com.seo4d696b75.android.switchbot_lock_ext.theme.AppTheme
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.uiMessage
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.auth.NoAuthenticatorScreen
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.auth.NotAuthenticatedScreen
-import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.widgetConfiguration.LockWidgetConfigurationScreen
-import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.widgetConfiguration.WidgetConfigurationViewModel
+import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.configure.ConfigurationScreen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @AndroidEntryPoint
 abstract class AppWidgetConfigureActivity : FragmentActivity() {
@@ -38,9 +34,6 @@ abstract class AppWidgetConfigureActivity : FragmentActivity() {
     private val secureViewModel: SecureViewModel by viewModels()
 
     abstract val appWidgetType: AppWidgetType
-
-    @Inject
-    lateinit var configureViewModelFactory: WidgetConfigurationViewModel.Factory
 
     private val appWidgetId by lazy {
         intent?.extras?.getInt(
@@ -62,8 +55,10 @@ abstract class AppWidgetConfigureActivity : FragmentActivity() {
             },
         )
         if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
-            finish()
+            throw IllegalArgumentException()
         }
+
+        // TODO enable edge2edge
 
         setContent {
             AppTheme {
@@ -73,7 +68,9 @@ abstract class AppWidgetConfigureActivity : FragmentActivity() {
                 ) {
                     val uiState by secureViewModel.uiState.collectAsStateWithLifecycle()
                     when (val state = uiState) {
-                        SecureUiState.Authenticated -> LockWidgetConfigurationScreen(
+                        SecureUiState.Authenticated -> ConfigurationScreen(
+                            appWidgetType = appWidgetType,
+                            appWidgetId = appWidgetId,
                             onCompleted = {
                                 setResult(
                                     RESULT_OK,
@@ -85,13 +82,7 @@ abstract class AppWidgetConfigureActivity : FragmentActivity() {
                                     },
                                 )
                                 finish()
-                            },
-                            viewModel = viewModel {
-                                configureViewModelFactory.create(
-                                    createSavedStateHandle(),
-                                    appWidgetType,
-                                )
-                            },
+                            }
                         )
 
                         SecureUiState.NotAuthenticated -> NotAuthenticatedScreen(

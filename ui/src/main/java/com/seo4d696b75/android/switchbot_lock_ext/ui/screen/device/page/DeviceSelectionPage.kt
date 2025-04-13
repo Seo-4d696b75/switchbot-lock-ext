@@ -1,4 +1,4 @@
-package com.seo4d696b75.android.switchbot_lock_ext.ui.screen.widgetConfiguration.page
+package com.seo4d696b75.android.switchbot_lock_ext.ui.screen.device.page
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,8 +18,8 @@ import com.seo4d696b75.android.switchbot_lock_ext.theme.AppTheme
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.ErrorSection
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.LoadingSection
 import com.seo4d696b75.android.switchbot_lock_ext.ui.common.NoDeviceSection
-import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.widgetConfiguration.WidgetConfigurationUiState
-import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.widgetConfiguration.component.DeviceListSection
+import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.device.SelectDeviceUiState
+import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.device.component.DeviceListSection
 import kotlinx.collections.immutable.toPersistentList
 
 @Composable
@@ -126,7 +126,7 @@ private class DeviceSelectionPagePreviewParamProvider :
 @Composable
 private fun DeviceSelectionPagePreview(
     @PreviewParameter(DeviceSelectionPagePreviewParamProvider::class)
-    param: WidgetConfigurationUiState
+    param: SelectDeviceUiState
 ) {
     AppTheme {
         Surface {

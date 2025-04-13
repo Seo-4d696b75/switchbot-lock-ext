@@ -2,6 +2,7 @@ package com.seo4d696b75.android.switchbot_lock_ext.ui.screen
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import com.seo4d696b75.android.switchbot_lock_ext.domain.widget.AppWidgetType
 import com.seo4d696b75.android.switchbot_lock_ext.theme.R
 import kotlinx.serialization.Serializable
 
@@ -51,5 +52,16 @@ sealed interface Screen {
             override val labelId = R.string.bottom_nav_user
             override val iconId = R.drawable.ic_person
         }
+    }
+
+    sealed interface Configuration : Screen {
+        @Serializable
+        data class Top(
+            val appWidgetType: AppWidgetType,
+            val appWidgetId: Int,
+        ) : Configuration
+
+        @Serializable
+        data object SelectDevice : Configuration
     }
 }
