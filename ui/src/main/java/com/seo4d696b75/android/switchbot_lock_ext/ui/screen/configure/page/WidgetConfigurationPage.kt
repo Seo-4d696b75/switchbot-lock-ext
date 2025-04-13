@@ -18,6 +18,7 @@ import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -45,6 +46,8 @@ import kotlin.math.roundToInt
 @Composable
 fun WidgetConfigurationPage(
     device: LockDevice?,
+    displayedName: String,
+    onDisplayedNameChanged: (String) -> Unit,
     opacity: Float,
     onOpacityChanged: (Float) -> Unit,
     isCompletable: Boolean,
@@ -96,6 +99,17 @@ fun WidgetConfigurationPage(
                     contentDescription = null,
                 )
             }
+
+            Spacer(modifier = Modifier.height(16.dp))
+            OutlinedTextField(
+                value = displayedName,
+                onValueChange = onDisplayedNameChanged,
+                maxLines = 1,
+                label = {
+                    Text(stringResource(R.string.label_widget_name))
+                },
+                modifier = Modifier.widthIn(max = 360.dp),
+            )
 
             Spacer(modifier = Modifier.height(32.dp))
 
@@ -158,6 +172,8 @@ private fun WidgetConfigurationPagePreview() {
             var opacity by remember { mutableFloatStateOf(1f) }
             WidgetConfigurationPage(
                 device = previewDevice,
+                displayedName = previewDevice.name,
+                onDisplayedNameChanged = {},
                 opacity = opacity,
                 onOpacityChanged = { opacity = it },
                 isCompletable = false,

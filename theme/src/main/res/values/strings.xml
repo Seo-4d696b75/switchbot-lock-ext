@@ -36,6 +36,7 @@
     <string name="label_transparent">transparent</string>
     <string name="label_not_transparent">opaque</string>
     <string name="label_complete">Complete</string>
+    <string name="label_widget_name">Displayed Name</string>
     <string name="placeholder_select_device">select device</string>
     <string name="description_no_authenticator">This app uses your device\'s screen lock for security of your credentials. You need to setup screen lock at first.</string>
     <string name="description_device_controllable">Not all devices are controllable.\n1. Cloud service MUST be enabled\n2. Not grouped with others, or is master of grouped devices</string>

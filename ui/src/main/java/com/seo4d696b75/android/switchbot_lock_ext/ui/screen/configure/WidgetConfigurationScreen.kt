@@ -39,6 +39,7 @@ fun WidgetConfigurationScreen(
 
     WidgetConfigurationScreen(
         state = uiState,
+        onDisplayedNameChanged = viewModel::onDisplayedNameChanged,
         onOpacityChanged = viewModel::onBackgroundOpacityChanged,
         complete = viewModel::onCompleted,
         selectDevice = viewModel::onSelectDeviceRequested,
@@ -50,6 +51,7 @@ fun WidgetConfigurationScreen(
 @Composable
 fun WidgetConfigurationScreen(
     state: WidgetConfigurationUiState,
+    onDisplayedNameChanged: (String) -> Unit,
     onOpacityChanged: (Float) -> Unit,
     complete: () -> Unit,
     selectDevice: () -> Unit,
@@ -79,6 +81,8 @@ fun WidgetConfigurationScreen(
                 when (state) {
                     is WidgetConfigurationUiState.Configurable -> WidgetConfigurationPage(
                         device = state.device,
+                        displayedName = state.displayedName,
+                        onDisplayedNameChanged = onDisplayedNameChanged,
                         opacity = state.opacity,
                         onOpacityChanged = onOpacityChanged,
                         isCompletable = state.isCompletable,

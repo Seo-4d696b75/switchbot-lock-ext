@@ -22,6 +22,7 @@ sealed interface WidgetConfigurationUiState {
 
     data class Configurable(
         val device: LockDevice?,
+        val displayedName: String,
         @FloatRange(from = 0.25, to = 1.0)
         val opacity: Float,
         val isCompletable: Boolean,

@@ -35,6 +35,7 @@
     <string name="label_transparent">透明</string>
     <string name="label_not_transparent">不透明</string>
     <string name="label_complete">完了</string>
+    <string name="label_widget_name">表示名</string>
     <string name="placeholder_select_device">選択してください</string>
     <string name="description_no_authenticator">アプリでは機密情報を保護するために端末の画面ロックを使用します。先に画面ロックを設定してください。</string>
     <string name="description_device_controllable">以下の条件を満たすデバイスのみ制御コマンドの対象です。\n1. クラウドサービスが有効化されている\n2. 他のデバイスとグループ化されていない、もしくはグループの親機に設定されている</string>

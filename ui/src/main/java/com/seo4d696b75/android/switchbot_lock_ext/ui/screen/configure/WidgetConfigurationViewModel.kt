@@ -46,15 +46,17 @@ class WidgetConfigurationViewModel @Inject constructor(
         MutableStateFlow<UiEvent<Unit>>(UiEvent.None)
 
     private val deviceFlow = MutableStateFlow<LockDevice?>(null)
+    private val nameFlow = MutableStateFlow("")
     private val opacityFlow = MutableStateFlow<Float>(1f)
 
     private val initializedDeviceFlow = flow {
-        kotlinx.coroutines.delay(100)
         val conf = widgetMediator.getConfiguration(
             args.appWidgetId,
             args.appWidgetType,
         )
         if (conf != null) {
+            nameFlow.update { conf.deviceName }
+            opacityFlow.update { conf.opacity }
             val devices = deviceRepository.deviceFlow.filterNotNull().first()
             val device = devices.firstOrNull { it.id == conf.deviceId }
             if (device == null) {
@@ -73,10 +75,12 @@ class WidgetConfigurationViewModel @Inject constructor(
                 onConfigurationCompletedFlow,
                 onSelectDeviceRequestedFlow,
                 initializedDeviceFlow,
+                nameFlow,
                 opacityFlow,
-            ) { onCompleted, onRequested, device, opacity ->
+            ) { onCompleted, onRequested, device, name, opacity ->
                 WidgetConfigurationUiState.Configurable(
                     device = device,
+                    displayedName = name,
                     opacity = opacity,
                     isCompletable = device != null,
                     onCompleted = onCompleted,
@@ -96,6 +100,11 @@ class WidgetConfigurationViewModel @Inject constructor(
 
     fun onDeviceSelected(device: LockDevice) {
         deviceFlow.update { device }
+        nameFlow.update { device.name }
+    }
+
+    fun onDisplayedNameChanged(name: String) {
+        nameFlow.update { name }
     }
 
     fun onBackgroundOpacityChanged(opacity: Float) {
@@ -109,7 +118,7 @@ class WidgetConfigurationViewModel @Inject constructor(
         val configuration = AppWidgetConfiguration(
             type = args.appWidgetType,
             deviceId = device.id,
-            deviceName = device.name,
+            deviceName = nameFlow.value,
             opacity = opacityFlow.value,
         )
         viewModelScope.launchCatching {
