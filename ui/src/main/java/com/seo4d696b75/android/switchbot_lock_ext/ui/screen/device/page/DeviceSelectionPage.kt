@@ -32,10 +32,7 @@ fun DeviceSelectionPage(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .padding(
-                horizontal = 8.dp,
-                vertical = 16.dp,
-            ),
+            .padding(16.dp),
         contentAlignment = Alignment.Center,
     ) {
         when (devices) {
