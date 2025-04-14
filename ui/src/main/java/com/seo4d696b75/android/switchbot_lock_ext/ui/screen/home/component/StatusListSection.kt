@@ -23,6 +23,7 @@ fun StatusListSection(
     devices: ImmutableList<LockStatus>,
     onLockedChanged: (String, Boolean) -> Unit,
     showStatusDetail: (String) -> Unit,
+    addWidget: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyVerticalGrid(
@@ -36,6 +37,7 @@ fun StatusListSection(
                 status = it,
                 onLockedChanged = onLockedChanged,
                 showStatusDetail = showStatusDetail,
+                addWidget = addWidget,
             )
         }
         item(
@@ -61,6 +63,7 @@ private fun StatusListSectionPreview() {
                     .toPersistentList(),
                 onLockedChanged = { _, _ -> },
                 showStatusDetail = {},
+                addWidget = {},
             )
         }
     }

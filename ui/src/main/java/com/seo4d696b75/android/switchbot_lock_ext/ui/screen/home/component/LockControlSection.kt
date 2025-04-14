@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -34,6 +33,7 @@ fun LockControlSection(
     status: LockStatus,
     onLockedChanged: (Boolean) -> Unit,
     showStatusDetail: () -> Unit,
+    addWidget: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Crossfade(
@@ -65,12 +65,14 @@ fun LockControlSection(
                             Icon(
                                 Icons.Outlined.Info,
                                 contentDescription = stringResource(id = R.string.label_status_detail),
+                                modifier = Modifier.size(32.dp),
                             )
                         }
-                        IconButton(onClick = { /*TODO*/ }) {
+                        IconButton(onClick = addWidget) {
                             Icon(
-                                Icons.Outlined.Settings,
-                                contentDescription = stringResource(id = R.string.label_device_setting),
+                                painterResource(R.drawable.ic_add_to_home_screen),
+                                contentDescription = stringResource(id = R.string.label_add_widget),
+                                modifier = Modifier.size(32.dp),
                             )
                         }
                     }

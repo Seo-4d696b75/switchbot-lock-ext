@@ -27,6 +27,7 @@ fun LockStatusPage(
     onRetry: () -> Unit,
     onLockedChanged: (String, Boolean) -> Unit,
     showStatusDetail: (String) -> Unit,
+    addWidget: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -52,6 +53,7 @@ fun LockStatusPage(
                         devices = devices.data.toPersistentList(),
                         onLockedChanged = onLockedChanged,
                         showStatusDetail = showStatusDetail,
+                        addWidget = addWidget,
                         modifier = Modifier.fillMaxSize(),
                     )
                 }
@@ -101,6 +103,7 @@ private fun LockStatusPagePreview(
                 onRetry = {},
                 onLockedChanged = { _, _ -> },
                 showStatusDetail = {},
+                addWidget = {},
             )
         }
     }

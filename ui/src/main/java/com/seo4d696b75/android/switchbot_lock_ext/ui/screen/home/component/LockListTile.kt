@@ -28,6 +28,7 @@ fun LockListTile(
     status: LockStatus,
     onLockedChanged: (String, Boolean) -> Unit,
     showStatusDetail: (String) -> Unit,
+    addWidget: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -52,6 +53,9 @@ fun LockListTile(
                 },
                 showStatusDetail = {
                     showStatusDetail(status.device.id)
+                },
+                addWidget = {
+                    addWidget(status.device.id)
                 },
                 modifier = Modifier
                     .height(100.dp)
@@ -129,6 +133,7 @@ private fun LockListTilePreview(
             modifier = Modifier.width(180.dp),
             onLockedChanged = { _, _ -> },
             showStatusDetail = {},
+            addWidget = {},
         )
     }
 }

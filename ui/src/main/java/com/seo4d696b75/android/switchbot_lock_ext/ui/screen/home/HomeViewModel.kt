@@ -11,6 +11,8 @@ import com.seo4d696b75.android.switchbot_lock_ext.domain.error.ErrorHandler
 import com.seo4d696b75.android.switchbot_lock_ext.domain.status.LockStatusRepository
 import com.seo4d696b75.android.switchbot_lock_ext.domain.user.UserRegistration
 import com.seo4d696b75.android.switchbot_lock_ext.domain.user.UserRepository
+import com.seo4d696b75.android.switchbot_lock_ext.domain.widget.AppWidgetMediator
+import com.seo4d696b75.android.switchbot_lock_ext.domain.widget.AppWidgetType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -27,6 +29,7 @@ class HomeViewModel @Inject constructor(
     userRepository: UserRepository,
     private val statusRepository: LockStatusRepository,
     private val controlRepository: LockControlRepository,
+    private val mediator: AppWidgetMediator,
     handler: ErrorHandler,
 ) : ViewModel(), ErrorHandler by handler {
 
@@ -89,6 +92,10 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
+
+    fun addWidget(id: String, type: AppWidgetType) {
+        viewModelScope.launchCatching {
+            mediator.addWidget(type, id)
+        }
+    }
 }
-
-

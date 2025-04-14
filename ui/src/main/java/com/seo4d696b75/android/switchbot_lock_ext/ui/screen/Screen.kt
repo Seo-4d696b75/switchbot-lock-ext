@@ -22,14 +22,17 @@ sealed interface Screen {
         val iconId: Int
     }
 
-    sealed interface Main : Screen
-
-    sealed interface Home : Main {
+    sealed interface Home : Screen {
         @Serializable
         data object Top : Home
 
         @Serializable
         data class StatusDetailDialog(
+            val deviceId: String,
+        ) : Home
+
+        @Serializable
+        data class SelectWidgetTypeDialog(
             val deviceId: String,
         ) : Home
 
@@ -40,7 +43,7 @@ sealed interface Screen {
         }
     }
 
-    sealed interface User : Main {
+    sealed interface User : Screen {
         @Serializable
         data object Top : User
 
@@ -59,6 +62,8 @@ sealed interface Screen {
         data class Top(
             val appWidgetType: AppWidgetType,
             val appWidgetId: Int,
+            /** used when widget state has not been initialized yet */
+            val initialDeviceId: String?,
         ) : Configuration
 
         @Serializable

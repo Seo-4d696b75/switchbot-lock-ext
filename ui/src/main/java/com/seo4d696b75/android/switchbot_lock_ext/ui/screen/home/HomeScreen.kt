@@ -30,6 +30,7 @@ import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.page.LockStatus
 @Composable
 fun HomeScreen(
     navigateToStatusDetail: (String) -> Unit,
+    navigateToWidgetTypeSelection: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
@@ -41,6 +42,7 @@ fun HomeScreen(
         onLockedChanged = viewModel::onLockedChanged,
         onRefresh = viewModel::refresh,
         showStatusDetail = navigateToStatusDetail,
+        addWidget = navigateToWidgetTypeSelection,
         modifier = modifier.fillMaxSize(),
     )
 }
@@ -53,9 +55,9 @@ fun HomeScreen(
     onLockedChanged: (String, Boolean) -> Unit,
     onRefresh: () -> Unit,
     showStatusDetail: (String) -> Unit,
+    addWidget: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    // TODO add widget from app
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -89,6 +91,7 @@ fun HomeScreen(
                     onRetry = onRefresh,
                     onLockedChanged = onLockedChanged,
                     showStatusDetail = showStatusDetail,
+                    addWidget = addWidget,
                     modifier = Modifier.fillMaxSize(),
                 )
 

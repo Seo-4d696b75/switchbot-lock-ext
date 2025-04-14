@@ -91,7 +91,7 @@ fun StatusDetailDialog(
         confirmButton = {
             TextButton(onClick = onDismiss) {
                 Text(
-                    text = stringResource(id = R.string.dialog_button_positive),
+                    text = stringResource(id = R.string.label_close),
                 )
             }
         },

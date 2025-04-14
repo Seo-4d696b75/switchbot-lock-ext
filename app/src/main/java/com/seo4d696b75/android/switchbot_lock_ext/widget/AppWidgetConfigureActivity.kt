@@ -35,6 +35,8 @@ abstract class AppWidgetConfigureActivity : FragmentActivity() {
 
     abstract val appWidgetType: AppWidgetType
 
+    abstract val initialDeviceId: String?
+
     private val appWidgetId by lazy {
         intent?.extras?.getInt(
             AppWidgetManager.EXTRA_APPWIDGET_ID,
@@ -48,15 +50,15 @@ abstract class AppWidgetConfigureActivity : FragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
+            throw IllegalArgumentException()
+        }
         setResult(
             RESULT_CANCELED,
             Intent().apply {
                 putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
             },
         )
-        if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
-            throw IllegalArgumentException()
-        }
 
         // TODO enable edge2edge
 
@@ -71,6 +73,7 @@ abstract class AppWidgetConfigureActivity : FragmentActivity() {
                         SecureUiState.Authenticated -> ConfigurationScreen(
                             appWidgetType = appWidgetType,
                             appWidgetId = appWidgetId,
+                            initialDeviceId = initialDeviceId,
                             onCompleted = {
                                 setResult(
                                     RESULT_OK,

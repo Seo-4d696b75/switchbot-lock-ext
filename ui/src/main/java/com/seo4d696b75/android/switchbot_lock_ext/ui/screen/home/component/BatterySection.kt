@@ -3,6 +3,7 @@ package com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.component
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -41,6 +42,7 @@ fun BatterySection(
             } else {
                 Color(0xFF21BE50)
             },
+            modifier = Modifier.size(32.dp),
         )
         Spacer(modifier = Modifier.width(4.dp))
         Text(

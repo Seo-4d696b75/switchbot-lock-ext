@@ -57,12 +57,16 @@ class WidgetConfigurationViewModel @Inject constructor(
         if (conf != null) {
             nameFlow.update { conf.deviceName }
             opacityFlow.update { conf.opacity }
+        }
+        val deviceId = conf?.deviceId ?: args.initialDeviceId
+        if (deviceId != null) {
             val devices = deviceRepository.deviceFlow.filterNotNull().first()
-            val device = devices.firstOrNull { it.id == conf.deviceId }
+            val device = devices.firstOrNull { it.id == deviceId }
             if (device == null) {
-                enqueueThrowable(RuntimeException("device not found. id:${conf.deviceId}"))
+                enqueueThrowable(RuntimeException("device not found. id:${deviceId}"))
             } else {
                 deviceFlow.update { device }
+                nameFlow.update { it.ifEmpty { device.name } }
             }
         }
         emitAll(deviceFlow)

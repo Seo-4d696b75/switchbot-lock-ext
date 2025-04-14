@@ -19,6 +19,7 @@ import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.device.SelectDeviceS
 fun ConfigurationScreen(
     appWidgetType: AppWidgetType,
     appWidgetId: Int,
+    initialDeviceId: String?,
     onCompleted: () -> Unit,
 ) {
     val navController = rememberNavController()
@@ -29,6 +30,7 @@ fun ConfigurationScreen(
         startDestination = Screen.Configuration.Top(
             appWidgetType,
             appWidgetId,
+            initialDeviceId,
         ),
         typeMap = typeMap,
     ) {

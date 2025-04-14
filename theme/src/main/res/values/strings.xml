@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="label_lock_widget">Lock and Unlock</string>
+    <string name="description_lock_widget">Send lock/unlock command to a Lock device</string>
+    <string name="label_simple_lock_widget">Simple Lock</string>
+    <string name="description_simple_lock_widget">Send lock/unlock command according to current state</string>
     <string name="bottom_nav_home">Home</string>
     <string name="bottom_nav_user">User</string>
     <string name="top_bar_home">Home</string>
@@ -7,7 +11,6 @@
     <string name="top_bar_edit_user">Edit User</string>
     <string name="top_bar_widget_configuration">Widget Configuration</string>
     <string name="top_bar_select_device">Select Device</string>
-    <string name="dialog_button_positive" translatable="false">OK</string>
     <string name="title_app_locked">App Locked</string>
     <string name="title_error_common">An error happened</string>
     <string name="title_no_devices">No Devices</string>
@@ -16,12 +19,14 @@
     <string name="title_widget_device">Device to Control</string>
     <string name="title_widget_opacity">Opacity of Background</string>
     <string name="title_select_device">Select device to control by widget</string>
+    <string name="title_select_widget_type">Add Widget</string>
+    <string name="label_close">Close</string>
     <string name="label_retry">Retry</string>
     <string name="label_configure_lock_screen">Configure screen look</string>
     <string name="label_refresh">Refresh</string>
     <string name="label_refresh_status">Refresh status</string>
     <string name="label_status_detail">Status detail</string>
-    <string name="label_device_setting">Device setting</string>
+    <string name="label_add_widget">Add widget</string>
     <string name="label_lock">Lock</string>
     <string name="label_unlock">Unlock</string>
     <string name="label_locking">Locking</string>
@@ -57,6 +62,7 @@
     <string name="message_user_auth_failed">Authentication failed</string>
     <string name="message_user_secret">Secret: %s</string>
     <string name="message_user_token">Token: %s</string>
+    <string name="message_select_widget_type">Which type of widget should be added?</string>
     <string name="notification_title_widget_running">Widget is (un)locking…</string>
     <string name="notification_text_widget_running">This notification will disappear when completed.</string>
     <string name="error_dialog_title">Error</string>

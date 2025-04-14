@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="label_lock_widget">施錠・解錠</string>
+    <string name="description_lock_widget">施錠と解錠のコマンドを素早く送れます</string>
+    <string name="label_simple_lock_widget">シンプル制御</string>
+    <string name="description_simple_lock_widget">現在の状態に応じて施錠・解錠コマンドを簡単に送れます</string>
     <string name="bottom_nav_home">ホーム</string>
     <string name="bottom_nav_user">ユーザ</string>
     <string name="top_bar_home">ホーム</string>
@@ -15,12 +19,14 @@
     <string name="title_widget_device">制御対象のデバイス</string>
     <string name="title_widget_opacity">背景の不透明度</string>
     <string name="title_select_device">ウィジェットで操作するデバイスを選択します</string>
+    <string name="title_select_widget_type">ウィジェット追加</string>
+    <string name="label_close">閉じる</string>
     <string name="label_retry">再試行</string>
     <string name="label_configure_lock_screen">画面ロックを設定する</string>
     <string name="label_refresh">更新</string>
     <string name="label_refresh_status">ステータスを更新</string>
     <string name="label_status_detail">ステータス詳細</string>
-    <string name="label_device_setting">デバイス設定</string>
+    <string name="label_add_widget">ウィジェットを追加する</string>
     <string name="label_lock">施錠</string>
     <string name="label_unlock">解錠</string>
     <string name="label_locking">施錠中</string>
@@ -53,6 +59,7 @@
     <string name="message_user_auth_failed">認証に失敗しました</string>
     <string name="message_user_secret">シークレット: %s</string>
     <string name="message_user_token">トークン: %s</string>
+    <string name="message_select_widget_type">追加するウィジェットの種類を選択してください</string>
     <string name="notification_title_widget_running">ウィジェットが解錠・施錠中</string>
     <string name="notification_text_widget_running">操作が完了すると通知は自動で消えます</string>
     <string name="error_dialog_title">エラー</string>

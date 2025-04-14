@@ -10,6 +10,8 @@ import androidx.navigation.navigation
 import androidx.navigation.toRoute
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.Screen
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.HomeScreen
+import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.HomeViewModel
+import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.dialog.SelectWidgetTypeDialog
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home.dialog.StatusDetailDialog
 
 fun NavGraphBuilder.homeNavGraph(
@@ -24,19 +26,37 @@ fun NavGraphBuilder.homeNavGraph(
                     val route = Screen.Home.StatusDetailDialog(it)
                     navController.navigateSingleTop(route)
                 },
+                navigateToWidgetTypeSelection = {
+                    val route = Screen.Home.SelectWidgetTypeDialog(it)
+                    navController.navigateSingleTop(route)
+                },
             )
         }
 
         dialog<Screen.Home.StatusDetailDialog> { backStackEntry ->
-            val topBackStackEntry = remember(backStackEntry) {
+            val owner = remember(backStackEntry) {
                 navController.getBackStackEntry<Screen.Home.Top>()
             }
             val deviceId = backStackEntry
                 .toRoute<Screen.Home.StatusDetailDialog>()
                 .deviceId
             StatusDetailDialog(
-                viewModel = hiltViewModel(topBackStackEntry),
+                viewModel = hiltViewModel(owner),
                 deviceId = deviceId,
+                onDismiss = { navController.popBackStack() },
+            )
+        }
+
+        dialog<Screen.Home.SelectWidgetTypeDialog> { backStackEntry ->
+            val owner = remember(backStackEntry) {
+                navController.getBackStackEntry<Screen.Home.Top>()
+            }
+            val viewModel: HomeViewModel = hiltViewModel(owner)
+            val deviceId = backStackEntry
+                .toRoute<Screen.Home.SelectWidgetTypeDialog>()
+                .deviceId
+            SelectWidgetTypeDialog(
+                onSelect = { viewModel.addWidget(deviceId, it) },
                 onDismiss = { navController.popBackStack() },
             )
         }

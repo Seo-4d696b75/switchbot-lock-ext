@@ -13,6 +13,7 @@ import kotlin.reflect.typeOf
 fun NavBackStackEntry.toRoute(): Screen = when {
     destination.hasRoute<Screen.Home.Top>() -> Screen.Home.Top
     destination.hasRoute<Screen.Home.StatusDetailDialog>() -> toRoute<Screen.Home.StatusDetailDialog>()
+    destination.hasRoute<Screen.Home.SelectWidgetTypeDialog>() -> toRoute<Screen.Home.SelectWidgetTypeDialog>()
     destination.hasRoute<Screen.User.Top>() -> Screen.User.Top
     destination.hasRoute<Screen.User.Edit>() -> Screen.User.Edit
     destination.hasRoute<Screen.Configuration.Top>() -> toRoute<Screen.Configuration.Top>()
@@ -20,9 +21,10 @@ fun NavBackStackEntry.toRoute(): Screen = when {
     else -> throw IllegalStateException()
 }
 
-fun Screen.Main.toTab(): Screen.BottomTab = when (this) {
+fun Screen.toTab(): Screen.BottomTab? = when (this) {
     is Screen.Home -> Screen.Home.Tab
     is Screen.User -> Screen.User.Tab
+    else -> null
 }
 
 fun NavController.navigateSingleTop(route: Screen) {

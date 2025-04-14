@@ -91,6 +91,7 @@ dependencies {
     implementation(libs.androidx.biometric.ktx)
 
     implementation(libs.androidx.glance)
+    implementation(libs.androidx.glance.appwidget)
 
     implementation(libs.kotlinx.serialization.json)
 

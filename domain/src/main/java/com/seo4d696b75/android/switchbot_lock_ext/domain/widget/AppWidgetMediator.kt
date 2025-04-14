@@ -10,4 +10,9 @@ interface AppWidgetMediator {
         appWidgetId: Int,
         configuration: AppWidgetConfiguration,
     )
+
+    suspend fun addWidget(
+        type: AppWidgetType,
+        deviceId: String,
+    )
 }

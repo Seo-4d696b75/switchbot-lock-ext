@@ -1,12 +1,18 @@
 package com.seo4d696b75.android.switchbot_lock_ext.widget
 
+import android.app.PendingIntent
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import com.seo4d696b75.android.switchbot_lock_ext.domain.widget.AppWidgetConfiguration
 import com.seo4d696b75.android.switchbot_lock_ext.domain.widget.AppWidgetMediator
 import com.seo4d696b75.android.switchbot_lock_ext.domain.widget.AppWidgetType
 import com.seo4d696b75.android.switchbot_lock_ext.widget.lock.LockWidget
+import com.seo4d696b75.android.switchbot_lock_ext.widget.lock.LockWidgetReceiver
 import com.seo4d696b75.android.switchbot_lock_ext.widget.simpleLock.SimpleLockWidget
+import com.seo4d696b75.android.switchbot_lock_ext.widget.simpleLock.SimpleLockWidgetReceiver
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -17,6 +23,7 @@ import javax.inject.Inject
 class AppWidgetMediatorImpl @Inject constructor(
     @ApplicationContext
     private val context: Context,
+    private val callbackHolder: InAppWidgetCallbackHolder,
 ) : AppWidgetMediator {
 
     private val glanceAppWidgetManager = GlanceAppWidgetManager(context)
@@ -60,6 +67,36 @@ class AppWidgetMediatorImpl @Inject constructor(
                     configuration.opacity,
                 )
             }
+        }
+    }
+
+    override suspend fun addWidget(
+        type: AppWidgetType,
+        deviceId: String,
+    ) {
+        val manager = AppWidgetManager.getInstance(context)
+        if (manager.isRequestPinAppWidgetSupported) {
+            val receiverClass = when (type) {
+                AppWidgetType.Standard -> LockWidgetReceiver::class
+                AppWidgetType.Simple -> SimpleLockWidgetReceiver::class
+            }
+            val provider = ComponentName(context, receiverClass.java)
+            val configActivity = when (type) {
+                AppWidgetType.Standard -> LockWidgetConfigureActivity.InApp::class
+                AppWidgetType.Simple -> SimpleLockWidgetConfigureActivity.InApp::class
+            }
+            val callback = PendingIntent.getActivity(
+                context,
+                deviceId.hashCode(),
+                Intent(context, configActivity.java),
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE,
+            )
+            val result = manager.requestPinAppWidget(provider, null, callback)
+            if (result) {
+                callbackHolder.enqueue(deviceId)
+            }
+        } else {
+            throw RuntimeException("requestPinAppWidget not supported")
         }
     }
 }
