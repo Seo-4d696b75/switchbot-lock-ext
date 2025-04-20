@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="title_user_auth">ユーザ認証</string>
-    <string name="description_user_auth">機密情報を保護するためアプリ使用前にユーザ認証が必要です。認証には端末の画面ロックを使用しています。</string>
-    <string name="description_user_auth_widget_configuration">機密情報を保護するためウィジェットを追加・編集する前にユーザ認証が必要です。</string>
+    <string name="title_user_auth">ユーザー認証</string>
+    <string name="description_user_auth">アプリでスマートロックを操作するには端末の画面ロックを解除してください。</string>
+    <string name="description_user_auth_widget_configuration">ウィジェットを追加・編集するには端末の画面ロックを解除してください。</string>
 </resources>

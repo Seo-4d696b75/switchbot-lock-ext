@@ -2,6 +2,6 @@
 <resources>
     <string name="app_name" translatable="false">Lock.ext</string>
     <string name="title_user_auth">User Authentication</string>
-    <string name="description_user_auth">Before using this app, authentication is required for security of your credentials. Your device\'s screen lock is used for this authentication.</string>
-    <string name="description_user_auth_widget_configuration">Before adding/editing a widget, authentication is required for security of your credentials.</string>
+    <string name="description_user_auth">Unlock device\'s screen lock for using app and controlling smart locks.</string>
+    <string name="description_user_auth_widget_configuration">Unlock device\'s screen lock for adding/editing a widget.</string>
 </resources>

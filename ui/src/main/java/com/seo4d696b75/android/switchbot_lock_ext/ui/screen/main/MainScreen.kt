@@ -13,13 +13,16 @@ import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.Screen
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.main.component.MainBottomNavigation
 
 @Composable
-fun MainScreen() {
+fun MainScreen(
+    modifier: Modifier = Modifier,
+) {
     val navController = rememberNavController()
     ErrorHandler()
     Scaffold(
         bottomBar = {
             MainBottomNavigation(navController = navController)
-        }
+        },
+        modifier = modifier,
     ) { innerPadding ->
         NavHost(
             navController = navController,

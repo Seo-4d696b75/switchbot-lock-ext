@@ -10,10 +10,13 @@ abstract class LockWidgetConfigureActivity : AppWidgetConfigureActivity() {
     @AndroidEntryPoint
     class Organic : LockWidgetConfigureActivity() {
         override val initialDeviceId = null
+        override val isScreenLockRequired = true
     }
 
     @AndroidEntryPoint
     class InApp : LockWidgetConfigureActivity() {
+
+        override val isScreenLockRequired = false
 
         @Inject
         lateinit var callbackHolder: InAppWidgetCallbackHolder

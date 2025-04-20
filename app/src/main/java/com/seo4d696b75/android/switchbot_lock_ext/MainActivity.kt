@@ -3,33 +3,17 @@ package com.seo4d696b75.android.switchbot_lock_ext
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.compose.setContent
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.seo4d696b75.android.switchbot_lock_ext.secure.SecureUiState
-import com.seo4d696b75.android.switchbot_lock_ext.secure.SecureViewModel
-import com.seo4d696b75.android.switchbot_lock_ext.secure.launchLockScreenSetting
+import com.seo4d696b75.android.switchbot_lock_ext.secure.SecureScreen
 import com.seo4d696b75.android.switchbot_lock_ext.theme.AppTheme
-import com.seo4d696b75.android.switchbot_lock_ext.ui.common.uiMessage
-import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.auth.NoAuthenticatorScreen
-import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.auth.NotAuthenticatedScreen
 import com.seo4d696b75.android.switchbot_lock_ext.ui.screen.main.MainScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : FragmentActivity() {
-
-    private val viewModel: SecureViewModel by viewModels()
-
-    private val lockScreenSettingLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult(),
-    ) {}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,43 +25,15 @@ class MainActivity : FragmentActivity() {
 
         setContent {
             AppTheme {
-                Surface(
+                SecureScreen(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    enabled = true,
+                    title = stringResource(R.string.title_user_auth),
+                    description = stringResource(R.string.description_user_auth),
                 ) {
-                    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-                    when (val state = uiState) {
-                        SecureUiState.Authenticated -> MainScreen()
-                        SecureUiState.NotAuthenticated -> NotAuthenticatedScreen(
-                            description = null,
-                        )
-
-                        is SecureUiState.AuthenticationError -> NotAuthenticatedScreen(
-                            description = uiMessage(state.message),
-                        )
-
-                        SecureUiState.NoAuthenticator -> NoAuthenticatorScreen(
-                            navigateToSetting = {
-                                lockScreenSettingLauncher.launchLockScreenSetting()
-                            },
-                        )
-                    }
+                    MainScreen()
                 }
             }
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        viewModel.authenticate(
-            activity = this,
-            title = getString(R.string.title_user_auth),
-            subTitle = getString(R.string.description_user_auth),
-        )
-    }
-
-    override fun onStop() {
-        super.onStop()
-        viewModel.lockApp()
     }
 }
