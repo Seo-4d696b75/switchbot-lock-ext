@@ -1,6 +1,8 @@
 package com.seo4d696b75.android.switchbot_lock_ext.ui.screen.main.component
 
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -32,6 +34,7 @@ fun MainBottomNavigation(
 
     NavigationBar(
         modifier = modifier.fillMaxWidth(),
+        windowInsets = WindowInsets.navigationBars,
     ) {
         listOf(
             Screen.Home.Tab,

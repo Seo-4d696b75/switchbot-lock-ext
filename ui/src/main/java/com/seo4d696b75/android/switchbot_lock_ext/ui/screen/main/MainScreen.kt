@@ -1,5 +1,8 @@
 package com.seo4d696b75.android.switchbot_lock_ext.ui.screen.main
 
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -23,11 +26,14 @@ fun MainScreen(
             MainBottomNavigation(navController = navController)
         },
         modifier = modifier,
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            modifier = Modifier.padding(innerPadding),
             startDestination = Screen.Home.Tab,
+            modifier = Modifier
+                .padding(innerPadding)
+                .consumeWindowInsets(WindowInsets.navigationBars),
         ) {
             homeNavGraph(navController)
             userNavGraph(navController)

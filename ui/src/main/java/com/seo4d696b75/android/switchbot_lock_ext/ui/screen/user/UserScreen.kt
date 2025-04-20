@@ -1,7 +1,11 @@
 package com.seo4d696b75.android.switchbot_lock_ext.ui.screen.user
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -50,29 +54,33 @@ fun UserScreen(
                 },
             )
         },
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
     ) { innerPadding ->
-        when (user) {
-            is UserRegistration.User -> {
-                UserPage(
-                    user = user,
-                    onEditUserClicked = onEditUserClicked,
-                    onRemoveUserClicked = onRemoveUserClicked,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding),
-                )
-            }
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .consumeWindowInsets(WindowInsets.statusBars),
+        ) {
+            when (user) {
+                is UserRegistration.User -> {
+                    UserPage(
+                        user = user,
+                        onEditUserClicked = onEditUserClicked,
+                        onRemoveUserClicked = onRemoveUserClicked,
+                        modifier = Modifier.fillMaxSize(),
+                    )
+                }
 
-            UserRegistration.Undefined -> {
-                NoUserPage(
-                    onAddUserClicked = onEditUserClicked,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding),
-                )
-            }
+                UserRegistration.Undefined -> {
+                    NoUserPage(
+                        onAddUserClicked = onEditUserClicked,
+                        modifier = Modifier.fillMaxSize(),
+                    )
+                }
 
-            UserRegistration.Loading -> {}
+                UserRegistration.Loading -> {}
+            }
         }
     }
 }

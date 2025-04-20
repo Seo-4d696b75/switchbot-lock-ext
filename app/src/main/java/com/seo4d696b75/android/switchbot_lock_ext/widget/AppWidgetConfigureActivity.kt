@@ -4,6 +4,7 @@ import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -34,6 +35,9 @@ abstract class AppWidgetConfigureActivity : FragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        enableEdgeToEdge()
+
         if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
             throw IllegalArgumentException()
         }
@@ -43,8 +47,6 @@ abstract class AppWidgetConfigureActivity : FragmentActivity() {
                 putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
             },
         )
-
-        // TODO enable edge2edge
 
         setContent {
             AppTheme {

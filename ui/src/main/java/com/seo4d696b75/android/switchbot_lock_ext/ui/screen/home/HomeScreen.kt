@@ -2,8 +2,11 @@ package com.seo4d696b75.android.switchbot_lock_ext.ui.screen.home
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -77,13 +80,15 @@ fun HomeScreen(
                 }
             }
         },
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
     ) { innerPadding ->
         Crossfade(
             targetState = user,
             label = "HomeScreen",
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding),
+                .padding(innerPadding)
+                .consumeWindowInsets(WindowInsets.statusBars),
         ) {
             when (it) {
                 is UserRegistration.User -> LockStatusPage(
