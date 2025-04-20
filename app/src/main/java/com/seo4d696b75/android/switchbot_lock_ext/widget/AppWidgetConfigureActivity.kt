@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.fragment.app.FragmentActivity
+import com.seo4d696b75.android.switchbot_lock_ext.MainActivity
 import com.seo4d696b75.android.switchbot_lock_ext.R
 import com.seo4d696b75.android.switchbot_lock_ext.domain.widget.AppWidgetType
 import com.seo4d696b75.android.switchbot_lock_ext.secure.SecureScreen
@@ -57,21 +58,34 @@ abstract class AppWidgetConfigureActivity : FragmentActivity() {
                         appWidgetType = appWidgetType,
                         appWidgetId = appWidgetId,
                         initialDeviceId = initialDeviceId,
-                        onCompleted = {
-                            setResult(
-                                RESULT_OK,
-                                Intent().apply {
-                                    putExtra(
-                                        AppWidgetManager.EXTRA_APPWIDGET_ID,
-                                        appWidgetId
-                                    )
-                                },
-                            )
-                            finish()
-                        }
+                        onCompleted = ::onComplete,
                     )
                 }
             }
+        }
+    }
+
+    private fun onComplete() {
+        setResult(
+            RESULT_OK,
+            Intent().apply {
+                putExtra(
+                    AppWidgetManager.EXTRA_APPWIDGET_ID,
+                    appWidgetId
+                )
+            },
+        )
+        if (initialDeviceId == null) {
+            finish()
+        } else {
+            val intent = Intent(
+                this,
+                MainActivity::class.java
+            ).apply {
+                putExtra("inapp_configuration_completed", true)
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            }
+            startActivity(intent)
         }
     }
 }
