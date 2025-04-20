@@ -16,7 +16,7 @@ android {
     defaultConfig {
         applicationId = "com.seo4d696b75.android.switchbot_lock_ext"
         minSdk = 27
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
